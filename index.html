@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Welcome - nox!314</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
+
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
+
+        .btn-register:hover {
+            background-color: var(--proton-blue-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero-title span {
+            color: var(--proton-blue);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 80px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            text-align: left;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(98, 74, 255, 0.2);
+        }
+
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .app-card h3 {
+            font-size: 20px;
+            color: var(--proton-dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .app-card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .app-link {
+            display: inline-block;
+            color: var(--proton-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .app-link:hover {
+            text-decoration: underline;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1c1c1c;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plus-section {
+            background: linear-gradient(135deg, #624aff 0%, #4f37e0 100%);
+            border-radius: var(--radius);
+            padding: 50px;
+            color: white;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(98, 74, 255, 0.3);
+        }
+
+        .plus-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 10s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .plus-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .plus-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .plus-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .plus-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .check-icon {
+            color: #00b894;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-plus {
+            background-color: white;
+            color: var(--proton-blue);
+            padding: 14px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            display: inline-block;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-plus:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #24292e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .github-btn:hover {
+            background-color: #1b1f23;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 36px; }
+            .plus-title { font-size: 28px; }
+            .plus-features { flex-direction: column; gap: 15px; }
+            #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
+            .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="/start" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="/start" class="active">Start</a>
+                <a href="/date">Weltuhr</a>
+                <a href="/iss">Iss</a>
+                <a href="/Info">Info</a>
+                <a href="/login">Login</a>
+                <a href="/register" class="btn-register">Registrieren</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="wrap">
+            
+            <div class="hero-section">
+                <h1 class="hero-title">Willkommen bei <span>nox!314</span></h1>
+                <p class="hero-subtitle">Eine experimentelle Plattform, die ständig weiterentwickelt wird. Entdecke unsere Suite von Tools für den Alltag.</p>
+                
+                <div style="margin-top: 30px;">
+                    <a href="https://github.com/nox314" class="github-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        nox314 auf GitHub
+                    </a>
+                </div>
+            </div>
+
+            <h2 class="section-title">Unsere X!Apps</h2>
+            <div class="apps-grid">
+                <div class="app-card">
+                    <div class="app-icon">⏰</div>
+                    <h3>X!Time</h3>
+                    <p>Die ultimative Weltuhr mit Echtzeit-Updates, Suchfunktion und Statusanzeige für Tag und Nacht.</p>
+                    <a href="/date" class="app-link">Jetzt öffnen →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🚀</div>
+                      <h3>X!Iss</h3>
+                      <p>Alle frei verfügbaren Informationen zur Iss.</p>
+                    <a href="/iss" class="app-link">Jetzt öffnen →</a>
+                </div>
+
+                <div class="app-card">
+                    <div class="app-icon">🔐</div>
+                    <h3>X!Secure</h3>
+                    <p>Verschlüsseltes Notizbuch und Passwort-Manager für deine sensibelsten Daten.</p>
+                    <a href="#" class="app-link">Demnächst verfügbar →</a>
+                </div>
+
+                <div class="app-card">
+                    <div class="app-icon">📅</div>
+                    <h3>X!Planer</h3>
+                    <p>Intelligenter Kalender für all deine Termine.</p>
+                    <a href="#" class="app-link">Beta testen →</a>
+                </div>
+
+                <div class="app-card">
+                    <div class="app-icon">💬</div>
+                    <h3>X!Chat</h3>
+                    <p>Sichere Messaging-Plattform mit End-to-End-Verschlüsselung.</p>
+                    <a href="#" class="app-link">Registrieren →</a>
+                </div>
+
+                <div class="app-card">
+                    <div class="app-icon">📁</div>
+                    <h3>X!Drive</h3>
+                    <p>Cloud-Speicher für deine Dateien mit automatischer Synchronisation über alle Geräte.</p>
+                    <a href="#" class="app-link">Mehr erfahren →</a>
+                </div>
+
+                <div class="app-card">
+                    <div class="app-icon">🎨</div>
+                    <h3>X!Studio</h3>
+                    <p>Kreatives Werkzeug für Design und Medienbearbeitung direkt im Browser.</p>
+                    <a href="#" class="app-link">In Arbeit →</a>
+                </div>
+            </div>
+
+            <div class="plus-section">
+                <div class="plus-content">
+                    <h2 class="plus-title">Upgrade auf X!Apps+</h2>
+                    <p class="plus-subtitle">Erhalte Zugriff auf alle Premium-Funktionen, unbegrenzte Nutzung und exklusive Tools.</p>
+                    
+                    <div class="plus-features">
+                        <div class="feature-item"><span class="check-icon">✓</span> Alle X!Apps inklusive</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Keine Werbung</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Prioritäts-Support</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Erweiterte Funktionen</div>
+                    </div>
+
+                    <a href="/register" class="btn-plus">Jetzt kostenlos starten</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+            <div class="footer-links">
+                <a href="/sourcecodes">Quellcode</a>
+                <a href="/News">News</a>
+                <a href="/sitemap">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+<?php
+header('Content-Type: text/html; charset=UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Iss</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--proton-blue);
+            color: var(--proton-dark);
+            font-weight: 500;
+            font-size: 14px;
+            min-width: 250px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateX(100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toast.success { border-left-color: var(--proton-success-text); }
+        .toast.error { border-left-color: #ff4757; }
+        .toast.info { border-left-color: var(--proton-blue); }
+
+        .toast.fade-out {
+            animation: fadeOut 0.5s ease-in forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
+
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
+
+        .btn-register:hover {
+            background-color: var(--proton-blue-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .hero-title span {
+            color: var(--proton-blue);
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card,
+        .map-card,
+        .api-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover,
+        .map-card:hover,
+        .api-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(98, 74, 255, 0.18);
+        }
+
+        .info-card h3,
+        .map-card h3,
+        .api-card h3 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--proton-dark);
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #f1f3f7;
+            padding: 12px 0;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #777;
+        }
+
+        .value {
+            font-weight: 700;
+            color: var(--proton-dark);
+            text-align: right;
+        }
+
+        .world-map {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            background: #eef4ff;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .world-map img {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.9;
+            filter: saturate(0.8);
+        }
+
+        .iss-marker {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(98,74,255,0.95) 0%, rgba(98,74,255,0.3) 70%);
+            color: white;
+            font-size: 14px;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 18px rgba(98, 74, 255, 0.35);
+            pointer-events: none;
+        }
+
+        .map-caption {
+            margin-top: 20px;
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .api-card p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 14px;
+            font-size: 15px;
+        }
+
+        .api-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .api-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 36px; }
+            .info-grid { grid-template-columns: 1fr; }
+            #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
+            .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
+            .toast-container { top: 80px; right: 10px; left: 10px; }
+            .toast { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="/start" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="/start">Start</a>
+                <a href="/date">Weltuhr</a>
+                <a href="/iss" class="active">Iss</a>
+                <a href="/Info">Info</a>
+                <a href="/login">Login</a>
+                <a href="/register" class="btn-register">Registrieren</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="wrap">
+            <div class="hero-section">
+                <h1 class="hero-title">ISS Live-Tracker</h1>
+                <p class="hero-subtitle">Zeigt alle öffentlich verfügbaren ISS-Daten in Echtzeit und markiert die grobe Position auf einer Weltkarte.</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3 style="font-size: 20px">ISS Echtzeitdaten</h3>
+                    <ul class="info-list">
+                        <li><span class="info-label">Aktualisiert</span><span id="iss-updated" class="value">lade...</span></li>
+                        <li><span class="info-label">Breitengrad</span><span id="iss-lat" class="value">–</span></li>
+                        <li><span class="info-label">Längengrad</span><span id="iss-lon" class="value">–</span></li>
+                        <li><span class="info-label">Höhe</span><span id="iss-alt" class="value">–</span></li>
+                        <li><span class="info-label">Geschwindigkeit</span><span id="iss-vel" class="value">–</span></li>
+                        <li><span class="info-label">Sichtbarkeit</span><span id="iss-vis" class="value">–</span></li>
+                        <li><span class="info-label">Fußabdruck</span><span id="iss-footprint" class="value">–</span></li>
+                        <li><span class="info-label">Solarlatitude</span><span id="iss-solar-lat" class="value">–</span></li>
+                        <li><span class="info-label">Sonnarlongitude</span><span id="iss-solar-lon" class="value">–</span></li>
+                    </ul>
+                </div>
+
+                <div class="map-card">
+                    <h3 style="font-size: 20px">Grobe Weltkarte</h3>
+                    <div class="world-map" id="world-map">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg" alt="Weltkarte">
+                        <div id="iss-marker" class="iss-marker" title="ISS Position">🚀</div>
+                    </div>
+                    <p class="map-caption">Die Position wird als Marker auf einer equirektangularen Weltkarte angezeigt. Die Karte ist eine grobe Visualisierung der momentanen Bahn der ISS.</p>
+                </div>
+
+                <div class="api-card">
+                    <h3 style="font-size: 20px">Quellen & Rechtliche Hinweise</h3>
+                    <p>Diese Anwendung nutzt öffentlich zugängliche APIs, um Echtzeitdaten der Internationalen Raumstation (ISS) abzurufen. Die Daten stammen aus folgenden autoritativen Quellen:</p>
+                    
+                    <ul class="info-list" style="margin-bottom: 15px;">
+                        <li>
+                            <span class="info-label">Positionsdaten</span>
+                            <a href="https://wheretheiss.at/" target="_blank" rel="noopener noreferrer" class="value">WhereTheISS.at API</a>
+                        </li>
+                        <li>
+                            <span class="info-label">Einfache Lokalisierung</span>
+                            <a href="http://open-notify.org/Open-Notify-API/ISS-Location-Now/" target="_blank" rel="noopener noreferrer" class="value">Open-Notify.org</a>
+                        </li>
+                        <li>
+                            <span class="info-label">Offizielle Mission</span>
+                            <a href="https://www.nasa.gov/mission_pages/station/main/index.html" target="_blank" rel="noopener noreferrer" class="value">NASA.gov</a>
+                        </li>
+                        <li>
+                            <span class="info-label">Hintergrundwissen</span>
+                            <a href="https://de.wikipedia.org/wiki/Internationale_Raumstation" target="_blank" rel="noopener noreferrer" class="value">Wikipedia.org</a>
+                        </li>
+                    </ul>
+                    
+                    <p style="font-size: 13px; color: #777; margin-top: 10px;">
+                        Hinweis: Alle Daten werden ohne Gewähr bereitgestellt. Für offizielle Missionsupdates konsultieren Sie bitte direkt die NASA.
+                    </p>
+                </div>
+            </div>
+
+            <div class="api-card">
+                <h3>Was diese Daten bedeuten</h3>
+                <p><strong>ISS</strong> ist die Internationale Raumstation, die mit einer Geschwindigkeit von rund 28.000 km/h in etwa 400 km Höhe um die Erde kreist.</p>
+                <p>Die API-Daten sind öffentlich zugänglich und enthalten Informationen zur Position, Höhe, Bahngeschwindigkeit, Sichtbarkeit, Tagesnummer und Sonnenstand.</p>
+                <p>Die Karte zeigt einen ungefähren Marker auf einer equirectangularen Darstellung der Erde. Daraus lassen sich aktuelle Zugriffspositionen und Flugbahnen grob visualisieren.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+            <div class="footer-links">
+                <a href="/sourcecodes">Quellcode</a>
+                <a href="/News">News</a>
+                <a href="/sitemap">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const elements = {
+            updated: document.getElementById('iss-updated'),
+            lat: document.getElementById('iss-lat'),
+            lon: document.getElementById('iss-lon'),
+            alt: document.getElementById('iss-alt'),
+            vel: document.getElementById('iss-vel'),
+            vis: document.getElementById('iss-vis'),
+            footprint: document.getElementById('iss-footprint'),
+            solarLat: document.getElementById('iss-solar-lat'),
+            solarLon: document.getElementById('iss-solar-lon'),
+            marker: document.getElementById('iss-marker'),
+            map: document.getElementById('world-map'),
+            toastContainer: document.getElementById('toast-container')
+        };
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            
+            elements.toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                toast.addEventListener('animationend', () => {
+                    toast.remove();
+                });
+            }, 4000);
+        }
+
+        function formatTimestamp(ts) {
+            const date = new Date(ts * 1000);
+            return date.toLocaleString('de-DE', {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+
+        function updateMapMarker(latitude, longitude) {
+            const x = (longitude + 180) / 360 * 100;
+            const y = (90 - latitude) / 180 * 100;
+            elements.marker.style.left = `${x}%`;
+            elements.marker.style.top = `${y}%`;
+        }
+
+        async function loadIssData() {
+            const endpoint = 'https://api.wheretheiss.at/v1/satellites/25544';
+            try {
+                showToast('Aktuelle ISS-Daten werden geladen...', 'info');
+                
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error(`Fehler ${response.status}`);
+                }
+                const data = await response.json();
+                
+                elements.updated.textContent = formatTimestamp(data.timestamp);
+                elements.lat.textContent = `${data.latitude.toFixed(4)}°`;
+                elements.lon.textContent = `${data.longitude.toFixed(4)}°`;
+                elements.alt.textContent = `${data.altitude.toFixed(1)} km`;
+                elements.vel.textContent = `${data.velocity.toFixed(1)} km/h`;
+                elements.vis.textContent = data.visibility.charAt(0).toUpperCase() + data.visibility.slice(1);
+                elements.footprint.textContent = `${data.footprint.toFixed(0)} km`;
+                elements.solarLat.textContent = `${data.solar_lat.toFixed(2)}°`;
+                elements.solarLon.textContent = `${data.solar_lon.toFixed(2)}°`;
+                
+                updateMapMarker(data.latitude, data.longitude);
+                showToast('ISS-Daten erfolgreich aktualisiert', 'success');
+            } catch (error) {
+                console.error('ISS API Fehler:', error);
+                showToast('Fehler beim Laden der ISS-Daten', 'error');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadIssData();
+            setInterval(loadIssData, 15000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Time - nox!314</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
+
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
+
+        .btn-register:hover {
+            background-color: var(--proton-blue-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 40px 0;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-section h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--proton-dark);
+        }
+
+        .header-section p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid var(--proton-border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--proton-blue);
+            box-shadow: 0 0 0 3px rgba(98, 74, 255, 0.1);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .search-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--proton-border);
+            transition: background 0.2s;
+        }
+
+        .search-item:last-child { border-bottom: none; }
+        .search-item:hover { background-color: var(--proton-light); }
+        .search-item strong { color: var(--proton-blue); }
+
+        .clock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .clock-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clock-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .clock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .city-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--proton-dark);
+        }
+
+        .timezone-info {
+            font-size: 12px;
+            color: #888;
+            background: var(--proton-light);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .time-display {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-blue);
+            margin-bottom: 5px;
+            font-family: 'Inter', monospace;
+        }
+
+        .date-display {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .status-day {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #f57c00;
+        }
+
+        .status-night {
+            background-color: rgba(33, 33, 33, 0.1);
+            color: #424242;
+        }
+
+        .diff-badge {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .clock-grid { grid-template-columns: 1fr; }
+            #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
+            .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="/start" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="/start">Start</a>
+                <a href="/date" class="active">Weltuhr</a>
+                <a href="/iss">Iss</a>
+                <a href="/Info">Info</a>
+                <a href="/login">Login</a>
+                <a href="/register" class="btn-register">Registrieren</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="wrap">
+            
+            <div class="header-section">
+                <h1>Weltzeituhr</h1>
+                <p>Echtzeit-Uhren für Städte weltweit mit intelligentem Suchsystem</p>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="citySearch" class="search-input" placeholder="Stadt suchen (z.B. Tokio, Berlin, New York)...">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <div id="clockGrid" class="clock-grid"></div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+            <div class="footer-links">
+                <a href="/sourcecodes">Quellcode</a>
+                <a href="/News">News</a>
+                <a href="/sitemap">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const cities = [
+            { name: "Berlin", timezone: "Europe/Berlin", country: "Deutschland" },
+            { name: "New York", timezone: "America/New_York", country: "USA" },
+            { name: "Tokio", timezone: "Asia/Tokyo", country: "Japan" },
+            { name: "London", timezone: "Europe/London", country: "UK" },
+            { name: "Paris", timezone: "Europe/Paris", country: "Frankreich" },
+            { name: "Sydney", timezone: "Australia/Sydney", country: "Australien" },
+            { name: "Dubai", timezone: "Asia/Dubai", country: "VAE" },
+            { name: "Singapur", timezone: "Asia/Singapore", country: "Singapur" },
+            { name: "Mumbai", timezone: "Asia/Kolkata", country: "Indien" },
+            { name: "São Paulo", timezone: "America/Sao_Paulo", country: "Brasilien" },
+            { name: "Mexiko-Stadt", timezone: "America/Mexico_City", country: "Mexiko" },
+            { name: "Kairo", timezone: "Africa/Cairo", country: "Ägypten" },
+            { name: "Los Angeles", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Hongkong", timezone: "Asia/Hong_Kong", country: "China" },
+            { name: "Moskau", timezone: "Europe/Moscow", country: "Russland" }
+        ];
+
+        let displayedCities = [...cities.slice(0, 6)];
+
+        const clockGrid = document.getElementById('clockGrid');
+        const searchInput = document.getElementById('citySearch');
+        const searchResults = document.getElementById('searchResults');
+
+        function updateClocks() {
+            const now = new Date();
+            clockGrid.innerHTML = '';
+
+            displayedCities.forEach(city => {
+                try {
+                    const cityTime = new Date(now.toLocaleString("en-US", { timeZone: city.timezone }));
+                    
+                    const diffMs = cityTime - now;
+                    const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+                    const diffSign = diffHours >= 0 ? '+' : '';
+                    const diffText = diffHours === 0 ? "Gleichzeitig" : `${diffSign}${diffHours} Std.`;
+
+                    const hour = cityTime.getHours();
+                    const isDay = hour >= 6 && hour < 18;
+                    const statusClass = isDay ? 'status-day' : 'status-night';
+                    const statusText = isDay ? 'Tag' : 'Nacht';
+                    const sunIcon = isDay ? '☀️' : '🌙';
+
+                    const card = document.createElement('div');
+                    card.className = 'clock-card';
+                    card.innerHTML = `
+                        <div class="clock-header">
+                            <span class="city-name">${city.name}</span>
+                            <span class="timezone-info">${city.country}</span>
+                        </div>
+                        <div class="time-display">${cityTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
+                        <div class="date-display">${cityTime.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
+                        <div class="status-indicator ${statusClass}">
+                            ${sunIcon} ${statusText}
+                        </div>
+                        <div class="diff-badge">Unterschied: ${diffText}</div>
+                    `;
+                    clockGrid.appendChild(card);
+                } catch (e) {
+                    console.error(`Fehler bei Stadt ${city.name}:`, e);
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            searchResults.innerHTML = '';
+            
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const filtered = cities.filter(c => 
+                c.name.toLowerCase().includes(query) || 
+                c.country.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                searchResults.style.display = 'block';
+                filtered.forEach(city => {
+                    const item = document.createElement('div');
+                    item.className = 'search-item';
+                    item.innerHTML = `<strong>${city.name}</strong>, ${city.country}`;
+                    item.onclick = () => {
+                        if (!displayedCities.some(c => c.name === city.name)) {
+                            displayedCities.push(city);
+                            updateClocks();
+                        }
+                        searchInput.value = '';
+                        searchResults.style.display = 'none';
+                    };
+                    searchResults.appendChild(item);
+                });
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
+
+        setInterval(updateClocks, 1000);
+        updateClocks();
+    </script>
+</body>
+</html>

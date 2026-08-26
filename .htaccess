@@ -20,7 +20,7 @@ RewriteRule ^$ /index.html [L,NC]
 # Prefer PHP dynamic pages when available
 RewriteRule ^date/?$ /date.php [L,NC]
 RewriteRule ^iss/?$ /iss.php [L,NC]
-RewriteRule ^info/?$ /info.php [L,NC]
+RewriteRule ^info/?$ /info.html [L,NC]
 
 # Static pages
 RewriteRule ^sourcecodes/?$ /sourcecodes.html [L,NC]

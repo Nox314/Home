@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../auth/config.php';
 
 $message = '';
 $messageType = '';
@@ -11,59 +11,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passconfirm = $_POST['passconfirm'] ?? '';
     $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $timestamp = date('Y-m-d H:i:s');
+    $t = getTranslations($_SESSION['lang']);
 
     if (empty($nickname) || empty($password) || empty($passconfirm)) {
-        $message = t('error_empty');
+        $message = $t['error_empty'] ?? 'Fehler';
         $messageType = 'error';
     } elseif ($password !== $passconfirm) {
-        $message = t('error_password_mismatch');
+        $message = 'Passwörter stimmen nicht überein.';
         $messageType = 'error';
     } elseif (strlen($password) < 6) {
-        $message = t('error_password_too_short');
+        $message = 'Passwort muss mindestens 6 Zeichen haben.';
         $messageType = 'error';
     } else {
-        // Prüfen ob Benutzer bereits existiert
-        $userExists = false;
-        if (file_exists(DATA_PATH)) {
-            $lines = file(DATA_PATH, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            foreach ($lines as $line) {
-                $parts = explode(' | ', $line, 3);
-                if (count($parts) === 3) {
-                    list($savedTime, $savedNick, $savedHash) = $parts;
-                    if (trim($savedNick) === $nickname) {
-                        $userExists = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if ($userExists) {
-            $message = 'Dieser Nickname existiert bereits.';
-            $messageType = 'error';
-        } else {
-            $dir = dirname(DATA_PATH);
+        $savePath = '/var/www/html/nox314/users.txt';
+        $dir = dirname($savePath);
+        
+        if (!file_exists($dir)) { mkdir($dir, 0777, true); }
+        if (is_writable($dir)) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $entry = "$timestamp | $nickname | $hashedPassword\n";
             
-            if (!file_exists($dir)) { 
-                mkdir($dir, 0777, true); 
-            }
-            
-            if (is_writable($dir)) {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $entry = "$timestamp | $nickname | $hashedPassword\n";
-                
-                if (file_put_contents(DATA_PATH, $entry, FILE_APPEND | LOCK_EX) !== false) {
-                    logError("REGISTER SUCCESS: Neuer Benutzer $nickname registriert");
-                    header('Location: /login.php?registered=1');
-                    exit();
-                } else {
-                    $message = t('error_system');
-                    $messageType = 'error';
-                }
+            if (file_put_contents($savePath, $entry, FILE_APPEND | LOCK_EX) !== false) {
+                file_put_contents('/var/www/html/nox314/errors.txt', 
+                    "[$timestamp] IP: $ipAddress | ERFOLG: Neuer Benutzer $nickname\n", 
+                    FILE_APPEND | LOCK_EX);
+                header('Location: /login/login.php?registered=1');
+                exit();
             } else {
-                $message = t('error_server');
+                $message = 'Systemfehler';
                 $messageType = 'error';
             }
+        } else {
+            $message = 'Server-Fehler';
+            $messageType = 'error';
         }
     }
 }
@@ -89,11 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button { width: 100%; padding: 14px; background: var(--proton-blue); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         button:hover { background: #4f37e0; transform: translateY(-1px); }
         .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; }
-        .alert-success { background: #e6fffa; color: #00b894; border: 1px solid rgba(0,184,148,.2); }
-        .alert-error { background: #fff5f5; color: #e53e3e; border: 1px solid rgba(229,62,62,.2); }
+        .alert-success { background: #e6fffa; color: #00b894; }
+        .alert-error { background: #fff5f5; color: #e53e3e; }
         .links { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
-        .links a { color: var(--proton-blue); text-decoration: none; font-weight: 500; }
-        .links a:hover { text-decoration: underline; }
+        .links a { color: var(--proton-blue); text-decoration: none; }
     </style>
 </head>
 <body>
@@ -103,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $messageType; ?>"><?php echo htmlspecialchars($message); ?></div>
         <?php elseif (isset($_GET['registered'])): ?>
-            <div class="alert alert-success"><?php echo t('success_registered'); ?></div>
+            <div class="alert alert-success">Erfolg! Du kannst dich jetzt anmelden.</div>
         <?php endif; ?>
         <form method="post" action="">
             <div class="form-group">
@@ -120,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit">Registrieren</button>
         </form>
-        <div class="links"><a href="/login.php">Bereits registriert? Anmelden</a></div>
+        <div class="links"><a href="/login/login.php/">Bereits registriert? Anmelden</a></div>
     </div>
 </body>
 </html>

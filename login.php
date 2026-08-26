@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../auth/config.php';
+require_once __DIR__ . '/config.php';
 
 if (isAuthenticated()) {
-    header('Location: /start/');
+    header('Location: /');
     exit;
 }
 
@@ -25,24 +25,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $lines = file(DATA_PATH, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
         
+        $found = false;
         foreach ($lines as $line) {
-            list($savedTime, $savedNick, $savedHash) = explode(' | ', $line, 3);
-            if (trim($savedNick) === $nickname) {
-                if (password_verify($password, $savedHash)) {
-                    doLogin($savedNick);
-                    header('Location: /start/?logged_in=1');
-                    exit;
-                } else {
-                    file_put_contents('/var/www/errors.txt', "[$timestamp] IP: $ipAddress | FEHLER: Falsches Passwort für $savedNick\n", FILE_APPEND | LOCK_EX);
-                    $message = t('error_invalid');
-                    $messageType = 'error';
+            $parts = explode(' | ', $line, 3);
+            if (count($parts) === 3) {
+                list($savedTime, $savedNick, $savedHash) = $parts;
+                if (trim($savedNick) === $nickname) {
+                    $found = true;
+                    if (password_verify($password, $savedHash)) {
+                        doLogin($savedNick);
+                        logError("LOGIN SUCCESS: Benutzer $savedNick angemeldet");
+                        header('Location: /?logged_in=1');
+                        exit;
+                    } else {
+                        logError("LOGIN FAILED: Falsches Passwort für $nickname");
+                        $message = t('error_invalid');
+                        $messageType = 'error';
+                    }
+                    break;
                 }
-                break;
             }
         }
         
-        if (!$message) {
-            file_put_contents('/var/www/errors.txt', "[$timestamp] IP: $ipAddress | FEHLER: Nutzer $nickname nicht gefunden\n", FILE_APPEND | LOCK_EX);
+        if (!$found) {
+            logError("LOGIN FAILED: Benutzer $nickname nicht gefunden");
             $message = t('error_invalid');
             $messageType = 'error';
         }
@@ -52,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="<?php echo $lang; ?>">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title><?php echo $lang === 'de' ? 'Anmelden' : 'Login'; ?> - nox!314</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -69,10 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button:hover{background:#4f37e0;transform:translateY(-1px)}
         .alert{padding:12px 16px;border-radius:8px;margin-bottom:20px}
         .alert-error{background:#fff5f5;color:#e53e3e;border:1px solid rgba(229,62,62,.2)}
+        .alert-success{background:#e6fffa;color:#00b894;border:1px solid rgba(0,184,148,.2)}
         .checkbox-group{display:flex;align-items:center;gap:8px;margin-bottom:20px}
         .checkbox-group input{width:auto}
         .links{text-align:center;margin-top:20px;color:#666;font-size:14px}
-        .links a{color:var(--blue);text-decoration:none}
+        .links a{color:var(--blue);text-decoration:none;font-weight:500}
+        .links a:hover{text-decoration:underline}
     </style>
 </head>
 <body>
@@ -81,6 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2><?php echo $lang === 'de' ? 'Anmelden' : 'Login'; ?></h2>
         <?php if ($message): ?>
             <div class="alert alert-<?php echo $messageType; ?>"><?php echo htmlspecialchars($message); ?></div>
+        <?php elseif (isset($_GET['registered'])): ?>
+            <div class="alert alert-success"><?php echo t('success_registered'); ?></div>
         <?php endif; ?>
         <form method="post" action="">
             <div class="form-group">
@@ -93,4 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" name="remember" id="remember">
-                <label for="remember"><?php echo t('welcome_user') !== t('welcome') ? (strpos(t('welcome_user'), 'User') !== false ? 'Angemeldet bleiben' : '') : 'Angem
+                <label for="remember"><?php echo $lang === 'de' ? 'Angemeldet bleiben' : 'Remember me'; ?></label>
+            </div>
+            <button type="submit"><?php echo $lang === 'de' ? 'Anmelden' : 'Login'; ?></button>
+        </form>
+        <div class="links"><a href="/register.php"><?php echo $lang === 'de' ? 'Noch kein Konto? Registrieren' : 'No account? Register'; ?></a></div>
+    </div>
+</body>
+</html>

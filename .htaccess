@@ -1,0 +1,34 @@
+# Apache rewrite rules for friendly URLs and redirects
+# Place in repository root as .htaccess
+
+# Enable rewrite engine
+RewriteEngine On
+RewriteBase /
+
+# Preferred directory index
+DirectoryIndex index.html index.php
+
+# If request points to an existing file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Pretty URL mappings (case-insensitive)
+RewriteRule ^start/?$ /index.html [L,NC]
+RewriteRule ^$ /index.html [L,NC]
+
+# Prefer PHP dynamic pages when available
+RewriteRule ^date/?$ /date.php [L,NC]
+RewriteRule ^iss/?$ /iss.php [L,NC]
+RewriteRule ^info/?$ /info.php [L,NC]
+
+# Static pages
+RewriteRule ^sourcecodes/?$ /sourcecodes.html [L,NC]
+RewriteRule ^news/?$ /news.html [L,NC]
+RewriteRule ^sitemap/?$ /sitemap.html [L,NC]
+RewriteRule ^login/?$ /login.html [L,NC]
+RewriteRule ^register/?$ /register.html [L,NC]
+
+# If none match, fallback to index (optional single-page fallback)
+# Uncomment the following line if you want all unknown paths to serve index.html
+# RewriteRule ^.*$ /index.html [L]

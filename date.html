@@ -328,11 +328,13 @@
     <script>
         const cities = [
             { name: "Berlin", timezone: "Europe/Berlin", country: "Deutschland" },
+            { name: "Hamburg", timezone: "Europe/Berlin", country: "Deutschland" },
             { name: "New York", timezone: "America/New_York", country: "USA" },
             { name: "Tokio", timezone: "Asia/Tokyo", country: "Japan" },
             { name: "London", timezone: "Europe/London", country: "UK" },
             { name: "Paris", timezone: "Europe/Paris", country: "Frankreich" },
             { name: "Sydney", timezone: "Australia/Sydney", country: "Australien" },
+            { name: "Melbourne", timezone: "Australia/Melbourne", country: "Australien" },
             { name: "Dubai", timezone: "Asia/Dubai", country: "VAE" },
             { name: "Singapur", timezone: "Asia/Singapore", country: "Singapur" },
             { name: "Mumbai", timezone: "Asia/Kolkata", country: "Indien" },
@@ -342,6 +344,8 @@
             { name: "Los Angeles", timezone: "America/Los_Angeles", country: "USA" },
             { name: "Hongkong", timezone: "Asia/Hong_Kong", country: "China" },
             { name: "Moskau", timezone: "Europe/Moscow", country: "Russland" },
+
+            /* zusätzliche Städte */
             { name: "Toronto", timezone: "America/Toronto", country: "Kanada" },
             { name: "Chicago", timezone: "America/Chicago", country: "USA" },
             { name: "Houston", timezone: "America/Chicago", country: "USA" },
@@ -351,6 +355,11 @@
             { name: "Vancouver", timezone: "America/Vancouver", country: "Kanada" },
             { name: "Calgary", timezone: "America/Edmonton", country: "Kanada" },
             { name: "Montreal", timezone: "America/Toronto", country: "Kanada" },
+            { name: "Miami", timezone: "America/New_York", country: "USA" },
+            { name: "Seattle", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Denver", timezone: "America/Denver", country: "USA" },
+            { name: "Boston", timezone: "America/New_York", country: "USA" },
+
             { name: "Quito", timezone: "America/Guayaquil", country: "Ecuador" },
             { name: "Lima", timezone: "America/Lima", country: "Peru" },
             { name: "Bogota", timezone: "America/Bogota", country: "Kolumbien" },
@@ -360,6 +369,7 @@
             { name: "Montevideo", timezone: "America/Montevideo", country: "Uruguay" },
             { name: "Asuncion", timezone: "America/Asuncion", country: "Paraguay" },
             { name: "La Paz", timezone: "America/La_Paz", country: "Bolivien" },
+
             { name: "Reykjavik", timezone: "Atlantic/Reykjavik", country: "Island" },
             { name: "Dublin", timezone: "Europe/Dublin", country: "Irland" },
             { name: "Edinburgh", timezone: "Europe/London", country: "UK" },
@@ -375,6 +385,14 @@
             { name: "Tirana", timezone: "Europe/Tirane", country: "Albanien" },
             { name: "Athens", timezone: "Europe/Athens", country: "Griechenland" },
             { name: "Istanbul", timezone: "Europe/Istanbul", country: "Türkei" },
+            { name: "Amsterdam", timezone: "Europe/Amsterdam", country: "Niederlande" },
+            { name: "Brussels", timezone: "Europe/Brussels", country: "Belgien" },
+            { name: "Geneva", timezone: "Europe/Zurich", country: "Schweiz" },
+            { name: "Stockholm", timezone: "Europe/Stockholm", country: "Schweden" },
+            { name: "Copenhagen", timezone: "Europe/Copenhagen", country: "Dänemark" },
+            { name: "Oslo", timezone: "Europe/Oslo", country: "Norwegen" },
+            { name: "Helsinki", timezone: "Europe/Helsinki", country: "Finnland" },
+
             { name: "Seoul", timezone: "Asia/Seoul", country: "Südkorea" },
             { name: "Manila", timezone: "Asia/Manila", country: "Philippinen" },
             { name: "Jakarta", timezone: "Asia/Jakarta", country: "Indonesien" },
@@ -384,9 +402,19 @@
             { name: "Kuala Lumpur", timezone: "Asia/Kuala_Lumpur", country: "Malaysia" },
             { name: "Taipei", timezone: "Asia/Taipei", country: "Taiwan" },
             { name: "Beijing", timezone: "Asia/Shanghai", country: "China" },
+            { name: "Shanghai", timezone: "Asia/Shanghai", country: "China" },
             { name: "Karachi", timezone: "Asia/Karachi", country: "Pakistan" },
+            { name: "Lahore", timezone: "Asia/Karachi", country: "Pakistan" },
             { name: "Dhaka", timezone: "Asia/Dhaka", country: "Bangladesch" },
             { name: "Colombo", timezone: "Asia/Colombo", country: "Sri Lanka" },
+            { name: "Teheran", timezone: "Asia/Tehran", country: "Iran" },
+            { name: "Jerusalem", timezone: "Asia/Jerusalem", country: "Israel" },
+            { name: "Bangkok", timezone: "Asia/Bangkok", country: "Thailand" },
+            { name: "Perth", timezone: "Australia/Perth", country: "Australien" },
+            { name: "Brisbane", timezone: "Australia/Brisbane", country: "Australien" },
+            { name: "Auckland", timezone: "Pacific/Auckland", country: "Neuseeland" },
+            { name: "Fiji", timezone: "Pacific/Fiji", country: "Fidschi" },
+
             { name: "Lagos", timezone: "Africa/Lagos", country: "Nigeria" },
             { name: "Johannesburg", timezone: "Africa/Johannesburg", country: "Südafrika" },
             { name: "Cape Town", timezone: "Africa/Johannesburg", country: "Südafrika" },
@@ -400,6 +428,8 @@
             { name: "Tunis", timezone: "Africa/Tunis", country: "Tunesien" },
             { name: "Rabat", timezone: "Africa/Casablanca", country: "Marokko" },
             { name: "Casablanca", timezone: "Africa/Casablanca", country: "Marokko" },
+            { name: "Dakar", timezone: "Africa/Dakar", country: "Senegal" },
+            { name: "Accra", timezone: "Africa/Accra", country: "Ghana" },
 
             /* spezielle Teststadt: statt Datum nur "xxx" */
             { name: "X!City", timezone: "Etc/UTC", country: "X-Land" }

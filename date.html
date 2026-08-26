@@ -341,7 +341,74 @@
             { name: "Kairo", timezone: "Africa/Cairo", country: "Ägypten" },
             { name: "Los Angeles", timezone: "America/Los_Angeles", country: "USA" },
             { name: "Hongkong", timezone: "Asia/Hong_Kong", country: "China" },
-            { name: "Moskau", timezone: "Europe/Moscow", country: "Russland" }
+            { name: "Moskau", timezone: "Europe/Moscow", country: "Russland" },
+
+            /* zusätzliche Städte (ca. 50) */
+            { name: "Toronto", timezone: "America/Toronto", country: "Kanada" },
+            { name: "Chicago", timezone: "America/Chicago", country: "USA" },
+            { name: "Houston", timezone: "America/Chicago", country: "USA" },
+            { name: "Phoenix", timezone: "America/Phoenix", country: "USA" },
+            { name: "Austin", timezone: "America/Chicago", country: "USA" },
+            { name: "San Francisco", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Vancouver", timezone: "America/Vancouver", country: "Kanada" },
+            { name: "Calgary", timezone: "America/Edmonton", country: "Kanada" },
+            { name: "Montreal", timezone: "America/Toronto", country: "Kanada" },
+
+            { name: "Quito", timezone: "America/Guayaquil", country: "Ecuador" },
+            { name: "Lima", timezone: "America/Lima", country: "Peru" },
+            { name: "Bogota", timezone: "America/Bogota", country: "Kolumbien" },
+            { name: "Caracas", timezone: "America/Caracas", country: "Venezuela" },
+            { name: "Santiago", timezone: "America/Santiago", country: "Chile" },
+            { name: "Buenos Aires", timezone: "America/Argentina/Buenos_Aires", country: "Argentinien" },
+            { name: "Montevideo", timezone: "America/Montevideo", country: "Uruguay" },
+            { name: "Asuncion", timezone: "America/Asuncion", country: "Paraguay" },
+            { name: "La Paz", timezone: "America/La_Paz", country: "Bolivien" },
+
+            { name: "Reykjavik", timezone: "Atlantic/Reykjavik", country: "Island" },
+            { name: "Dublin", timezone: "Europe/Dublin", country: "Irland" },
+            { name: "Edinburgh", timezone: "Europe/London", country: "UK" },
+            { name: "Zagreb", timezone: "Europe/Zagreb", country: "Kroatien" },
+            { name: "Belgrade", timezone: "Europe/Belgrade", country: "Serbien" },
+            { name: "Prague", timezone: "Europe/Prague", country: "Tschechien" },
+            { name: "Bratislava", timezone: "Europe/Bratislava", country: "Slowakei" },
+            { name: "Budapest", timezone: "Europe/Budapest", country: "Ungarn" },
+            { name: "Vienna", timezone: "Europe/Vienna", country: "Österreich" },
+            { name: "Ljubljana", timezone: "Europe/Ljubljana", country: "Slowenien" },
+            { name: "Sarajevo", timezone: "Europe/Sarajevo", country: "Bosnien" },
+            { name: "Skopje", timezone: "Europe/Skopje", country: "Nordmazedonien" },
+            { name: "Tirana", timezone: "Europe/Tirane", country: "Albanien" },
+            { name: "Athens", timezone: "Europe/Athens", country: "Griechenland" },
+            { name: "Istanbul", timezone: "Europe/Istanbul", country: "Türkei" },
+
+            { name: "Seoul", timezone: "Asia/Seoul", country: "Südkorea" },
+            { name: "Manila", timezone: "Asia/Manila", country: "Philippinen" },
+            { name: "Jakarta", timezone: "Asia/Jakarta", country: "Indonesien" },
+            { name: "Bangkok", timezone: "Asia/Bangkok", country: "Thailand" },
+            { name: "Hanoi", timezone: "Asia/Ho_Chi_Minh", country: "Vietnam" },
+            { name: "Phnom Penh", timezone: "Asia/Phnom_Penh", country: "Kambodscha" },
+            { name: "Kuala Lumpur", timezone: "Asia/Kuala_Lumpur", country: "Malaysia" },
+            { name: "Taipei", timezone: "Asia/Taipei", country: "Taiwan" },
+            { name: "Beijing", timezone: "Asia/Shanghai", country: "China" },
+            { name: "Karachi", timezone: "Asia/Karachi", country: "Pakistan" },
+            { name: "Dhaka", timezone: "Asia/Dhaka", country: "Bangladesch" },
+            { name: "Colombo", timezone: "Asia/Colombo", country: "Sri Lanka" },
+
+            { name: "Lagos", timezone: "Africa/Lagos", country: "Nigeria" },
+            { name: "Johannesburg", timezone: "Africa/Johannesburg", country: "Südafrika" },
+            { name: "Cape Town", timezone: "Africa/Johannesburg", country: "Südafrika" },
+            { name: "Nairobi", timezone: "Africa/Nairobi", country: "Kenia" },
+            { name: "Kampala", timezone: "Africa/Kampala", country: "Uganda" },
+            { name: "Dar es Salaam", timezone: "Africa/Dar_es_Salaam", country: "Tansania" },
+            { name: "Kigali", timezone: "Africa/Kigali", country: "Ruanda" },
+            { name: "Addis Ababa", timezone: "Africa/Addis_Ababa", country: "Äthiopien" },
+            { name: "Antananarivo", timezone: "Indian/Antananarivo", country: "Madagaskar" },
+            { name: "Algiers", timezone: "Africa/Algiers", country: "Algerien" },
+            { name: "Tunis", timezone: "Africa/Tunis", country: "Tunesien" },
+            { name: "Rabat", timezone: "Africa/Casablanca", country: "Marokko" },
+            { name: "Casablanca", timezone: "Africa/Casablanca", country: "Marokko" },
+
+            /* spezielle Teststadt: statt Datum nur "xxx" */
+            { name: "X!City", timezone: "Etc/UTC", country: "X-Land" }
         ];
 
         let displayedCities = [...cities.slice(0, 6)];
@@ -369,6 +436,11 @@
                     const statusText = isDay ? 'Tag' : 'Nacht';
                     const sunIcon = isDay ? '☀️' : '🌙';
 
+                    // spezielle Darstellung für X!City: statt Datum nur 'xxx'
+                    const dateText = city.name === 'X!City'
+                        ? 'xxx'
+                        : cityTime.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+
                     const card = document.createElement('div');
                     card.className = 'clock-card';
                     card.innerHTML = `
@@ -377,7 +449,7 @@
                             <span class="timezone-info">${city.country}</span>
                         </div>
                         <div class="time-display">${cityTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
-                        <div class="date-display">${cityTime.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
+                        <div class="date-display">${dateText}</div>
                         <div class="status-indicator ${statusClass}">
                             ${sunIcon} ${statusText}
                         </div>

@@ -1,73 +1,196 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sitemap - nox!314</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <style>
-        :root {
-            --proton-blue: #624aff;
-            --proton-dark: #1c1c1c;
-            --proton-light: #f5f7fa;
-            --proton-border: #e0e4eb;
-            --proton-text: #333333;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --radius: 12px;
-        }
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--proton-light);
-            color: var(--proton-text);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--proton-dark);
-        }
-        ul {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0;
-            list-style: none;
-        }
-        li {
-            background: white;
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.2s;
-        }
-        li:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        a {
-            text-decoration: none;
-            color: var(--proton-blue);
-            font-weight: 600;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sitemap - nox!314</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --proton-blue: #624aff;
+    --proton-dark: #1c1c1c;
+    --proton-light: #f5f7fa;
+    --proton-border: #e0e4eb;
+    --proton-text: #333;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --border-radius: 12px;
+  }
+
+  /* Grundlegendes Styling */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--proton-light);
+    color: var(--proton-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  h1 {
+    text-align: center;
+    margin: 40px 20px 20px 20px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--proton-dark);
+  }
+
+  /* Container für Inhalt */
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex: 1;
+  }
+
+  /* Kategorien */
+  .category {
+    margin-bottom: 30px;
+  }
+
+  .category h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--proton-dark);
+    border-bottom: 2px solid var(--proton-border);
+    padding-bottom: 8px;
+  }
+
+  /* Listen für Links */
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 10px 0;
+  }
+
+  a {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    color: var(--proton-text);
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+
+  /* Hover- und aktive Effekte */
+  a:hover, a.active {
+    background-color: rgba(98, 74, 255, 0.1);
+    color: var(--proton-blue);
+  }
+
+  /* Spezifischer Stil für den aktiven Link */
+  a.active {
+    font-weight: 700;
+  }
+
+  /* Footer Styling */
+  footer {
+    background-color: white;
+    padding: 30px 20px;
+    border-top: 1px solid var(--proton-border);
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .footer-links {
+    margin-top: 15px;
+  }
+
+  .footer-links a {
+    margin: 0 15px;
+    color: var(--proton-blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive Design */
+  @media(max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    a {
+      width: 100%;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .footer-links a {
+      margin: 10px 0;
+    }
+  }
+</style>
 </head>
 <body>
-    <h1>Sitemap - nox!314</h1>
+
+<h1>Sitemap - nox!314</h1>
+
+<div class="container">
+
+  <!-- Dienste -->
+  <div class="category">
+    <h2>Dienste</h2>
     <ul>
-        <li><a href="index.html">Startseite</a></li>
-        <li><a href="date.html">Weltuhr</a></li>
-        <li><a href="iss.html">ISS</a></li>
-        <li><a href="info.html">Über nox!314 (Info)</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Registrieren</a></li>
-        <li><a href="/sourcecodes">Quellcodes</a></li>
-        <li><a href="/Home/news.html">News</a></li>
-        <li><a href="/Home/sitemap.html">Sitemap</a></li>
-        <!-- Add more links as needed -->
+      <li><a href="index.html">Start</a></li>
+      <li><a href="date.html">Weltuhr</a></li>
+      <li><a href="iss.html">Iss</a></li>
     </ul>
+  </div>
+
+  <!-- Informationen -->
+  <div class="category">
+    <h2>Informationen</h2>
+    <ul>
+      <li><a href="info.html">Über nox!314</a></li>
+      <li><a href="/Home/news.html">News</a></li>
+      <li><a href="/Home/sitemap.html" class="active">Sitemap</a></li>
+    </ul>
+  </div>
+
+  <!-- Konto -->
+  <div class="category">
+    <h2>Konto</h2>
+    <ul>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="register.html">Registrieren</a></li>
+    </ul>
+  </div>
+
+  <!-- Weiterentwicklung -->
+  <div class="category">
+    <h2>Weiterentwicklung</h2>
+    <ul>
+      <li><a href="/sourcecodes">Quellcodes</a></li>
+      <li><a href="/Home/sourcecodes.html">Quellcode</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2026 nox!314
+  <div class="footer-links">
+    <a href="/Home/sourcecodes.html">Quellcode</a>
+    <a href="/Home/news.html">News</a>
+    <a href="/Home/sitemap.html" class="active">Sitemap</a>
+  </div>
+</footer>
+
 </body>
 </html>

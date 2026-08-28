@@ -1,323 +1,307 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta charset="UTF-8">
-	<div class="logo">
-		<title>X!Welcome</title>
-	</div>
-	<link href="https://fonts.googleapis.com/css?family=Anton|Open+Sans" rel="stylesheet">
-	
-	<style>
-	body {
-		margin: 0;
-		padding: 0;
-		font-family: "Open Sans", sans-serif;
-		font-size: 15px;
-		background-color: white;
-		color: #333;
-	}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info - nox!314</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
 
-	h1, h2 {
-		margin: 0;
-		padding: 0;
-		font-family: "Anton", coursive;
-		font-weight: normal;
-	}
-	h1 {
-		font-size: 80px;
-	}
-	h2 {
-		font-size: 30px;
-	}
-	.spacer.v20 {
-		height: 20px;
-	}
-	.spacer.v40 {
-		height: 40px;
-	}
-	.spacer.v80 {
-		height: 80px;
-	}
-	.clear {
-		clear: both;
-	}
-	
-	.nolink_ {
-		text-decoration: none;
-		color: black;
-		font-size: 16px;
-	}
-	
-	.nolink_:hover{
-		text-decoration: none;
-		color: ;
-		font-size: 16px;
-		color: #4b5a62;
-		text-decoration: underline;
-		-webkit-transition: all 500ms line;
-		-ms-transition: all 500ms line;
-		transition: all 500ms line;
-	}
-	
-	#promo,
-	#subscribe,
-	#footer {
-		text-align: center;
-		color: #fff;
-		min-width: 1000px;
-	}
-	
-	#promo {
-		background-color: #f46036;
-	}		
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-	#promo > div {
-		padding: 15px;
-	}
-	
-	.wrap {
-		margin: 0 auto;
-		padding: 0;
-		width: 1000px
-	}
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-	#topMenu {
-		height: 60px;
-	}	
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
 
-	#topLinks {
-		float: right;
-		padding-top: 20px;
-	}	
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
 
-	#topLinks ul,
-	#footer {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		overflow: hidden;
-	}	
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
 
-	#topLinks li {
-		float: left;
-	}
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-	#topLinks li a {
-		color: #333;
-		text-align: center;
-		padding: 16px;
-		text-decoration: none;
-		font-size: 16px;
-		-webkit-transition: all 250ms ease-out;
-		-ms-transition: all 250ms ease-out;
-		transition: all 250ms ease-out;
-	}
-	#topLinks li a:hover {
-		color: #4b13f8;
-		text-decoration: underline;
-	}
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
 
-	#topMenu .logo {
-		padding-left: 48px;
-		float: left;
-		padding-top: 13px;
-		font-size: 24px;
-		color: #333;
-		text-decoration: none;
-	}
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
 
-	#topMenu .logo:hover {
-		color: #4b13f8;
-	}
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
 
-	.logo {
-		font-family: "Anton", coursive;
-	}
+        .btn-register:hover {
+            background-color: var(--proton-blue-hover) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
+        }
 
-	.feature .Inhalt {
-		text-align: center;
-	}
-	
-	.feature .bm {
-		text-align: center;
-		clear: both;
-	}
-	
-	.feature hr {
-		background-color: #333;
-		height: 1px;
-		border: 0;
-		width: 50px;
-	}
-	
-	.linkbutton input[type=submit] {
-		
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
 
-	}
-	
-	#subscribe {
-		margin-top: 224px;
-		background-color: #4392F1;
-		width: 1000px;
-		height: 150px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
 
-	#subscribe h2 {
-		margin: 0 0 10px 0;
-		color: white;
-		font-size: 18px;
-		font-family: "Open Sans", sans-serif;
-		font-weight: bold;
-	}
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
 
-	#subscribe .form-row {
-		display: flex;
-		gap: 10px;
-	}
+        .info-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
 
-	#subscribe input[type=email] {
-		border: 0;
-		width: 250px;
-		height: 28px;
-		font-size: 14px;
-		padding: 0 10px;
-		border-radius: 30px;
-	}
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(98, 74, 255, 0.2);
+        }
 
-	#subscribe input[type=submit] {
-		border: 0;
-		width: 100px;
-		height: 32px;
-		font-size: 14px;
-		background-color: #0046b8;
-		color: white;
-		border-radius: 30px;
-		cursor: pointer;
-	}
+        .info-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--proton-dark);
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-	#subscribe input[type=submit]:hover {
-		background-color: #0f19ff;
-	}
-	
-	#footer {
-		margin: 0 auto;
-		padding: 0;
-		background-color: #0275ee;
-		height: 60px;
-		width: 1000px;
-	}
-		
-	#footer ul {
-		list-style-type: none;
-		margin: 6px 0 0 0;
-		padding: 0;
-		overflow: hidden;
-		display: inline-block;
-	}
-		
-	#footer li {
-		float: left;
-	}
-		
-	#footer li a {
-		color: white;
-		text-align: center;
-		padding: 20px;
-		text-decoration: none;
-		font-size: 14px;
-		-webkit-transition: all 250ms linear;
-		-ms-transition: all 250ms linear;
-		transition: all 250ms linear;
-	}
-		
-	#footer li a:hover {
-		color: #333;
-	}
+        .info-card-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
+            border-radius: 8px;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
 
-	.rounded-box {
-		border: 2px solid #6b14b8;
-		border-radius: 10px;
-		padding: 10px;
-		width: fit-content;
-		font-family: Courier;
-		font-weight: 400;
-		margin: 10px auto;
-		background-color: #f4ebff;
-	}
-	</style>
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0 0 15px 0;
+            font-size: 15px;
+        }
+
+        .info-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-link {
+            display: inline-block;
+            color: var(--proton-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .info-link:hover {
+            text-decoration: underline;
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #24292e;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .github-btn:hover {
+            background-color: #1b1f23;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .page-title { font-size: 32px; }
+            #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
+            .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
+            .info-cards { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="topMenu">
-	<div class="wrap">
-		<div id="topLinks">
-			<ul>
-				<li><a href="/start">Start</a></li>
-				<li><a href="/date">Clock</a></li>
-				<li><a href="/Info">Info</a></li>
-				<li><a href="https://github.com/nox314" class="github-button" data-show-count="false" style="font-size: 12px; display:inline-block; padding:5px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:10px;">nox314 on GitHub</a></li>
-			</ul>
-		</div>
-		<a class="logo" href="/start">nox!314</a>
-	</div>
-</div>
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="index.html" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="index.html">Start</a>
+                <a href="date.html">Weltuhr</a>
+                <a href="iss.html">Iss</a>
+                <a href="info.html" class="active">Info</a>
+                <a href="login.html">Login</a>
+                <a href="register.html" class="btn-register">Registrieren</a>
+            </div>
+        </div>
+    </nav>
 
-<div class="wrap">
-	<div class="clear spacer v80"></div>
-	<div id="ftr" class="feature">
-		<div class="Inhalt">
+    <div class="main-container">
+        <div class="wrap">
+            <h1 class="page-title">Über nox!314</h1>
 
-			<h2>What kind of website is this?</h2>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3><div class="info-card-icon">🌐</div> Was ist diese Website?</h3>
+                    <p>Dies ist eine experimentelle Website von nox314, die ständig weiterentwickelt wird. Hier findest du eine Suite verschiedener Tools und Anwendungen für deinen Alltag.</p>
+                </div>
 
-			<h4> This is an experimental website by nox314, which is constantly being developed.</h4>
-			
-			<h2>Who is the owner of this website?</h2>
-			
-			<h4>The owner of this website is nox314.</h4>
-			
-			<a href="https://github.com/nox314" style="display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:20px;">nox314 on GitHub</a>
-			
-			<br />
-			
-			<br />
+                <div class="info-card">
+                    <h3><div class="info-card-icon">👤</div> Wer ist der Besitzer?</h3>
+                    <p>Der Besitzer dieser Website ist nox314. Ein Entwickler mit Leidenschaft für experimentelle Webprojekte und innovative Technologien.</p>
+                    <a href="https://github.com/nox314" class="github-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.013 12.013 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        nox314 auf GitHub
+                    </a>
+                </div>
 
-			<h2>Which server is this website running on?</h2>
-			
-			<h4>This website is running on Apache2.</h4>
-			
-			<h2>Can I download the source codes?</h2>
-			
-			<h4>Yes, you can download some of the sourcodes. They are available <a class="nolink_" href="/sourcecodes">here</a>.</h4> 
-			
-			<h4>The username to download is: download and the password is: sourcecodes314.</h4>
-			
-			
+                <div class="info-card">
+                    <h3><div class="info-card-icon">🖥️</div> Welcher Server?</h3>
+                    <p>Diese Website läuft auf Apache2. Ein zuverlässiger und stabiler Webserver, der Leistung und Sicherheit bietet.</p>
+                </div>
 
-		</div>
-	</div>
-</div>
+                <div class="info-card">
+                    <h3><div class="info-card-icon">💾</div> Quellcodes verfügbar?</h3>
+                    <p>Ja, du kannst einige der Quellcodes herunterladen. Sie sind für registrierte Benutzer verfügbar.</p>
+                    <p><strong>Zugang:</strong> Benutzername: download | Passwort: sourcecodes314</p>
+                    <a href="/sourcecodes" class="info-link">Zum Download →</a>
+                </div>
 
-<div class="wrap" id="subscribe">
-	<h2>Newsletter abonnieren</h2>
-	<form action="/subscribe" method="post">
-		<input name="email" type="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein" />
-		<input type="submit" value="Anmelden" />
-	</form>
-</div>
+                <div class="info-card">
+                    <h3><div class="info-card-icon">🛠️</div> Technologie</h3>
+                    <p>Die Website nutzt moderne Web-Technologien wie HTML5, CSS3 und JavaScript für ein optimales Benutzererlebnis.</p>
+                </div>
 
-<div class="wrap" id="footer">
-	<ul>
-		<li><a href="/sourcecodes">Download Sourcecodes</a></li>
-		<li><a href="/News">News</a></li>
-		<li><a href="/sitemap">Sitemap</a></li>
-	</ul>
-	<div class="wrap" id="copyright">
-		<div>&copy; 2026 <span class="logo">nox!314</span></div>
-	</div>
-</div>
+                <div class="info-card">
+                    <h3><div class="info-card-icon">📬</div> Kontakt & Support</h3>
+                    <p>Für Fragen, Vorschläge oder technische Unterstützung, kontaktiere uns über unsere GitHub-Seite oder melde dich an.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+            <div class="footer-links">
+                <a href="/Home/sourcecodes.html">Quellcode</a>
+                <a href="/Home/news.html">News</a>
+                <a href="/Home/sitemap.html">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

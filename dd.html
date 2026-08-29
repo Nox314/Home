@@ -3,24 +3,61 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Doodle Jump with Wide Area</title>
+<title>Pro Doodle Jump Game</title>
 <style>
   body {
     margin: 0;
     overflow: hidden;
-    background: #cceeff;
+    background: #222;
+    font-family: Arial, sans-serif;
   }
   canvas {
     display: block;
     background: #87cefa;
   }
+  #score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    z-index: 10;
+  }
+  #gameOver {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    font-size: 32px;
+    padding: 20px;
+    display: none;
+    z-index: 20;
+  }
+  #restartBtn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
+<div id="score">Score: 0</div>
+<div id="gameOver">
+  <div>Game Over!</div>
+  <button id="restartBtn">Restart</button>
+</div>
 <canvas id="gameCanvas"></canvas>
 <script>
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+
+const scoreDiv = document.getElementById('score');
+const gameOverDiv = document.getElementById('gameOver');
+const restartBtn = document.getElementById('restartBtn');
 
 let width = window.innerWidth;
 let height = window.innerHeight;
@@ -34,83 +71,120 @@ window.addEventListener('resize', () => {
   canvas.height = height;
 });
 
-// Make game area at least 1000 columns wide
-const minGameWidth = 1000;
+// Game world parameters
+const WORLD_WIDTH = Math.max(3000, width * 2); // At least 3000 pixels wide
+let cameraX = 0; // Camera offset
 
-let gameWidth = Math.max(width, minGameWidth);
-
-// Player properties
+// Player object
 const player = {
-  x: gameWidth/2,
-  y: height - 50,
-  width: 30,
-  height: 30,
+  x: WORLD_WIDTH / 2,
+  y: height - 150,
+  width: 40,
+  height: 40,
   vx: 0,
   vy: 0,
-  color: 'red'
+  color: '#f00',
+  spriteIndex: 0,
+  spriteTimer: 0
 };
 
-// Gravity and game parameters
-const gravity = 0.4;
-const moveSpeed = 8; // faster for wider space
-const jumpStrength = 12;
+// Physics
+const gravity = 0.5;
+const moveSpeed = 8;
+const jumpStrength = 15;
 
-// Platforms array
-let platforms = [];
-const platformCount = 15; // more platforms for a large area
+// Platforms
+const platforms = [];
+const PLATFORM_COUNT = 30;
+
+// Score
+let score = 0;
+let bestScore = 0;
 
 // Controls
-let leftPressed = false;
-let rightPressed = false;
+let keys = { left: false, right: false };
 
+// Initialize controls
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') leftPressed = true;
-  if (e.key === 'ArrowRight') rightPressed = true;
+  if (e.key === 'ArrowLeft') keys.left = true;
+  if (e.key === 'ArrowRight') keys.right = true;
 });
 document.addEventListener('keyup', (e) => {
-  if (e.key === 'ArrowLeft') leftPressed = false;
-  if (e.key === 'ArrowRight') rightPressed = false;
+  if (e.key === 'ArrowLeft') keys.left = false;
+  if (e.key === 'ArrowRight') keys.right = false;
+});
+restartBtn.addEventListener('click', resetGame);
+window.addEventListener('resize', () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
 });
 
 // Initialize platforms
 function createPlatforms() {
-  for (let i=0; i<platformCount; i++) {
-    let pY = height - i * (height / platformCount);
+  for (let i=0; i<PLATFORM_COUNT; i++) {
+    let pY = height - i * (height / PLATFORM_COUNT) - 200;
     platforms.push({
-      x: Math.random() * (gameWidth - 60),
+      x: Math.random() * (WORLD_WIDTH - 100),
       y: pY,
-      width: 60,
-      height: 10,
-      color: 'green'
+      width: 100,
+      height: 12,
+      type: Math.random() < 0.2 ? 'moving' : 'static',
+      dx: Math.random() * 2 + 1,
+      dir: Math.random() < 0.5 ? -1 : 1,
+      color: '#228b22'
     });
   }
 }
 createPlatforms();
 
-function resetPlayer() {
-  player.x = gameWidth/2;
-  player.y = height - 50;
+function resetGame() {
+  player.x = WORLD_WIDTH / 2;
+  player.y = height - 150;
   player.vx = 0;
   player.vy = 0;
+  score = 0;
+  scoreDiv.textContent = `Score: ${score}`;
+  platforms.length = 0;
+  createPlatforms();
+  cameraX = 0;
+  gameOverDiv.style.display = 'none';
 }
 
 // Main game loop
 function gameLoop() {
-  // Move player
-  if (leftPressed) player.vx = -moveSpeed;
-  else if (rightPressed) player.vx = moveSpeed;
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+// Update game state
+function update() {
+  // Horizontal movement
+  if (keys.left) player.vx = -moveSpeed;
+  else if (keys.right) player.vx = moveSpeed;
   else player.vx = 0;
 
+  // Apply physics
   player.vy += gravity;
   player.x += player.vx;
   player.y += player.vy;
 
   // Wrap around horizontally
-  if (player.x < -player.width) player.x = gameWidth;
-  if (player.x > gameWidth) player.x = -player.width;
+  if (player.x < -player.width) player.x = WORLD_WIDTH;
+  if (player.x > WORLD_WIDTH) player.x = -player.width;
 
-  // Collision with platforms
-  if (player.vy > 0) { // Falling
+  // Move camera to keep player in middle
+  if (player.x - cameraX > width * 0.6) {
+    cameraX = Math.min(player.x - width * 0.6, WORLD_WIDTH - width);
+  }
+  if (player.x - cameraX < width * 0.4) {
+    cameraX = Math.max(player.x - width * 0.4, 0);
+  }
+
+  // Collisions with platforms (only when falling)
+  if (player.vy > 0) {
     for (let p of platforms) {
       if (
         player.x + player.width > p.x &&
@@ -119,44 +193,69 @@ function gameLoop() {
         player.y + player.height < p.y + p.height
       ) {
         player.vy = -jumpStrength;
+        score += 1;
+        scoreDiv.textContent = `Score: ${score}`;
         break;
       }
     }
   }
 
-  // Move platforms down when player reaches upper part
+  // Platforms movement
+  for (let p of platforms) {
+    if (p.type === 'moving') {
+      p.x += p.dx * p.dir;
+      if (p.x < 0 || p.x + p.width > WORLD_WIDTH) p.dir *= -1;
+    }
+  }
+
+  // Scroll platforms down when player reaches upper third
   if (player.y < height / 3) {
     let dy = height / 3 - player.y;
     player.y = height / 3;
-    platforms.forEach(p => p.y += dy);
+    // Move platforms down
+    for (let p of platforms) {
+      p.y += dy;
+    }
   }
 
-  // Remove platforms that go off screen and create new ones
-  platforms = platforms.filter(p => p.y < height);
-  while (platforms.length < platformCount) {
-    let newY = Math.random() * 100 - 100; // start near top
+  // Remove platforms that go off screen and generate new ones at top
+  for (let i=platforms.length -1; i>=0; i--) {
+    if (platforms[i].y > height + 50) {
+      platforms.splice(i,1);
+    }
+  }
+  while (platforms.length < PLATFORM_COUNT) {
     platforms.push({
-      x: Math.random() * (gameWidth - 60),
-      y: newY,
-      width: 60,
-      height: 10,
-      color: 'green'
+      x: Math.random() * (WORLD_WIDTH - 100),
+      y: Math.random() * -100,
+      width: 100,
+      height: 12,
+      type: Math.random() < 0.2 ? 'moving' : 'static',
+      dx: Math.random() * 2 + 1,
+      dir: Math.random() < 0.5 ? -1 : 1,
+      color: '#228b22'
     });
   }
 
-  // Check if player falls below screen
-  if (player.y > height) {
-    alert('Game Over! Press OK to restart.');
-    resetPlayer();
+  // Check if player fell below screen
+  if (player.y > height + 50) {
+    // Game over
+    if (score > bestScore) bestScore = score;
+    gameOverDiv.style.display = 'block';
   }
-
-  draw();
-  requestAnimationFrame(gameLoop);
 }
 
 // Draw everything
 function draw() {
   ctx.clearRect(0, 0, width, height);
+
+  // Save context and apply camera translation
+  ctx.save();
+  ctx.translate(-cameraX, 0);
+
+  // Draw background
+  ctx.fillStyle = '#87cefa';
+  ctx.fillRect(cameraX, 0, width, height);
 
   // Draw player
   ctx.fillStyle = player.color;
@@ -167,9 +266,17 @@ function draw() {
     ctx.fillStyle = p.color;
     ctx.fillRect(p.x, p.y, p.width, p.height);
   }
+
+  ctx.restore();
+
+  // Draw score
+  ctx.fillStyle = 'white';
+  ctx.font = '20px Arial';
+  ctx.fillText(`Score: ${score}`, 20, 30);
 }
 
-// Start game
+// Initialize game
+resetGame();
 gameLoop();
 </script>
 </body>

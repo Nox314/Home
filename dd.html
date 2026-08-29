@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Doodle Jump with Wide Area</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: #cceeff;
+  }
+  canvas {
+    display: block;
+    background: #87cefa;
+  }
+</style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+
+window.addEventListener('resize', () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+});
+
+// Make game area at least 1000 columns wide
+const minGameWidth = 1000;
+
+let gameWidth = Math.max(width, minGameWidth);
+
+// Player properties
+const player = {
+  x: gameWidth/2,
+  y: height - 50,
+  width: 30,
+  height: 30,
+  vx: 0,
+  vy: 0,
+  color: 'red'
+};
+
+// Gravity and game parameters
+const gravity = 0.4;
+const moveSpeed = 8; // faster for wider space
+const jumpStrength = 12;
+
+// Platforms array
+let platforms = [];
+const platformCount = 15; // more platforms for a large area
+
+// Controls
+let leftPressed = false;
+let rightPressed = false;
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') leftPressed = true;
+  if (e.key === 'ArrowRight') rightPressed = true;
+});
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'ArrowLeft') leftPressed = false;
+  if (e.key === 'ArrowRight') rightPressed = false;
+});
+
+// Initialize platforms
+function createPlatforms() {
+  for (let i=0; i<platformCount; i++) {
+    let pY = height - i * (height / platformCount);
+    platforms.push({
+      x: Math.random() * (gameWidth - 60),
+      y: pY,
+      width: 60,
+      height: 10,
+      color: 'green'
+    });
+  }
+}
+createPlatforms();
+
+function resetPlayer() {
+  player.x = gameWidth/2;
+  player.y = height - 50;
+  player.vx = 0;
+  player.vy = 0;
+}
+
+// Main game loop
+function gameLoop() {
+  // Move player
+  if (leftPressed) player.vx = -moveSpeed;
+  else if (rightPressed) player.vx = moveSpeed;
+  else player.vx = 0;
+
+  player.vy += gravity;
+  player.x += player.vx;
+  player.y += player.vy;
+
+  // Wrap around horizontally
+  if (player.x < -player.width) player.x = gameWidth;
+  if (player.x > gameWidth) player.x = -player.width;
+
+  // Collision with platforms
+  if (player.vy > 0) { // Falling
+    for (let p of platforms) {
+      if (
+        player.x + player.width > p.x &&
+        player.x < p.x + p.width &&
+        player.y + player.height > p.y &&
+        player.y + player.height < p.y + p.height
+      ) {
+        player.vy = -jumpStrength;
+        break;
+      }
+    }
+  }
+
+  // Move platforms down when player reaches upper part
+  if (player.y < height / 3) {
+    let dy = height / 3 - player.y;
+    player.y = height / 3;
+    platforms.forEach(p => p.y += dy);
+  }
+
+  // Remove platforms that go off screen and create new ones
+  platforms = platforms.filter(p => p.y < height);
+  while (platforms.length < platformCount) {
+    let newY = Math.random() * 100 - 100; // start near top
+    platforms.push({
+      x: Math.random() * (gameWidth - 60),
+      y: newY,
+      width: 60,
+      height: 10,
+      color: 'green'
+    });
+  }
+
+  // Check if player falls below screen
+  if (player.y > height) {
+    alert('Game Over! Press OK to restart.');
+    resetPlayer();
+  }
+
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+// Draw everything
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+
+  // Draw player
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+
+  // Draw platforms
+  for (let p of platforms) {
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, p.width, p.height);
+  }
+}
+
+// Start game
+gameLoop();
+</script>
+</body>
+</html>

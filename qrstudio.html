@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Studio, QR Code Generator</title>
+    <link rel="stylesheet" href="qrstyle.css">
+</head>
+<body>
+    <div class="container">
+        <h1>X!Studio, QR Code Generator</h1>
+        <form id="qr-form">
+            <input type="text" id="url-input" placeholder="Enter URL" required>
+            <button type="submit">QR Code erstellen</button>
+        </form>
+        <div id="qr-code"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script src="qrscript.js"></script>
+</body>
+</html>

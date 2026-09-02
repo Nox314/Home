@@ -1,268 +1,282 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>X!Studio — Studio (Background Remover + QR Studio)</title>
-  <meta name="description" content="X!Studio: Background Remover und QR Code Generator in einer Oberfläche">
-  <style>
-  /* Combined styles (backgroundstyle.css + qrstyle.css) */
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
-  body{background-image:linear-gradient(120deg,#004ef5 0%,#6800d8 100%);min-height:100vh;color:#222}
-  .site{min-height:100vh;display:flex;flex-direction:column}
-  header{background:rgba(255,255,255,0.06);backdrop-filter:blur(6px);}
-  .nav{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-  .brand{color:#fff;font-weight:700;font-size:18px}
-  .menu{display:flex;gap:12px}
-  .menu a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px;background:transparent}
-  .menu a.active{background:rgba(255,255,255,0.12)}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Studio — Studio (Background Remover + QR Studio)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --studio-bg-gradient-start: #004ef5;
+            --studio-bg-gradient-end: #6800d8;
+        }
 
-  main{flex:1;display:flex;justify-content:center;align-items:flex-start;padding:28px}
-  .container{width:100%;max-width:1100px;background:rgba(255,255,255,0.92);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
-  .tool-row{display:flex;gap:18px;flex-wrap:wrap}
-  .panel{flex:1;min-width:300px;background:linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.98));padding:16px;border-radius:10px;border:1px solid rgba(0,0,0,0.04)}
-  h1,h2{color:#0b1220}
-  .p{font-size:15px;margin-bottom:8px}
+        /* Base layout from index.html to ensure consistent header/navigation */
+        html,body{height:100%;}
+        body{
+            margin:0;padding:0;font-family:'Inter',sans-serif;background-color:var(--proton-light);color:var(--proton-text);display:flex;flex-direction:column;min-height:100vh;
+            background-image: linear-gradient(180deg, rgba(246,248,251,0.9), rgba(246,248,251,0.95));
+        }
 
-  /* Background remover specific */
-  .custum-file-upload{height:150px;width:100%;display:flex;flex-direction:column;gap:8px;margin:8px 0;cursor:pointer;align-items:center;justify-content:center;border:2px dashed #cacaca;background-color:rgba(255,255,255,1);padding:1rem;border-radius:10px}
-  .custum-file-upload .icon svg{height:60px;fill:rgba(75,85,99,1)}
-  .custum-file-upload input{display:none}
-  .buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-  .buttons button{padding:8px 12px;border:none;background:#ed5e37;color:#fff;border-radius:8px;cursor:pointer}
-  .buttons button:hover{background:#c94a2a}
-  #resultImage{max-width:100%;margin-top:12px;border-radius:6px}
+        /* Top menu (copied/styled like index.html) */
+        #topMenu{background-color:white;box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:100}
+        .wrap{margin:0 auto;padding:0 20px;max-width:1200px}
+        #topMenu .wrap{display:flex;justify-content:space-between;align-items:center;height:70px}
+        .logo{font-family:'Inter',sans-serif;font-weight:700;font-size:24px;color:var(--proton-dark);text-decoration:none;letter-spacing:-0.5px}
+        .logo span{color:var(--proton-blue)}
+        .nav-links{display:flex;gap:16px;align-items:center}
+        .nav-links a{text-decoration:none;color:var(--proton-text);font-weight:500;padding:8px 12px;border-radius:8px;transition:all .15s}
+        .nav-links a:hover,.nav-links a.active{background-color:rgba(98,74,255,0.08);color:var(--proton-blue)}
+        .btn-register{background-color:var(--proton-blue);color:white;padding:8px 16px;border-radius:8px;font-weight:600;box-shadow:0 6px 18px rgba(98,74,255,0.14)}
+        .btn-register:hover{background-color:var(--proton-blue-hover);transform:translateY(-1px)}
 
-  /* QR Studio specific */
-  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .type-extra input,.type-extra select,input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd}
-  .colors{display:flex;gap:12px;align-items:center}
-  .export-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-  .export-buttons button{padding:8px 10px;background:#2b6df6;color:#fff;border-radius:8px;border:none;cursor:pointer}
+        /* Studio page specific styles (blend of previous studio styles but aligned to index aesthetic) */
+        main{flex:1;padding:36px 0}
+        .container{max-width:1200px;margin:0 auto;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.98), #fff);border-radius:16px;box-shadow:var(--shadow-md)}
+        .studio-hero{display:flex;gap:20px;align-items:center;margin-bottom:18px}
+        .studio-hero .title{font-size:26px;font-weight:700;color:var(--proton-dark)}
+        .studio-hero .subtitle{color:#666;font-size:14px}
 
-  /* QR preview */
-  .qr-preview{min-height:220px;display:flex;align-items:center;justify-content:center;padding:12px;border-radius:8px;background:linear-gradient(180deg,rgba(250,250,250,0.9),#fff)}
-  
-  footer{padding:14px 20px;text-align:center;color:rgba(0,0,0,0.6);font-size:13px}
-  @media (max-width:900px){.tool-row{flex-direction:column}}
-  </style>
+        .panels{display:grid;grid-template-columns:1fr 480px;gap:20px}
+        @media (max-width:980px){.panels{grid-template-columns:1fr;}}
+
+        /* Left panel - Background Remover */
+        .panel{background:#fff;border-radius:12px;padding:16px;border:1px solid var(--proton-border)}
+        .panel h2{margin:0 0 8px 0;font-size:18px}
+        .hint{font-size:13px;color:#666;margin-bottom:10px}
+
+        .custum-file-upload{height:140px;width:100%;display:flex;flex-direction:column;gap:8px;margin:8px 0;cursor:pointer;align-items:center;justify-content:center;border:2px dashed rgba(0,0,0,0.06);background-color:#fafafa;padding:1rem;border-radius:10px}
+        .custum-file-upload .icon svg{height:54px;fill:var(--proton-blue)}
+        .custum-file-upload .text span{font-size:14px;color:#333}
+        .custum-file-upload input{display:none}
+
+        .removing{font-size:14px;color:var(--proton-blue);margin-top:8px}
+        #resultImage{max-width:100%;margin-top:14px;border-radius:8px;display:block}
+        .result .buttons{display:flex;gap:8px;margin-top:10px}
+        .result .buttons button{padding:8px 12px;border-radius:8px;border:none;background:var(--proton-blue);color:#fff}
+
+        /* Right panel - QR Studio (compact controls) */
+        .qr-controls{display:flex;flex-direction:column;gap:10px}
+        .qr-controls label{font-size:13px;color:#444}
+        .type-extra input,.type-extra select,input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid var(--proton-border);font-size:14px}
+        .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .colors{display:flex;gap:8px;align-items:center}
+        .buttons{display:flex;gap:8px}
+        .export-buttons{display:flex;gap:8px}
+        .export-buttons button{padding:8px 10px;border-radius:8px;border:none;background:#2b6df6;color:#fff}
+        .qr-preview{min-height:260px;display:flex;align-items:center;justify-content:center;padding:12px;border-radius:8px;background:linear-gradient(180deg, #fff,#fbfdff);border:1px solid var(--proton-border)}
+
+        /* Footer consistent with index.html */
+        footer{margin-top:18px;background-color:white;padding:20px 0;border-top:1px solid var(--proton-border)}
+        .footer-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;color:#666}
+
+    </style>
 </head>
 <body>
-  <div class="site">
-    <header>
-      <div class="nav">
-        <div class="brand">X!Studio</div>
-        <nav class="menu">
-          <a href="#remover" class="active" data-tool="remover">Background Remover</a>
-          <a href="#qr" data-tool="qr">QR Studio</a>
-          <a href="#about" data-tool="about">Über</a>
-        </nav>
-      </div>
-    </header>
 
-    <main>
-      <div class="container">
-        <h1>Studio — Background Remover &amp; QR Generator</h1>
-        <div class="tool-row">
+<nav id="topMenu">
+    <div class="wrap">
+        <a href="index.html" class="logo">nox<span>!</span>314</a>
+        <div class="nav-links">
+            <a href="index.html">Start</a>
+            <a href="date.html">Weltuhr</a>
+            <a href="iss.html">Iss</a>
+            <a href="studio.html" class="active">Studio</a>
+            <a href="info.html">Info</a>
+            <a href="login.html">Login</a>
+            <a href="register.html" class="btn-register">Registrieren</a>
+        </div>
+    </div>
+</nav>
 
-          <!-- Background Remover Panel -->
-          <section id="remover" class="panel">
-            <h2>Background Remover</h2>
-            <p class="p">Foto hier hochladen:</p>
-            <label class="custum-file-upload" for="file">
-              <div class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7Z"/></svg>
-              </div>
-              <div class="text"><span>Datei auswählen oder hierher ziehen</span></div>
-              <input id="file" type="file" accept="image/*">
-            </label>
-
-            <p class="removing" style="display:none">Hintergrund wird entfernt …</p>
-            <img id="resultImage" src="" alt="Ergebnis" style="display:none">
-            <div class="result" style="display:none">
-              <div class="buttons">
-                <button id="download-bg" type="button">Download</button>
-                <button id="reset-bg" type="button">Neu</button>
-              </div>
+<main>
+    <div class="container">
+        <div class="studio-hero">
+            <div>
+                <div class="title">X!Studio — Background Remover &amp; QR Studio</div>
+                <div class="subtitle">Einfaches Bearbeiten und Erstellen von QR‑Codes, sowie schnelle Entfernung von Bildhintergründen.</div>
             </div>
-          </section>
-
-          <!-- QR Studio Panel -->
-          <section id="qr" class="panel">
-            <h2>QR Studio</h2>
-            <form id="qr-form">
-              <div class="row">
-                <label for="type-select">Typ:</label>
-                <select id="type-select">
-                  <option value="text">Text / URL</option>
-                  <option value="wifi">Wi‑Fi</option>
-                  <option value="vcard">vCard</option>
-                </select>
-              </div>
-
-              <div id="type-extra" class="type-extra" style="margin-top:8px">
-                <input type="text" id="text-input" placeholder="Text oder URL eingeben" required>
-              </div>
-
-              <div class="row" style="margin-top:8px">
-                <label for="size-select">Größe (px):</label>
-                <select id="size-select">
-                  <option value="150">150</option>
-                  <option value="200" selected>200</option>
-                  <option value="300">300</option>
-                  <option value="400">400</option>
-                </select>
-
-                <label for="ec-level">Fehlerkorrektur:</label>
-                <select id="ec-level">
-                  <option value="L">L (7%)</option>
-                  <option value="M" selected>M (15%)</option>
-                  <option value="Q">Q (25%)</option>
-                  <option value="H">H (30%)</option>
-                </select>
-              </div>
-
-              <div class="colors" style="margin-top:8px">
-                <label>Farbe (Vordergrund): <input type="color" id="fg-color" value="#000000"></label>
-                <label>Hintergrund: <input type="color" id="bg-color" value="#ffffff"></label>
-              </div>
-
-              <label class="custum-file-upload small" style="width:auto;margin-top:8px" for="logo-input">Logo einbetten (optional):</label>
-              <input id="logo-input" type="file" accept="image/*">
-
-              <div class="buttons" style="margin-top:8px">
-                <button id="generate-btn" type="submit">QR Code erstellen</button>
-                <button id="clear-btn" type="button">Zurücksetzen</button>
-              </div>
-
-              <div class="export-buttons">
-                <button id="download-png" type="button">Download PNG</button>
-                <button id="download-svg" type="button">Download SVG</button>
-                <button id="copy-btn" type="button">In Zwischenablage (Bild)</button>
-              </div>
-            </form>
-
-            <div id="qr-code" class="qr-preview"></div>
-          </section>
-
         </div>
 
-        <section id="about" class="panel" style="margin-top:16px;display:none">
-          <h2>Über</h2>
-          <p class="p">Dieses Studio kombiniert den Background Remover (remove.bg API) mit einem erweiterten QR Generator.</p>
-          <p class="p">Hinweis: Die Background-API benötigt einen gültigen API‑Key und arbeitet im Demo‑Modus hier.</p>
-        </section>
+        <div class="panels">
+            <!-- Left: Background Remover -->
+            <section class="panel">
+                <h2>Background Remover</h2>
+                <div class="hint">Bild hochladen — die API entfernt automatisch den Hintergrund. (API‑Key erforderlich)</div>
 
-        <footer style="margin-top:18px">© X!Studio — Nox314 • Alle Rechte vorbehalten</footer>
-      </div>
-    </main>
-  </div>
+                <label class="custum-file-upload" for="file">
+                    <div class="icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7Z"/></svg>
+                    </div>
+                    <div class="text"><span>Datei auswählen oder hierher ziehen</span></div>
+                    <input id="file" type="file" accept="image/*">
+                </label>
 
-  <script>
-  /* Combined scripts (backgroundscript.js + qrscript.js) */
-  // --- Background remover logic ---
-  let imageURL;
-  const fileInput = document.getElementById('file');
-  const resultImage = document.getElementById('resultImage');
-  const removingText = document.querySelector('.removing');
-  const resultBlock = document.querySelector('.result');
-  const downloadBgBtn = document.getElementById('download-bg');
-  const resetBgBtn = document.getElementById('reset-bg');
+                <p class="removing" style="display:none">Hintergrund wird entfernt …</p>
+                <img id="resultImage" src="" alt="Ergebnis" style="display:none">
 
-  fileInput.addEventListener('change', async function(){
-    const image = fileInput.files[0];
-    if(!image) return;
-    document.querySelector('.custum-file-upload').style.display='none';
-    removingText.style.display='';
+                <div class="result" style="display:none">
+                    <div class="buttons">
+                        <button id="download-bg" type="button">Download</button>
+                        <button id="reset-bg" type="button">Neu</button>
+                    </div>
+                </div>
+            </section>
 
-    const formData = new FormData();
-    formData.append('image_file', image);
-    formData.append('size','auto');
+            <!-- Right: QR Studio -->
+            <aside class="panel">
+                <h2>QR Studio</h2>
+                <form id="qr-form" class="qr-controls">
+                    <div class="row">
+                        <label for="type-select">Typ</label>
+                        <select id="type-select">
+                            <option value="text">Text / URL</option>
+                            <option value="wifi">Wi‑Fi</option>
+                            <option value="vcard">vCard</option>
+                        </select>
+                    </div>
 
-    // NOTE: Replace with your own API key or keep as demo placeholder
-    const apiKey = "c4Ce5rPdwPYc6RmcjwSVyZzA";
+                    <div id="type-extra" class="type-extra"><input type="text" id="text-input" placeholder="Text oder URL eingeben" required></div>
 
-    try{
-      const res = await fetch('https://api.remove.bg/v1.0/removebg',{
-        method:'POST',headers:{'X-Api-Key':apiKey},body:formData
-      });
-      if(!res.ok) throw new Error('remove.bg Fehler: '+res.status);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      imageURL = url;
-      resultImage.src = url;resultImage.style.display='block';
-      removingText.style.display='none';resultBlock.style.display='block';
-    }catch(err){
-      console.error('Error:',err);alert('Failed to remove background. Bitte versuche es erneut.');
-      // restore UI
-      document.querySelector('.custum-file-upload').style.display='flex';
-      removingText.style.display='none';
-    }
-  });
+                    <div class="row">
+                        <label for="size-select">Größe</label>
+                        <select id="size-select"><option value="150">150</option><option value="200" selected>200</option><option value="300">300</option><option value="400">400</option></select>
 
-  downloadBgBtn.addEventListener('click', function(){
-    if(!imageURL){alert('Kein Bild vorhanden!');return}
-    const a=document.createElement('a');a.href=imageURL;a.download='background_removed_image.png';document.body.appendChild(a);a.click();a.remove();
-  });
-  resetBgBtn.addEventListener('click', function(){
-    // reset UI
-    document.querySelector('.custum-file-upload').style.display='flex';
-    document.querySelector('.p').style.display='';
-    resultImage.src='';resultImage.style.display='none';resultBlock.style.display='none';fileInput.value='';imageURL=null;
-  });
+                        <label for="ec-level">Fehlerkorrektur</label>
+                        <select id="ec-level"><option value="L">L</option><option value="M" selected>M</option><option value="Q">Q</option><option value="H">H</option></select>
+                    </div>
 
-  // --- QR Studio logic ---
-  const form = document.getElementById('qr-form');
-  const typeSelect = document.getElementById('type-select');
-  const typeExtra = document.getElementById('type-extra');
-  const sizeSelect = document.getElementById('size-select');
-  const ecLevel = document.getElementById('ec-level');
-  const fgColor = document.getElementById('fg-color');
-  const bgColor = document.getElementById('bg-color');
-  const logoInput = document.getElementById('logo-input');
-  const qrCodeContainer = document.getElementById('qr-code');
-  const downloadPngBtn = document.getElementById('download-png');
-  const downloadSvgBtn = document.getElementById('download-svg');
-  const copyBtn = document.getElementById('copy-btn');
-  const clearBtn = document.getElementById('clear-btn');
+                    <div class="colors">
+                        <label>Farbe <input type="color" id="fg-color" value="#000000"></label>
+                        <label>Hintergrund <input type="color" id="bg-color" value="#ffffff"></label>
+                    </div>
 
-  let lastCanvas=null;let lastSVG=null;let logoDataUrl=null;
+                    <label for="logo-input" class="custum-file-upload small" style="width:auto;padding:8px;margin-top:6px">Logo einbetten (optional)</label>
+                    <input id="logo-input" type="file" accept="image/*">
 
-  function showTextInput(){typeExtra.innerHTML='<input type="text" id="text-input" placeholder="Text oder URL eingeben" required>'}
-  function showWifiInputs(){typeExtra.innerHTML=`<input id="wifi-ssid" type="text" placeholder="SSID (Name des Netzwerks)" required><select id="wifi-auth"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">Kein Passwort</option></select><input id="wifi-pass" type="text" placeholder="Passwort (falls benötigt)"><label><input id="wifi-hidden" type="checkbox"> Hidden SSID</label>`}
-  function showVCardInputs(){typeExtra.innerHTML=`<input id="vc-name" type="text" placeholder="Name (Nachname Vorname)"><input id="vc-org" type="text" placeholder="Organisation"><input id="vc-title" type="text" placeholder="Position / Titel"><input id="vc-tel" type="text" placeholder="Telefon"><input id="vc-email" type="text" placeholder="E‑Mail"><input id="vc-url" type="text" placeholder="Website">`}
+                    <div class="buttons">
+                        <button id="generate-btn" type="submit">QR Code erstellen</button>
+                        <button id="clear-btn" type="button">Zurücksetzen</button>
+                    </div>
 
-  typeSelect.addEventListener('change',()=>{const t=typeSelect.value;if(t==='text')showTextInput();else if(t==='wifi')showWifiInputs();else if(t==='vcard')showVCardInputs()});
-  showTextInput();
+                    <div class="export-buttons">
+                        <button id="download-png" type="button">Download PNG</button>
+                        <button id="download-svg" type="button">Download SVG</button>
+                        <button id="copy-btn" type="button">In Zwischenablage</button>
+                    </div>
+                </form>
 
-  logoInput.addEventListener('change',async (e)=>{const f=e.target.files[0];if(!f){logoDataUrl=null;return}const reader=new FileReader();reader.onload=()=>{logoDataUrl=reader.result};reader.readAsDataURL(f)});
+                <div id="qr-code" class="qr-preview"></div>
+            </aside>
+        </div>
 
-  form.addEventListener('submit',(ev)=>{ev.preventDefault();generateQRCode()});
-  clearBtn.addEventListener('click',()=>{form.reset();typeSelect.value='text';showTextInput();qrCodeContainer.innerHTML='';lastCanvas=null;lastSVG=null;logoDataUrl=null});
+        <div style="margin-top:18px;text-align:center;color:#666;font-size:13px">Hinweis: Ersetze den Platzhalter-API‑Key für remove.bg durch deinen eigenen Schlüssel. Die Clipboard‑Funktion benötigt HTTPS.</div>
 
-  downloadPngBtn.addEventListener('click',()=>{if(!lastCanvas){alert('Kein QR verfügbar. Bitte zuerst erstellen.');return}const link=document.createElement('a');link.href=lastCanvas.toDataURL('image/png');link.download='qr-code.png';link.click()});
+    </div>
+</main>
 
-  downloadSvgBtn.addEventListener('click',async ()=>{const payload=buildPayload();if(!payload) return;try{const svgString = await QRCode.toString(payload.value, { type: 'svg', errorCorrectionLevel: ecLevel.value, color: { dark: fgColor.value, light: bgColor.value } }); lastSVG = svgString; const blob=new Blob([svgString],{type:'image/svg+xml'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='qr-code.svg';link.click();URL.revokeObjectURL(url);}catch(err){console.error(err);alert('SVG konnte nicht erzeugt werden.')}});
+<footer>
+    <div class="footer-inner wrap">
+        <div>&copy; 2026 nox!314</div>
+        <div class="footer-links">
+            <a href="/Home/sourcecodes.html">Quellcode</a>
+            <a href="/Home/news.html">News</a>
+            <a href="/Home/sitemap.html">Sitemap</a>
+        </div>
+    </div>
+</footer>
 
-  copyBtn.addEventListener('click',async ()=>{if(!lastCanvas){alert('Kein QR verfügbar. Bitte zuerst erstellen.');return}try{lastCanvas.toBlob(async (blob)=>{const item=new ClipboardItem({[blob.type]:blob});await navigator.clipboard.write([item]);alert('QR als Bild in die Zwischenablage kopiert.');});}catch(err){console.error(err);alert('Kopieren in die Zwischenablage fehlgeschlagen.')}});
+<script>
+/* Background remover logic (unchanged) */
+let imageURL;
+const fileInput = document.getElementById('file');
+const resultImage = document.getElementById('resultImage');
+const removingText = document.querySelector('.removing');
+const resultBlock = document.querySelector('.result');
+const downloadBgBtn = document.getElementById('download-bg');
+const resetBgBtn = document.getElementById('reset-bg');
 
-  function buildPayload(){const t=typeSelect.value;if(t==='text'){const txt=document.getElementById('text-input').value.trim();if(!txt){alert('Bitte Text/URL eingeben.');return null}return {value:txt}}if(t==='wifi'){const ssid=document.getElementById('wifi-ssid').value||'';const auth=document.getElementById('wifi-auth').value||'WPA';const pass=document.getElementById('wifi-pass').value||'';const hidden=document.getElementById('wifi-hidden').checked;if(!ssid){alert('Bitte SSID eingeben.');return null}const esc=(s)=>s.replace(/([;,:\\"])/g,'\\$1');const payload=`WIFI:T:${auth};S:${esc(ssid)};P:${esc(pass)};${hidden?'H:true;':''};;`;return {value:payload}}if(t==='vcard'){const name=document.getElementById('vc-name').value||'';const org=document.getElementById('vc-org').value||'';const title=document.getElementById('vc-title').value||'';const tel=document.getElementById('vc-tel').value||'';const email=document.getElementById('vc-email').value||'';const url=document.getElementById('vc-url').value||'';const lines=['BEGIN:VCARD','VERSION:3.0',name?`FN:${name}`:'',title?`TITLE:${title}`:'',org?`ORG:${org}`:'',tel?`TEL;TYPE=WORK,VOICE:${tel}`:'',email?`EMAIL:${email}`:'',url?`URL:${url}`:'','END:VCARD'].filter(Boolean);return {value:lines.join('\n')}}return {value:''}}
+fileInput.addEventListener('change', async function () {
+  const image = fileInput.files[0]; if (!image) return;
+  document.querySelector('.custum-file-upload').style.display = 'none';
+  removingText.style.display = '';
+  resultBlock.style.display = 'none'; resultImage.style.display = 'none';
 
-  async function generateQRCode(){const payload=buildPayload();if(!payload)return;const size=parseInt(sizeSelect.value,10)||200;const options={errorCorrectionLevel:ecLevel.value,margin:1,color:{dark:fgColor.value,light:bgColor.value}};qrCodeContainer.innerHTML='';const canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;qrCodeContainer.appendChild(canvas);try{await QRCode.toCanvas(canvas,payload.value,{width:size,height:size,errorCorrectionLevel:options.errorCorrectionLevel,color:options.color});if(logoDataUrl){await embedLogoOnCanvas(canvas,logoDataUrl)}lastCanvas=canvas;lastSVG=await QRCode.toString(payload.value,{type:'svg',errorCorrectionLevel:options.errorCorrectionLevel,color:options.color});}catch(err){console.error(err);alert('QR konnte nicht generiert werden.')}}
+  const formData = new FormData(); formData.append('image_file', image); formData.append('size', 'auto');
+  const apiKey = "c4Ce5rPdwPYc6RmcjwSVyZzA"; // placeholder
 
-  function embedLogoOnCanvas(canvas,logoUrl){return new Promise((resolve)=>{const ctx=canvas.getContext('2d');const img=new Image();img.crossOrigin='anonymous';img.onload=()=>{const ratio=Math.min(0.24,Math.max(0.12,Math.min(0.3,(img.width/img.height)*0.2)));const w=canvas.width*ratio;const h=(img.height/img.width)*w;const x=(canvas.width-w)/2;const y=(canvas.height-h)/2;ctx.save();const radius=8;ctx.fillStyle=bgColor.value||'#ffffff';roundRect(ctx,x-6,y-6,w+12,h+12,radius);ctx.fill();ctx.restore();ctx.drawImage(img,x,y,w,h);resolve()};img.onerror=(e)=>{console.error('Logo load failed',e);resolve()};img.src=logoUrl})}
-  function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+  try {
+    const res = await fetch('https://api.remove.bg/v1.0/removebg', { method: 'POST', headers: { 'X-Api-Key': apiKey }, body: formData });
+    if (!res.ok) throw new Error('remove.bg Fehler: ' + res.status);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    imageURL = url; resultImage.src = url; resultImage.style.display = 'block'; removingText.style.display = 'none'; resultBlock.style.display = 'block';
+  } catch (err) {
+    console.error('Error:', err); alert('Failed to remove background. Bitte versuche es erneut.');
+    document.querySelector('.custum-file-upload').style.display = 'flex'; removingText.style.display = 'none';
+  }
+});
 
-  // Ensure QR library is available or load it dynamically if needed
-  (function ensureQRCodeLib(){if(window.QRCode) return;const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js';s.onload=function(){console.log('qrcode lib loaded')};document.head.appendChild(s)})();
+downloadBgBtn && downloadBgBtn.addEventListener('click', function () { if (!imageURL) { alert('Kein Bild vorhanden!'); return; } const a = document.createElement('a'); a.href = imageURL; a.download = 'background_removed_image.png'; document.body.appendChild(a); a.click(); a.remove(); });
+resetBgBtn && resetBgBtn.addEventListener('click', function () { document.querySelector('.custum-file-upload').style.display = 'flex'; document.querySelector('.p') && (document.querySelector('.p').style.display = ''); resultImage.src = ''; resultImage.style.display = 'none'; resultBlock.style.display = 'none'; fileInput.value = ''; imageURL = null; });
 
-  // initial focus safe guard
-  setTimeout(()=>{const ti=document.getElementById('text-input');if(ti)ti.focus()},300);
+/* QR studio logic (unchanged behavior, only UI adjusted) */
+const form = document.getElementById('qr-form');
+const typeSelect = document.getElementById('type-select');
+const typeExtra = document.getElementById('type-extra');
+const sizeSelect = document.getElementById('size-select');
+const ecLevel = document.getElementById('ec-level');
+const fgColor = document.getElementById('fg-color');
+const bgColor = document.getElementById('bg-color');
+const logoInput = document.getElementById('logo-input');
+const qrCodeContainer = document.getElementById('qr-code');
+const downloadPngBtn = document.getElementById('download-png');
+const downloadSvgBtn = document.getElementById('download-svg');
+const copyBtn = document.getElementById('copy-btn');
+const clearBtn = document.getElementById('clear-btn');
+let lastCanvas = null; let lastSVG = null; let logoDataUrl = null;
 
-  // Simple navigation for panels
-  document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const tool=a.dataset.tool;document.querySelectorAll('.menu a').forEach(x=>x.classList.remove('active'));a.classList.add('active');document.querySelectorAll('main .panel, main #about').forEach(p=>p.style.display='none');if(tool==='remover'){document.getElementById('remover').style.display='block';document.getElementById('qr').style.display='block'}else if(tool==='qr'){document.getElementById('remover').style.display='none';document.getElementById('qr').style.display='block'}else{document.getElementById('remover').style.display='none';document.getElementById('qr').style.display='none';document.getElementById('about').style.display='block'} }))
+function showTextInput() { typeExtra.innerHTML = '<input type="text" id="text-input" placeholder="Text oder URL eingeben" required>' }
+function showWifiInputs() { typeExtra.innerHTML = '<input id="wifi-ssid" type="text" placeholder="SSID (Name des Netzwerks)" required><select id="wifi-auth"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">Kein Passwort</option></select><input id="wifi-pass" type="text" placeholder="Passwort (falls benötigt)"><label style="font-size:13px"><input id="wifi-hidden" type="checkbox"> Hidden SSID</label>'; }
+function showVCardInputs() { typeExtra.innerHTML = '<input id="vc-name" type="text" placeholder="Name (Nachname Vorname)"><input id="vc-org" type="text" placeholder="Organisation"><input id="vc-title" type="text" placeholder="Position / Titel"><input id="vc-tel" type="text" placeholder="Telefon"><input id="vc-email" type="text" placeholder="E‑Mail"><input id="vc-url" type="text" placeholder="Website">'; }
 
-  </script>
+typeSelect.addEventListener('change', () => { const t = typeSelect.value; if (t === 'text') showTextInput(); else if (t === 'wifi') showWifiInputs(); else if (t === 'vcard') showVCardInputs(); });
+showTextInput();
+
+logoInput.addEventListener('change', async (e) => { const f = e.target.files[0]; if (!f) { logoDataUrl = null; return; } const reader = new FileReader(); reader.onload = () => { logoDataUrl = reader.result; }; reader.readAsDataURL(f); });
+
+form.addEventListener('submit', (ev) => { ev.preventDefault(); generateQRCode(); });
+clearBtn && clearBtn.addEventListener('click', () => { form.reset(); typeSelect.value = 'text'; showTextInput(); qrCodeContainer.innerHTML = ''; lastCanvas = null; lastSVG = null; logoDataUrl = null; });
+
+downloadPngBtn && downloadPngBtn.addEventListener('click', () => { if (!lastCanvas) { alert('Kein QR verfügbar. Bitte zuerst erstellen.'); return; } const link = document.createElement('a'); link.href = lastCanvas.toDataURL('image/png'); link.download = 'qr-code.png'; link.click(); });
+
+downloadSvgBtn && downloadSvgBtn.addEventListener('click', async () => { const payload = buildPayload(); if (!payload) return; try { if (!window.QRCode || !QRCode.toString) { alert('QR Bibliothek nicht geladen. Bitte Seite neu laden.'); return; } const svgString = await QRCode.toString(payload.value, { type: 'svg', errorCorrectionLevel: ecLevel.value, color: { dark: fgColor.value, light: bgColor.value } }); lastSVG = svgString; const blob = new Blob([svgString], { type: 'image/svg+xml' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'qr-code.svg'; link.click(); URL.revokeObjectURL(url); } catch (err) { console.error(err); alert('SVG konnte nicht erzeugt werden.'); } });
+
+copyBtn && copyBtn.addEventListener('click', async () => { if (!lastCanvas) { alert('Kein QR verfügbar. Bitte zuerst erstellen.'); return; } try { lastCanvas.toBlob(async (blob) => { const item = new ClipboardItem({ [blob.type]: blob }); await navigator.clipboard.write([item]); alert('QR als Bild in die Zwischenablage kopiert.'); }); } catch (err) { console.error(err); alert('Kopieren in die Zwischenablage fehlgeschlagen.'); } });
+
+function buildPayload() { const t = typeSelect.value; if (t === 'text') { const txtEl = document.getElementById('text-input'); const txt = txtEl ? txtEl.value.trim() : ''; if (!txt) { alert('Bitte Text/URL eingeben.'); return null; } return { value: txt }; } if (t === 'wifi') { const ssid = (document.getElementById('wifi-ssid') || {}).value || ''; const auth = (document.getElementById('wifi-auth') || {}).value || 'WPA'; const pass = (document.getElementById('wifi-pass') || {}).value || ''; const hidden = (document.getElementById('wifi-hidden') || {}).checked || false; if (!ssid) { alert('Bitte SSID eingeben.'); return null; } const esc = (s) => String(s).replace(/([;,:\\"])/g, '\\$1'); const payload = `WIFI:T:${auth};S:${esc(ssid)};P:${esc(pass)};${hidden ? 'H:true;' : ''};`; return { value: payload }; } if (t === 'vcard') { const name = (document.getElementById('vc-name') || {}).value || ''; const org = (document.getElementById('vc-org') || {}).value || ''; const title = (document.getElementById('vc-title') || {}).value || ''; const tel = (document.getElementById('vc-tel') || {}).value || ''; const email = (document.getElementById('vc-email') || {}).value || ''; const url = (document.getElementById('vc-url') || {}).value || ''; const lines = [ 'BEGIN:VCARD', 'VERSION:3.0', name ? `FN:${name}` : '', title ? `TITLE:${title}` : '', org ? `ORG:${org}` : '', tel ? `TEL;TYPE=WORK,VOICE:${tel}` : '', email ? `EMAIL:${email}` : '', url ? `URL:${url}` : '', 'END:VCARD' ].filter(Boolean); return { value: lines.join('\n') }; } return { value: '' }; }
+
+async function generateQRCode() { const payload = buildPayload(); if (!payload) return; const size = parseInt(sizeSelect.value, 10) || 200; const options = { errorCorrectionLevel: ecLevel.value, margin: 1, color: { dark: fgColor.value, light: bgColor.value } }; qrCodeContainer.innerHTML = ''; const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size; qrCodeContainer.appendChild(canvas); try { if (!window.QRCode || !QRCode.toCanvas) { alert('QR Bibliothek wird geladen oder ist nicht verfügbar.'); return; } await QRCode.toCanvas(canvas, payload.value, { width: size, height: size, errorCorrectionLevel: options.errorCorrectionLevel, color: options.color }); if (logoDataUrl) { await embedLogoOnCanvas(canvas, logoDataUrl); } lastCanvas = canvas; lastSVG = await QRCode.toString(payload.value, { type: 'svg', errorCorrectionLevel: options.errorCorrectionLevel, color: options.color }); } catch (err) { console.error(err); alert('QR konnte nicht generiert werden.'); } }
+
+function embedLogoOnCanvas(canvas, logoUrl) { return new Promise((resolve) => { const ctx = canvas.getContext('2d'); const img = new Image(); img.crossOrigin = 'anonymous'; img.onload = () => { const ratio = Math.min(0.24, Math.max(0.12, Math.min(0.3, (img.width / img.height) * 0.2))); const w = canvas.width * ratio; const h = (img.height / img.width) * w; const x = (canvas.width - w) / 2; const y = (canvas.height - h) / 2; ctx.save(); const radius = 8; ctx.fillStyle = bgColor.value || '#ffffff'; roundRect(ctx, x - 6, y - 6, w + 12, h + 12, radius); ctx.fill(); ctx.restore(); ctx.drawImage(img, x, y, w, h); resolve(); }; img.onerror = (e) => { console.error('Logo load failed', e); resolve(); }; img.src = logoUrl; }); }
+
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+
+// Load QR lib if needed
+(function ensureQRCodeLib() { if (window.QRCode && QRCode.toCanvas) return; const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js'; s.onload = function () { console.log('qrcode lib loaded'); }; document.head.appendChild(s); })();
+
+// initial focus
+setTimeout(() => { const ti = document.getElementById('text-input'); if (ti) ti.focus(); }, 300);
+
+</script>
 </body>
 </html>

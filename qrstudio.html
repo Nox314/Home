@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +7,63 @@
     <link rel="stylesheet" href="qrstyle.css">
 </head>
 <body>
-    <div class="container">
-        <h1>X!Studio, QR Code Generator</h1>
-        <form id="qr-form">
-            <input type="text" id="url-input" placeholder="URL eingeben" required>
-            <button type="submit">QR Code erstellen</button>
-        </form>
-        <div id="qr-code"></div>
+    <div class="main">
+        <div class="container">
+            <h1>X!Studio, QR Code Generator</h1>
+
+            <form id="qr-form">
+                <label for="type-select">Typ:</label>
+                <select id="type-select">
+                    <option value="text">Text / URL</option>
+                    <option value="wifi">Wi‑Fi</option>
+                    <option value="vcard">vCard</option>
+                </select>
+
+                <div id="type-extra">
+                    <!-- Default text input -->
+                    <input type="text" id="text-input" placeholder="Text oder URL eingeben" required>
+                </div>
+
+                <label for="size-select">Größe:</label>
+                <select id="size-select">
+                    <option value="150">150</option>
+                    <option value="200" selected>200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                </select>
+
+                <label for="ec-level">Fehlerkorrektur:</label>
+                <select id="ec-level">
+                    <option value="L">L (7%)</option>
+                    <option value="M" selected>M (15%)</option>
+                    <option value="Q">Q (25%)</option>
+                    <option value="H">H (30%)</option>
+                </select>
+
+                <div class="colors">
+                    <label>Farbe (Vordergrund): <input type="color" id="fg-color" value="#000000"></label>
+                    <label>Hintergrund: <input type="color" id="bg-color" value="#ffffff"></label>
+                </div>
+
+                <label for="logo-input" class="custum-file-upload small">Logo einbetten (optional):</label>
+                <input id="logo-input" type="file" accept="image/*">
+
+                <div class="buttons">
+                    <button id="generate-btn" type="submit">QR Code erstellen</button>
+                    <button id="clear-btn" type="button">Zurücksetzen</button>
+                </div>
+
+                <div class="export-buttons">
+                    <button id="download-png" type="button">Download PNG</button>
+                    <button id="download-svg" type="button">Download SVG</button>
+                    <button id="copy-btn" type="button">In Zwischenablage (Bild)</button>
+                </div>
+            </form>
+
+            <div id="qr-code"></div>
+        </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
     <script src="qrscript.js"></script>
 </body>

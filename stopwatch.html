@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch & Lap Timer</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Stopwatch & Lap Timer</h1>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <label class="switch">
+                    <input type="checkbox" id="theme-switch">
+                    <span class="slider round"></span>
+                </label>
+                <i class="fas fa-sun"></i>
+            </div>
+        </header>
+
+        <main>
+            <div class="timer-display">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="milliseconds">00</span>
+            </div>
+
+            <div class="controls">
+                <button id="start-stop-btn" class="btn primary">
+                    <i class="fas fa-play"></i> Start
+                </button>
+                <button id="lap-btn" class="btn secondary" disabled>
+                    <i class="fas fa-flag"></i> Lap
+                </button>
+                <button id="reset-btn" class="btn danger">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="fastest-lap">--:--:--.--</span>
+                    <span class="stat-label">Fastest Lap</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="slowest-lap">--:--:--.--</span>
+                    <span class="stat-label">Slowest Lap</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="average-lap">--:--:--.--</span>
+                    <span class="stat-label">Average Lap</span>
+                </div>
+            </div>
+
+            <div class="laps-container">
+                <div class="laps-header">
+                    <h2>Lap History</h2>
+                    <button id="export-btn" class="btn small">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
+                </div>
+                <div id="laps-list" class="laps-list">
+                    <div class="empty-state">
+                        <i class="fas fa-flag"></i>
+                        <p>Your lap times will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Press <kbd>Space</kbd> to start/stop, <kbd>L</kbd> for lap</p>
+        </footer>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

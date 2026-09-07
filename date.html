@@ -381,6 +381,100 @@
 
         .lap-item:last-child { border-bottom: none; }
 
+        /* Timer section */
+        .timer-section {
+            margin-bottom: 50px;
+        }
+
+        .timer-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timer-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin: 0 0 10px 0;
+        }
+
+        .timer-header p {
+            color: #666;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .timer-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .timer-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .timer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .timer-time {
+            font-family: 'Inter', monospace;
+            font-weight: 700;
+            font-size: 56px;
+            color: var(--proton-blue);
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+
+        .timer-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .timer-input {
+            width: 70px;
+            padding: 10px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Inter', monospace;
+            font-weight: 600;
+        }
+
+        .timer-input:focus {
+            outline: none;
+            border-color: var(--proton-blue);
+            box-shadow: 0 0 0 3px rgba(98, 74, 255, 0.1);
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         footer {
             background-color: white;
             padding: 30px 0;
@@ -409,11 +503,12 @@
             #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
             .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
             .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
-            .stopwatch-time { font-size: 44px; }
-            .stopwatch-header h2 { font-size: 28px; }
-            .stopwatch-section { margin-bottom: 30px; }
-            .stopwatch-controls { gap: 8px; }
+            .stopwatch-time, .timer-time { font-size: 44px; }
+            .stopwatch-header h2, .timer-header h2 { font-size: 28px; }
+            .stopwatch-section, .timer-section { margin-bottom: 30px; }
+            .stopwatch-controls, .timer-controls { gap: 8px; }
             .btn { padding: 8px 12px; font-size: 13px; }
+            .timer-input { width: 60px; }
         }
     </style>
 </head>
@@ -464,6 +559,35 @@
                             <button id="resetBtn" class="btn btn-reset" disabled>Reset</button>
                         </div>
                         <div class="laps" id="lapsList" aria-live="polite" aria-label="Runden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <div class="timer-header">
+                    <h2>Timer</h2>
+                    <p>Zähle die Zeit herunter für Aufgaben, Trainingsintervalle und Zeitverwaltung</p>
+                </div>
+                <div class="timer-container">
+                    <div class="timer-card">
+                        <div class="timer-time" id="timerDisplay" aria-live="polite">00:00</div>
+                        <div class="timer-input-group" id="timerInputGroup">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <input type="number" id="minutesInput" class="timer-input" placeholder="MM" min="0" max="59" value="0">
+                                <span class="timer-label">Minuten</span>
+                            </div>
+                            <span style="font-size: 20px; font-weight: 600; color: #999;">:</span>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <input type="number" id="secondsInput" class="timer-input" placeholder="SS" min="0" max="59" value="0">
+                                <span class="timer-label">Sekunden</span>
+                            </div>
+                        </div>
+                        <div class="timer-controls">
+                            <button id="timerStartBtn" class="btn btn-start" aria-pressed="false">Start</button>
+                            <button id="timerPauseBtn" class="btn btn-pause" style="display:none;">Pause</button>
+                            <button id="timerResetBtn" class="btn btn-reset">Reset</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -694,8 +818,8 @@
         const lapsList = document.getElementById('lapsList');
 
         let running = false;
-        let startTime = 0; // performance.now() when started
-        let elapsedBefore = 0; // ms
+        let startTime = 0;
+        let elapsedBefore = 0;
         let stopwatchTimer = null;
         let laps = [];
 
@@ -773,7 +897,6 @@
 
         function renderLaps() {
             lapsList.innerHTML = '';
-            // show newest first
             for (let i = laps.length - 1; i >= 0; i--) {
                 const lap = laps[i];
                 const div = document.createElement('div');
@@ -783,13 +906,11 @@
             }
         }
 
-        // event listeners
         startBtn.addEventListener('click', () => startStopwatch());
         pauseBtn.addEventListener('click', () => pauseStopwatch());
         resetBtn.addEventListener('click', () => resetStopwatch());
         lapBtn.addEventListener('click', () => recordLap());
 
-        // keyboard shortcuts: Space=Start/Pause, L=Lap, R=Reset
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
                 e.preventDefault();
@@ -803,8 +924,102 @@
             }
         });
 
-        // ensure a clean initial state
         resetStopwatch();
+
+        /* Timer implementation */
+        const timerStartBtn = document.getElementById('timerStartBtn');
+        const timerPauseBtn = document.getElementById('timerPauseBtn');
+        const timerResetBtn = document.getElementById('timerResetBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const minutesInput = document.getElementById('minutesInput');
+        const secondsInput = document.getElementById('secondsInput');
+        const timerInputGroup = document.getElementById('timerInputGroup');
+
+        let timerRunning = false;
+        let timerTotalSeconds = 0;
+        let timerRemainingSeconds = 0;
+        let timerIntervalId = null;
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerRemainingSeconds / 60);
+            const secs = timerRemainingSeconds % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerRunning) return;
+            if (timerRemainingSeconds === 0) {
+                timerRemainingSeconds = parseInt(minutesInput.value || 0) * 60 + parseInt(secondsInput.value || 0);
+            }
+            if (timerRemainingSeconds === 0) return;
+            
+            timerRunning = true;
+            timerStartBtn.style.display = 'none';
+            timerPauseBtn.style.display = '';
+            minutesInput.disabled = true;
+            secondsInput.disabled = true;
+
+            timerIntervalId = setInterval(() => {
+                timerRemainingSeconds--;
+                updateTimerDisplay();
+
+                if (timerRemainingSeconds <= 0) {
+                    pauseTimer();
+                    timerDisplay.style.color = '#ff4444';
+                    setTimeout(() => {
+                        timerDisplay.style.color = 'var(--proton-blue)';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!timerRunning) return;
+            timerRunning = false;
+            clearInterval(timerIntervalId);
+            timerIntervalId = null;
+            timerPauseBtn.style.display = 'none';
+            timerStartBtn.style.display = '';
+        }
+
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerIntervalId);
+            timerIntervalId = null;
+            timerRemainingSeconds = 0;
+            timerTotalSeconds = 0;
+            minutesInput.disabled = false;
+            secondsInput.disabled = false;
+            minutesInput.value = 0;
+            secondsInput.value = 0;
+            timerDisplay.textContent = '00:00';
+            timerDisplay.style.color = 'var(--proton-blue)';
+            timerPauseBtn.style.display = 'none';
+            timerStartBtn.style.display = '';
+        }
+
+        timerStartBtn.addEventListener('click', () => startTimer());
+        timerPauseBtn.addEventListener('click', () => pauseTimer());
+        timerResetBtn.addEventListener('click', () => resetTimer());
+
+        minutesInput.addEventListener('change', () => {
+            if (minutesInput.value > 59) minutesInput.value = 59;
+            if (minutesInput.value < 0) minutesInput.value = 0;
+        });
+
+        secondsInput.addEventListener('change', () => {
+            if (secondsInput.value > 59) secondsInput.value = 59;
+            if (secondsInput.value < 0) secondsInput.value = 0;
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && document.activeElement.id !== 'minutesInput' && document.activeElement.id !== 'secondsInput') {
+                e.preventDefault();
+                if (timerRunning) pauseTimer(); else startTimer();
+            }
+        });
+
+        resetTimer();
 
     </script>
 </body>

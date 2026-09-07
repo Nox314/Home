@@ -19,8 +19,6 @@
             --radius: 12px;
         }
 
-        * { box-sizing: border-box; }
-
         body {
             margin: 0;
             padding: 0;
@@ -181,353 +179,848 @@
             padding: 20px;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s;
-            animation: fadeIn 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .clock-card:hover {
+            transform: translateY(-4px);
             box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
         }
 
-        .clock-card-header {
+        .clock-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .clock-city {
+        .city-name {
+            font-size: 18px;
             font-weight: 600;
-            font-size: 16px;
             color: var(--proton-dark);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        .clock-timezone {
+        .timezone-info {
             font-size: 12px;
             color: #888;
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .clock-remove {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 18px;
-            cursor: pointer;
+            background: var(--proton-light);
             padding: 4px 8px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            line-height: 1;
-            flex-shrink: 0;
+            border-radius: 4px;
         }
 
-        .clock-remove:hover {
-            background-color: rgba(255, 0, 0, 0.08);
-            color: #e33;
-        }
-
-        .clock-time {
+        .time-display {
             font-size: 32px;
             font-weight: 700;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -1px;
-            color: var(--proton-dark);
-            margin-bottom: 4px;
-        }
-
-        .clock-date {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 10px;
-        }
-
-        .clock-offset {
-            font-size: 12px;
-            font-weight: 500;
             color: var(--proton-blue);
-            background: rgba(98, 74, 255, 0.08);
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
+            margin-bottom: 5px;
+            font-family: 'Inter', monospace;
         }
 
-        .empty-state {
+        .date-display {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .status-day {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #f57c00;
+        }
+
+        .status-night {
+            background-color: rgba(33, 33, 33, 0.1);
+            color: #424242;
+        }
+
+        .diff-badge {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        /* Stopwatch section */
+        .stopwatch-section {
+            margin-bottom: 50px;
+        }
+
+        .stopwatch-header {
             text-align: center;
-            color: #aaa;
-            padding: 60px 20px;
-            font-size: 18px;
-            grid-column: 1 / -1;
+            margin-bottom: 30px;
         }
 
-        .empty-state .empty-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            display: block;
+        .stopwatch-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin: 0 0 10px 0;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .stopwatch-header p {
+            color: #666;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .stopwatch-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Stopwatch card */
+        .stopwatch-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stopwatch-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stopwatch-time {
+            font-family: 'Inter', monospace;
+            font-weight: 700;
+            font-size: 56px;
+            color: var(--proton-blue);
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+
+        .stopwatch-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            font-size: 14px;
+        }
+
+        .btn:active { transform: translateY(1px); }
+
+        .btn-start {
+            background: linear-gradient(90deg, var(--proton-blue), var(--proton-blue-hover));
+            color: white;
+            box-shadow: 0 4px 12px rgba(98,74,255,0.2);
+        }
+
+        .btn-start:hover {
+            box-shadow: 0 6px 16px rgba(98,74,255,0.3);
+        }
+
+        .btn-pause {
+            background: #f0f0f5;
+            color: var(--proton-dark);
+            border: 1px solid var(--proton-border);
+        }
+
+        .btn-pause:hover {
+            background: #e5e5eb;
+        }
+
+        .btn-lap, .btn-reset {
+            background: white;
+            color: var(--proton-dark);
+            border: 1px solid var(--proton-border);
+        }
+
+        .btn-lap:hover, .btn-reset:hover {
+            background: #f9f9fc;
+            border-color: var(--proton-blue);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .laps {
+            width: 100%;
+            max-height: 200px;
+            overflow: auto;
+            border-radius: 8px;
+            padding: 8px;
+            background: linear-gradient(180deg, #fff, #fcfcff);
+            border: 1px solid var(--proton-border);
+        }
+
+        .lap-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: 1px dashed #eee;
+            font-family: 'Inter', monospace;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .lap-item:last-child { border-bottom: none; }
+
+        /* Timer section */
+        .timer-section {
+            margin-bottom: 50px;
+        }
+
+        .timer-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timer-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin: 0 0 10px 0;
+        }
+
+        .timer-header p {
+            color: #666;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .timer-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .timer-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .timer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .timer-time {
+            font-family: 'Inter', monospace;
+            font-weight: 700;
+            font-size: 56px;
+            color: var(--proton-blue);
+            letter-spacing: 2px;
+            margin: 10px 0;
+        }
+
+        .timer-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .timer-input {
+            width: 70px;
+            padding: 10px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Inter', monospace;
+            font-weight: 600;
+        }
+
+        .timer-input:focus {
+            outline: none;
+            border-color: var(--proton-blue);
+            box-shadow: 0 0 0 3px rgba(98, 74, 255, 0.1);
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         footer {
-            text-align: center;
-            padding: 20px;
-            color: #aaa;
-            font-size: 14px;
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
             border-top: 1px solid var(--proton-border);
-            background: white;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
         }
 
-        @media (max-width: 640px) {
-            .header-section h1 { font-size: 28px; }
-            .clock-time { font-size: 28px; }
-            .nav-links a:not(.btn-register) { display: none; }
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: var(--proton-blue);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .clock-grid { grid-template-columns: 1fr; }
+            #topMenu .wrap { flex-direction: column; height: auto; padding: 15px 0; }
+            .nav-links { margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+            .btn-register { width: 100%; text-align: center; box-sizing: border-box; }
+            .stopwatch-time, .timer-time { font-size: 44px; }
+            .stopwatch-header h2, .timer-header h2 { font-size: 28px; }
+            .stopwatch-section, .timer-section { margin-bottom: 30px; }
+            .stopwatch-controls, .timer-controls { gap: 8px; }
+            .btn { padding: 8px 12px; font-size: 13px; }
+            .timer-input { width: 60px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="topMenu">
+    <nav id="topMenu">
         <div class="wrap">
-            <a href="#" class="logo">X!<span>Time</span></a>
-            <nav class="nav-links">
-                <a href="#" class="active">Start</a>
-                <a href="#">Uhrzeit</a>
-                <a href="#">Weltzeit</a>
-                <a href="#">Einstellungen</a>
-                <a href="#" class="btn-register">Registrieren</a>
-            </nav>
+            <a href="/start" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="/Home">Start</a>
+                <a href="/Home/date.html" class="active">Weltuhr</a>
+                <a href="/Home/iss.html">Iss</a>
+                <a href="/Home/info.html">Info</a>
+                <a href="/Home/login.html">Login</a>
+                <a href="/Home/register.html" class="btn-register">Registrieren</a>
+            </div>
         </div>
-    </div>
+    </nav>
 
     <div class="main-container">
         <div class="wrap">
+            
             <div class="header-section">
-                <h1>X!Time – Ihre Weltzeit</h1>
-                <p>Fügen Sie Städte hinzu und behalten Sie alle Zeitzonen im Blick.</p>
+                <h1>Weltzeituhr</h1>
+                <p>Echtzeit-Uhren für Städte weltweit mit intelligentem Suchsystem</p>
             </div>
 
             <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Stadt oder Zeitzone suchen..." autocomplete="off">
-                <div class="search-results" id="searchResults"></div>
+                <input type="text" id="citySearch" class="search-input" placeholder="Stadt suchen (z.B. Tokio, Berlin, New York)...">
+                <div id="searchResults" class="search-results"></div>
             </div>
 
-            <div class="clock-grid" id="clockGrid">
-                <div class="empty-state">
-                    <span class="empty-icon">🕐</span>
-                    Noch keine Uhren hinzugefügt<br>
-                    <small style="font-size:14px;">Suchen Sie oben nach einer Stadt oder Zeitzone</small>
+            <div id="clockGrid" class="clock-grid"></div>
+
+            <!-- Stopwatch Section -->
+            <div class="stopwatch-section">
+                <div class="stopwatch-header">
+                    <h2>Stoppuhr</h2>
+                    <p>Präzises Zeitmessung mit Rundenaufzeichnung für deine Trainings- und Messaufgaben</p>
+                </div>
+                <div class="stopwatch-container">
+                    <div class="stopwatch-card">
+                        <div class="stopwatch-time" id="stopwatchDisplay" aria-live="polite">00:00.00</div>
+                        <div class="stopwatch-controls">
+                            <button id="startBtn" class="btn btn-start" aria-pressed="false">Start</button>
+                            <button id="lapBtn" class="btn btn-lap" disabled>Lap</button>
+                            <button id="pauseBtn" class="btn btn-pause" style="display:none;">Pause</button>
+                            <button id="resetBtn" class="btn btn-reset" disabled>Reset</button>
+                        </div>
+                        <div class="laps" id="lapsList" aria-live="polite" aria-label="Runden"></div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <div class="timer-header">
+                    <h2>Timer</h2>
+                    <p>Zähle die Zeit herunter für Aufgaben, Trainingsintervalle und Zeitverwaltung</p>
+                </div>
+                <div class="timer-container">
+                    <div class="timer-card">
+                        <div class="timer-time" id="timerDisplay" aria-live="polite">00:00</div>
+                        <div class="timer-input-group" id="timerInputGroup">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <input type="number" id="minutesInput" class="timer-input" placeholder="MM" min="0" max="59" value="0">
+                                <span class="timer-label">Minuten</span>
+                            </div>
+                            <span style="font-size: 20px; font-weight: 600; color: #999;">:</span>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <input type="number" id="secondsInput" class="timer-input" placeholder="SS" min="0" max="59" value="0">
+                                <span class="timer-label">Sekunden</span>
+                            </div>
+                        </div>
+                        <div class="timer-controls">
+                            <button id="timerStartBtn" class="btn btn-start" aria-pressed="false">Start</button>
+                            <button id="timerPauseBtn" class="btn btn-pause" style="display:none;">Pause</button>
+                            <button id="timerResetBtn" class="btn btn-reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <footer>
-        <span>© 2025 X!Time · nox!314</span>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+            <div class="footer-links">
+                <a href="/Home/sourcecodes.html">Quellcode</a>
+                <a href="/Home/news.html">News</a>
+                <a href="/Home/sitemap.html">Sitemap</a>
+            </div>
+        </div>
     </footer>
 
     <script>
-        // Verfügbare Zeitzonen
-        const timeZones = Intl.supportedValuesOf('timeZone');
-        
-        // Gespeicherte Zeitzonen (localStorage)
-        let savedZones = [];
-        try {
-            savedZones = JSON.parse(localStorage.getItem('xtime_zones') || '[]');
-        } catch(e) { savedZones = []; }
+        const cities = [
+            { name: "Berlin", timezone: "Europe/Berlin", country: "Deutschland" },
+            { name: "Hamburg", timezone: "Europe/Berlin", country: "Deutschland" },
+            { name: "New York", timezone: "America/New_York", country: "USA" },
+            { name: "Tokio", timezone: "Asia/Tokyo", country: "Japan" },
+            { name: "London", timezone: "Europe/London", country: "UK" },
+            { name: "Paris", timezone: "Europe/Paris", country: "Frankreich" },
+            { name: "Sydney", timezone: "Australia/Sydney", country: "Australien" },
+            { name: "Melbourne", timezone: "Australia/Melbourne", country: "Australien" },
+            { name: "Dubai", timezone: "Asia/Dubai", country: "VAE" },
+            { name: "Singapur", timezone: "Asia/Singapore", country: "Singapur" },
+            { name: "Mumbai", timezone: "Asia/Kolkata", country: "Indien" },
+            { name: "São Paulo", timezone: "America/Sao_Paulo", country: "Brasilien" },
+            { name: "Mexiko-Stadt", timezone: "America/Mexico_City", country: "Mexiko" },
+            { name: "Kairo", timezone: "Africa/Cairo", country: "Ägypten" },
+            { name: "Los Angeles", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Hongkong", timezone: "Asia/Hong_Kong", country: "China" },
+            { name: "Moskau", timezone: "Europe/Moscow", country: "Russland" },
+            { name: "Toronto", timezone: "America/Toronto", country: "Kanada" },
+            { name: "Chicago", timezone: "America/Chicago", country: "USA" },
+            { name: "Houston", timezone: "America/Chicago", country: "USA" },
+            { name: "Phoenix", timezone: "America/Phoenix", country: "USA" },
+            { name: "Austin", timezone: "America/Chicago", country: "USA" },
+            { name: "San Francisco", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Vancouver", timezone: "America/Vancouver", country: "Kanada" },
+            { name: "Calgary", timezone: "America/Edmonton", country: "Kanada" },
+            { name: "Montreal", timezone: "America/Toronto", country: "Kanada" },
+            { name: "Miami", timezone: "America/New_York", country: "USA" },
+            { name: "Seattle", timezone: "America/Los_Angeles", country: "USA" },
+            { name: "Denver", timezone: "America/Denver", country: "USA" },
+            { name: "Boston", timezone: "America/New_York", country: "USA" },
 
-        // DOM-Elemente
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
+            { name: "Quito", timezone: "America/Guayaquil", country: "Ecuador" },
+            { name: "Lima", timezone: "America/Lima", country: "Peru" },
+            { name: "Bogota", timezone: "America/Bogota", country: "Kolumbien" },
+            { name: "Caracas", timezone: "America/Caracas", country: "Venezuela" },
+            { name: "Santiago", timezone: "America/Santiago", country: "Chile" },
+            { name: "Buenos Aires", timezone: "America/Argentina/Buenos_Aires", country: "Argentinien" },
+            { name: "Montevideo", timezone: "America/Montevideo", country: "Uruguay" },
+            { name: "Asuncion", timezone: "America/Asuncion", country: "Paraguay" },
+            { name: "La Paz", timezone: "America/La_Paz", country: "Bolivien" },
+
+            { name: "Reykjavik", timezone: "Atlantic/Reykjavik", country: "Island" },
+            { name: "Dublin", timezone: "Europe/Dublin", country: "Irland" },
+            { name: "Edinburgh", timezone: "Europe/London", country: "UK" },
+            { name: "Zagreb", timezone: "Europe/Zagreb", country: "Kroatien" },
+            { name: "Belgrade", timezone: "Europe/Belgrade", country: "Serbien" },
+            { name: "Prague", timezone: "Europe/Prague", country: "Tschechien" },
+            { name: "Bratislava", timezone: "Europe/Bratislava", country: "Slowakei" },
+            { name: "Budapest", timezone: "Europe/Budapest", country: "Ungarn" },
+            { name: "Vienna", timezone: "Europe/Vienna", country: "Österreich" },
+            { name: "Ljubljana", timezone: "Europe/Ljubljana", country: "Slowenien" },
+            { name: "Sarajevo", timezone: "Europe/Sarajevo", country: "Bosnien" },
+            { name: "Skopje", timezone: "Europe/Skopje", country: "Nordmazedonien" },
+            { name: "Tirana", timezone: "Europe/Tirane", country: "Albanien" },
+            { name: "Athens", timezone: "Europe/Athens", country: "Griechenland" },
+            { name: "Istanbul", timezone: "Europe/Istanbul", country: "Türkei" },
+            { name: "Amsterdam", timezone: "Europe/Amsterdam", country: "Niederlande" },
+            { name: "Brussels", timezone: "Europe/Brussels", country: "Belgien" },
+            { name: "Geneva", timezone: "Europe/Zurich", country: "Schweiz" },
+            { name: "Stockholm", timezone: "Europe/Stockholm", country: "Schweden" },
+            { name: "Copenhagen", timezone: "Europe/Copenhagen", country: "Dänemark" },
+            { name: "Oslo", timezone: "Europe/Oslo", country: "Norwegen" },
+            { name: "Helsinki", timezone: "Europe/Helsinki", country: "Finnland" },
+
+            { name: "Seoul", timezone: "Asia/Seoul", country: "Südkorea" },
+            { name: "Manila", timezone: "Asia/Manila", country: "Philippinen" },
+            { name: "Jakarta", timezone: "Asia/Jakarta", country: "Indonesien" },
+            { name: "Bangkok", timezone: "Asia/Bangkok", country: "Thailand" },
+            { name: "Hanoi", timezone: "Asia/Ho_Chi_Minh", country: "Vietnam" },
+            { name: "Phnom Penh", timezone: "Asia/Phnom_Penh", country: "Kambodscha" },
+            { name: "Kuala Lumpur", timezone: "Asia/Kuala_Lumpur", country: "Malaysia" },
+            { name: "Taipei", timezone: "Asia/Taipei", country: "Taiwan" },
+            { name: "Beijing", timezone: "Asia/Shanghai", country: "China" },
+            { name: "Shanghai", timezone: "Asia/Shanghai", country: "China" },
+            { name: "Karachi", timezone: "Asia/Karachi", country: "Pakistan" },
+            { name: "Lahore", timezone: "Asia/Karachi", country: "Pakistan" },
+            { name: "Dhaka", timezone: "Asia/Dhaka", country: "Bangladesch" },
+            { name: "Colombo", timezone: "Asia/Colombo", country: "Sri Lanka" },
+            { name: "Teheran", timezone: "Asia/Tehran", country: "Iran" },
+            { name: "Jerusalem", timezone: "Asia/Jerusalem", country: "Israel" },
+            { name: "Bangkok", timezone: "Asia/Bangkok", country: "Thailand" },
+            { name: "Perth", timezone: "Australia/Perth", country: "Australien" },
+            { name: "Brisbane", timezone: "Australia/Brisbane", country: "Australien" },
+            { name: "Auckland", timezone: "Pacific/Auckland", country: "Neuseeland" },
+            { name: "Fiji", timezone: "Pacific/Fiji", country: "Fidschi" },
+
+            { name: "Lagos", timezone: "Africa/Lagos", country: "Nigeria" },
+            { name: "Johannesburg", timezone: "Africa/Johannesburg", country: "Südafrika" },
+            { name: "Cape Town", timezone: "Africa/Johannesburg", country: "Südafrika" },
+            { name: "Nairobi", timezone: "Africa/Nairobi", country: "Kenia" },
+            { name: "Kampala", timezone: "Africa/Kampala", country: "Uganda" },
+            { name: "Dar es Salaam", timezone: "Africa/Dar_es_Salaam", country: "Tansania" },
+            { name: "Kigali", timezone: "Africa/Kigali", country: "Ruanda" },
+            { name: "Addis Ababa", timezone: "Africa/Addis_Ababa", country: "Äthiopien" },
+            { name: "Antananarivo", timezone: "Indian/Antananarivo", country: "Madagaskar" },
+            { name: "Algiers", timezone: "Africa/Algiers", country: "Algerien" },
+            { name: "Tunis", timezone: "Africa/Tunis", country: "Tunesien" },
+            { name: "Rabat", timezone: "Africa/Casablanca", country: "Marokko" },
+            { name: "Casablanca", timezone: "Africa/Casablanca", country: "Marokko" },
+            { name: "Dakar", timezone: "Africa/Dakar", country: "Senegal" },
+            { name: "Accra", timezone: "Africa/Accra", country: "Ghana" },
+
+            /* spezielle Teststadt: statt Datum nur "xxx" */
+            { name: "X!City", timezone: "Europe/Berlin", country: "X-Land" }
+        ];
+
+        let displayedCities = [...cities.slice(0, 6)];
+
         const clockGrid = document.getElementById('clockGrid');
+        const searchInput = document.getElementById('citySearch');
+        const searchResults = document.getElementById('searchResults');
 
-        // Formatierer
-        const timeFormatter = new Intl.DateTimeFormat('de-DE', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
-
-        const dateFormatter = new Intl.DateTimeFormat('de-DE', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-        const offsetFormatter = (tz) => {
-            try {
-                const now = new Date();
-                const dtf = new Intl.DateTimeFormat('de-DE', {
-                    timeZone: tz,
-                    timeZoneName: 'shortOffset'
-                });
-                const parts = dtf.formatToParts(now);
-                const offset = parts.find(p => p.type === 'timeZoneName').value;
-                return offset || '';
-            } catch {
-                return '';
-            }
-        };
-
-        // Uhrzeit aktualisieren
-        function getTimeInZone(tz) {
+        function updateClocks() {
             const now = new Date();
-            return {
-                time: timeFormatter.formatToParts(now).map(p => {
-                    if (p.type === 'hour') return p.value;
-                    if (p.type === 'minute') return p.value;
-                    if (p.type === 'second') return p.value;
-                    if (p.type === 'dayPeriod') return p.value;
-                    return '';
-                }).filter((v, i, arr) => arr[i-1] !== ' ' && v !== '').join(':').replace(/(:+)$/, ''),
-                date: dateFormatter.format(now),
-                offset: offsetFormatter(tz)
-            };
-        }
+            clockGrid.innerHTML = '';
 
-        // Zeitzonen durchsuchen
-        function searchZones(query) {
-            if (!query || query.length < 2) return [];
-            const q = query.toLowerCase();
-            return timeZones.filter(tz => tz.toLowerCase().includes(q)).slice(0, 8);
-        }
+            displayedCities.forEach(city => {
+                try {
+                    const cityTime = new Date(now.toLocaleString("en-US", { timeZone: city.timezone }));
+                    
+                    const diffMs = cityTime - now;
+                    const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+                    const diffSign = diffHours >= 0 ? '+' : '';
+                    const diffText = diffHours === 0 ? "Gleichzeitig" : `${diffSign}${diffHours} Std.`;
 
-        // Suche anzeigen
-        function showResults(results) {
-            if (results.length === 0) {
-                searchResults.style.display = 'none';
-                return;
-            }
-            searchResults.innerHTML = results.map(tz => {
-                const city = tz.split('/').pop().replace(/_/g, ' ');
-                return `<div class="search-item" data-zone="${tz}"><strong>${esc(city)}</strong><br><small>${esc(tz)} · ${offsetFormatter(tz)}</small></div>`;
-            }).join('');
-            searchResults.style.display = 'block';
-        }
+                    const hour = cityTime.getHours();
+                    const isDay = hour >= 6 && hour < 18;
+                    const statusClass = isDay ? 'status-day' : 'status-night';
+                    const statusText = isDay ? 'Tag' : 'Nacht';
+                    const sunIcon = isDay ? '☀️' : '🌙';
 
-        function esc(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
+                    // spezielle Darstellung für X!City: statt Datum nur 'xxx'
+                    const dateText = city.name === 'X!City'
+                        ? 'XXX'
+                        : cityTime.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
 
-        // Clock-Karte rendern
-        function renderClock(tz) {
-            // Entferne Empty-State
-            const empty = clockGrid.querySelector('.empty-state');
-            if (empty) empty.remove();
-
-            const existing = document.querySelector(`[data-clock="${CSS.escape(tz)}"]`);
-            if (existing) {
-                existing.classList.remove('remove-anim');
-                void existing.offsetWidth;
-                existing.classList.add('remove-anim');
-                return;
-            }
-
-            const card = document.createElement('div');
-            card.className = 'clock-card';
-            card.dataset.clock = tz;
-
-            const { time, date, offset } = getTimeInZone(tz);
-            const city = tz.split('/').pop().replace(/_/g, ' ');
-
-            card.innerHTML = `
-                <div class="clock-card-header">
-                    <div>
-                        <div class="clock-city">${esc(city)}</div>
-                        <div class="clock-timezone">${esc(tz)}</div>
-                    </div>
-                    <button class="clock-remove" title="Entfernen">&times;</button>
-                </div>
-                <div class="clock-time" data-part="time">${time}</div>
-                <div class="clock-date" data-part="date">${date}</div>
-                <div class="clock-offset">${offset}</div>
-            `;
-
-            card.querySelector('.clock-remove').addEventListener('click', () => {
-                card.remove();
-                savedZones = savedZones.filter(z => z !== tz);
-                localStorage.setItem('xtime_zones', JSON.stringify(savedZones));
-                checkEmpty();
-            });
-
-            clockGrid.appendChild(card);
-        }
-
-        // Alle Karten aktualisieren
-        function updateAllClocks() {
-            document.querySelectorAll('.clock-card').forEach(card => {
-                const tz = card.dataset.clock;
-                const { time, date, offset } = getTimeInZone(tz);
-                card.querySelector('[data-part="time"]').textContent = time;
-                card.querySelector('[data-part="date"]').textContent = date;
-                card.querySelector('.clock-offset').textContent = offset;
+                    const card = document.createElement('div');
+                    card.className = 'clock-card';
+                    card.innerHTML = `
+                        <div class="clock-header">
+                            <span class="city-name">${city.name}</span>
+                            <span class="timezone-info">${city.country}</span>
+                        </div>
+                        <div class="time-display">${cityTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</div>
+                        <div class="date-display">${dateText}</div>
+                        <div class="status-indicator ${statusClass}">
+                            ${sunIcon} ${statusText}
+                        </div>
+                        <div class="diff-badge">Unterschied: ${diffText}</div>
+                    `;
+                    clockGrid.appendChild(card);
+                } catch (e) {
+                    console.error(`Fehler bei Stadt ${city.name}:`, e);
+                }
             });
         }
 
-        // Empty-State prüfen
-        function checkEmpty() {
-            if (clockGrid.children.length === 0) {
-                clockGrid.innerHTML = `
-                    <div class="empty-state">
-                        <span class="empty-icon">🕐</span>
-                        Noch keine Uhren hinzugefügt<br>
-                        <small style="font-size:14px;">Suchen Sie oben nach einer Stadt oder Zeitzone</small>
-                    </div>
-                `;
-            }
-        }
-
-        // Event-Listener für Suche
-        let searchTimeout;
         searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const query = e.target.value;
-            searchTimeout = setTimeout(() => {
-                const results = searchZones(query);
-                showResults(results);
-            }, 150);
-        });
-
-        // Klick auf Suchergebnis
-        searchResults.addEventListener('click', (e) => {
-            const item = e.target.closest('.search-item');
-            if (!item) return;
-            const tz = item.dataset.zone;
-            if (!savedZones.includes(tz)) {
-                savedZones.push(tz);
-                localStorage.setItem('xtime_zones', JSON.stringify(savedZones));
+            const query = e.target.value.toLowerCase();
+            searchResults.innerHTML = '';
+            
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
             }
-            renderClock(tz);
-            searchInput.value = '';
-            searchResults.style.display = 'none';
-        });
 
-        // Klick außerhalb schließt Suche
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
+            const filtered = cities.filter(c => 
+                c.name.toLowerCase().includes(query) || 
+                c.country.toLowerCase().includes(query)
+            );
+
+            if (filtered.length > 0) {
+                searchResults.style.display = 'block';
+                filtered.forEach(city => {
+                    const item = document.createElement('div');
+                    item.className = 'search-item';
+                    item.innerHTML = `<strong>${city.name}</strong>, ${city.country}`;
+                    item.onclick = () => {
+                        if (!displayedCities.some(c => c.name === city.name)) {
+                            displayedCities.push(city);
+                            updateClocks();
+                        }
+                        searchInput.value = '';
+                        searchResults.style.display = 'none';
+                    };
+                    searchResults.appendChild(item);
+                });
+            } else {
                 searchResults.style.display = 'none';
             }
         });
 
-        // Initiale Uhren aus localStorage
-        savedZones.forEach(tz => renderClock(tz));
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchResults.style.display = 'none';
+            }, 200);
+        });
 
-        // Alle Sekunde aktualisieren
-        setInterval(updateAllClocks, 1000);
+        setInterval(updateClocks, 1000);
+        updateClocks();
 
-        // Anzeige-Offset bei Änderung
-        updateAllClocks();
+        /* Stopwatch implementation */
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const lapBtn = document.getElementById('lapBtn');
+        const display = document.getElementById('stopwatchDisplay');
+        const lapsList = document.getElementById('lapsList');
+
+        let running = false;
+        let startTime = 0;
+        let elapsedBefore = 0;
+        let stopwatchTimer = null;
+        let laps = [];
+
+        function formatTime(ms) {
+            const totalHundredths = Math.floor(ms / 10);
+            const hundredths = totalHundredths % 100;
+            const totalSeconds = Math.floor(totalHundredths / 100);
+            const seconds = totalSeconds % 60;
+            const minutes = Math.floor(totalSeconds / 60) % 60;
+            const hours = Math.floor(totalSeconds / 3600);
+            const parts = [];
+            if (hours > 0) parts.push(String(hours).padStart(2, '0'));
+            parts.push(String(minutes).padStart(2, '0'));
+            parts.push(String(seconds).padStart(2, '0'));
+            const main = parts.join(':');
+            return `${main}.${String(hundredths).padStart(2, '0')}`;
+        }
+
+        function updateStopwatchDisplay() {
+            const now = performance.now();
+            const elapsed = elapsedBefore + (running ? (now - startTime) : 0);
+            display.textContent = formatTime(elapsed);
+        }
+
+        function startStopwatch() {
+            if (running) return;
+            running = true;
+            startTime = performance.now();
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = '';
+            startBtn.setAttribute('aria-pressed', 'true');
+            lapBtn.disabled = false;
+            resetBtn.disabled = false;
+            stopwatchTimer = setInterval(updateStopwatchDisplay, 33);
+            updateStopwatchDisplay();
+        }
+
+        function pauseStopwatch() {
+            if (!running) return;
+            running = false;
+            const now = performance.now();
+            elapsedBefore += now - startTime;
+            clearInterval(stopwatchTimer);
+            stopwatchTimer = null;
+            pauseBtn.style.display = 'none';
+            startBtn.style.display = '';
+            startBtn.setAttribute('aria-pressed', 'false');
+        }
+
+        function resetStopwatch() {
+            running = false;
+            startTime = 0;
+            elapsedBefore = 0;
+            laps = [];
+            clearInterval(stopwatchTimer);
+            stopwatchTimer = null;
+            display.textContent = '00:00.00';
+            lapsList.innerHTML = '';
+            lapBtn.disabled = true;
+            resetBtn.disabled = true;
+            pauseBtn.style.display = 'none';
+            startBtn.style.display = '';
+            startBtn.setAttribute('aria-pressed', 'false');
+        }
+
+        function recordLap() {
+            const now = performance.now();
+            const elapsed = elapsedBefore + (running ? (now - startTime) : 0);
+            const lastLapTotal = laps.length ? laps[laps.length - 1].total : 0;
+            const lapSegment = elapsed - lastLapTotal;
+            const lapObj = { number: laps.length + 1, time: lapSegment, total: elapsed };
+            laps.push(lapObj);
+            renderLaps();
+        }
+
+        function renderLaps() {
+            lapsList.innerHTML = '';
+            for (let i = laps.length - 1; i >= 0; i--) {
+                const lap = laps[i];
+                const div = document.createElement('div');
+                div.className = 'lap-item';
+                div.innerHTML = `<span>Runde ${lap.number}</span><span>${formatTime(lap.time)} <small style="color:#888;margin-left:8px">(gesamt ${formatTime(lap.total)})</small></span>`;
+                lapsList.appendChild(div);
+            }
+        }
+
+        startBtn.addEventListener('click', () => startStopwatch());
+        pauseBtn.addEventListener('click', () => pauseStopwatch());
+        resetBtn.addEventListener('click', () => resetStopwatch());
+        lapBtn.addEventListener('click', () => recordLap());
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (running) pauseStopwatch(); else startStopwatch();
+            }
+            if (e.key.toLowerCase() === 'l') {
+                if (!lapBtn.disabled) recordLap();
+            }
+            if (e.key.toLowerCase() === 'r') {
+                resetStopwatch();
+            }
+        });
+
+        resetStopwatch();
+
+        /* Timer implementation */
+        const timerStartBtn = document.getElementById('timerStartBtn');
+        const timerPauseBtn = document.getElementById('timerPauseBtn');
+        const timerResetBtn = document.getElementById('timerResetBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const minutesInput = document.getElementById('minutesInput');
+        const secondsInput = document.getElementById('secondsInput');
+        const timerInputGroup = document.getElementById('timerInputGroup');
+
+        let timerRunning = false;
+        let timerTotalSeconds = 0;
+        let timerRemainingSeconds = 0;
+        let timerIntervalId = null;
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerRemainingSeconds / 60);
+            const secs = timerRemainingSeconds % 60;
+            timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerRunning) return;
+            if (timerRemainingSeconds === 0) {
+                timerRemainingSeconds = parseInt(minutesInput.value || 0) * 60 + parseInt(secondsInput.value || 0);
+            }
+            if (timerRemainingSeconds === 0) return;
+            
+            timerRunning = true;
+            timerStartBtn.style.display = 'none';
+            timerPauseBtn.style.display = '';
+            minutesInput.disabled = true;
+            secondsInput.disabled = true;
+
+            timerIntervalId = setInterval(() => {
+                timerRemainingSeconds--;
+                updateTimerDisplay();
+
+                if (timerRemainingSeconds <= 0) {
+                    pauseTimer();
+                    timerDisplay.style.color = '#ff4444';
+                    setTimeout(() => {
+                        timerDisplay.style.color = 'var(--proton-blue)';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!timerRunning) return;
+            timerRunning = false;
+            clearInterval(timerIntervalId);
+            timerIntervalId = null;
+            timerPauseBtn.style.display = 'none';
+            timerStartBtn.style.display = '';
+        }
+
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerIntervalId);
+            timerIntervalId = null;
+            timerRemainingSeconds = 0;
+            timerTotalSeconds = 0;
+            minutesInput.disabled = false;
+            secondsInput.disabled = false;
+            minutesInput.value = 0;
+            secondsInput.value = 0;
+            timerDisplay.textContent = '00:00';
+            timerDisplay.style.color = 'var(--proton-blue)';
+            timerPauseBtn.style.display = 'none';
+            timerStartBtn.style.display = '';
+        }
+
+        timerStartBtn.addEventListener('click', () => startTimer());
+        timerPauseBtn.addEventListener('click', () => pauseTimer());
+        timerResetBtn.addEventListener('click', () => resetTimer());
+
+        minutesInput.addEventListener('change', () => {
+            if (minutesInput.value > 59) minutesInput.value = 59;
+            if (minutesInput.value < 0) minutesInput.value = 0;
+        });
+
+        secondsInput.addEventListener('change', () => {
+            if (secondsInput.value > 59) secondsInput.value = 59;
+            if (secondsInput.value < 0) secondsInput.value = 0;
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && document.activeElement.id !== 'minutesInput' && document.activeElement.id !== 'secondsInput') {
+                e.preventDefault();
+                if (timerRunning) pauseTimer(); else startTimer();
+            }
+        });
+
+        resetTimer();
+
     </script>
 </body>
 </html>

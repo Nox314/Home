@@ -59,7 +59,7 @@
 
   .calculator {
     position: relative;
-    width: 440px; /* Expanded width to fit more buttons */
+    width: 440px;
     background: var(--panel-bg);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
@@ -95,7 +95,7 @@
     margin: 16px;
     display: grid;
     grid-gap: 8px;
-    grid-template-columns: repeat(5, 1fr); /* 5 columns now */
+    grid-template-columns: repeat(5, 1fr);
   }
 
   .calculator-button {
@@ -139,29 +139,6 @@
     background-color: var(--button-highlight-bg);
     color: #ec4899;
     font-weight: 600;
-  }
-
-  /* WEIRDLY DESIGNED PLUS BUTTON */
-  .calculator-button.weird-plus {
-    background: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 22px;
-    border-radius: 50px 10px 50px 10px;
-    border: 2px dashed #f43f5e;
-    transform: rotate(-3deg);
-    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-    animation: pulse-weird 2s infinite alternate;
-  }
-
-  .calculator-button.weird-plus:hover {
-    transform: rotate(3deg) scale(1.08);
-    border-style: solid;
-  }
-
-  @keyframes pulse-weird {
-    0% { filter: hue-rotate(0deg); }
-    100% { filter: hue-rotate(360deg); }
   }
 
   /* History Panel */
@@ -325,12 +302,11 @@
         <button type="button" class="calculator-button" data-number="0">0</button>
         <button type="button" class="calculator-button" data-action="decimal">.</button>
 
-        <!-- Row 6: Standard operations & WEIRD PLUS BUTTON -->
+        <!-- Row 6: Standard operations (Plus button fixed) -->
         <button type="button" class="calculator-button highlight" data-action="percent">%</button>
         <button type="button" class="calculator-button highlight" data-action="multiply">×</button>
         <button type="button" class="calculator-button highlight" data-action="subtract">-</button>
-        <!-- The weirdly designed Plus button -->
-        <button type="button" class="calculator-button weird-plus" data-action="add">+</button>
+        <button type="button" class="calculator-button highlight" data-action="add">+</button>
         <button type="button" class="calculator-button equal" data-action="calculate">=</button>
       </div>
     </section>

@@ -124,7 +124,7 @@
   }
 
   .calculator-button.equal {
-    grid-column: span 2;
+    /* grid-column span removed to make it standard size */
     background-image: var(--accent-gradient);
     color: #fff;
     border: none;
@@ -302,7 +302,7 @@
         <button type="button" class="calculator-button" data-number="0">0</button>
         <button type="button" class="calculator-button" data-action="decimal">.</button>
 
-        <!-- Row 6: Standard operations (Plus button fixed) -->
+        <!-- Row 6: Standard operations (= button moved next to +) -->
         <button type="button" class="calculator-button highlight" data-action="percent">%</button>
         <button type="button" class="calculator-button highlight" data-action="multiply">×</button>
         <button type="button" class="calculator-button highlight" data-action="subtract">-</button>

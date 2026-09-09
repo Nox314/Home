@@ -295,7 +295,7 @@
   </main>
 
   <!-- History Panel Sidebar -->
-  aside class="history-panel">
+  <aside class="history-panel">
     <div class="history-title">
       History 
       <button class="clear-history" id="clearHistory">Clear</button>
@@ -385,23 +385,31 @@
   }
 
   function renderHistory() {
-    historyList.innerHTML = historyData.map(item => `
-      <div class="history-item" onclick="useHistoryResult('${item.result}')">
+    if (historyData.length === 0) {
+      historyList.innerHTML = '<div class="history-item" style="opacity: 0.6; cursor: default;">No history yet</div>';
+      return;
+    }
+
+    historyList.innerHTML = '';
+    historyData.forEach((item) => {
+      const historyItemEl = document.createElement('div');
+      historyItemEl.className = 'history-item';
+      historyItemEl.innerHTML = `
         <div class="history-expr">${item.expression}</div>
         <div class="history-res">${item.result}</div>
-      </div>
-    `).join('');
-  }
-
-  window.useHistoryResult = function(val) {
-    currentInput = val;
-    resetNextInput = true;
-    updateDisplay();
+      `;
+      historyItemEl.addEventListener('click', () => {
+        currentInput = item.result.toString();
+        resetNextInput = true;
+        updateDisplay();
+      });
+      historyList.appendChild(historyItemEl);
+    });
   }
 
   clearHistoryBtn.addEventListener('click', () => {
     historyData = [];
-    historyList.innerHTML = '<div class="history-item" style="opacity: 0.6; cursor: default;">No history yet</div>';
+    renderHistory();
   });
 
   // Button Listeners

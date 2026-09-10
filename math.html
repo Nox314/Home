@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>X!Math Calculator Pro</title>
+<title>X!Math Calculator Pro & Unit Converter</title>
 <style>
   :root {
     --bg-color: #0f172a;
@@ -69,9 +69,67 @@
     overflow: hidden;
   }
 
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px 0 20px;
+  }
+
+  .app-title {
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+  }
+
+  .mode-switch {
+    display: flex;
+    gap: 5px;
+    background: var(--button-bg);
+    padding: 3px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .mode-btn {
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 16px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-btn.active {
+    background: var(--accent-gradient);
+    color: #fff;
+  }
+
+  .toggle-theme {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background-color: var(--button-bg);
+    border-radius: 20px;
+    color: var(--text-color);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s;
+  }
+
+  .toggle-theme:hover {
+    background-color: var(--button-bg-hover);
+  }
+
   .calculator-header {
     background-color: var(--header-bg);
-    padding: 24px 20px 16px 20px;
+    padding: 20px;
     text-align: right;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
@@ -140,7 +198,75 @@
     font-weight: 600;
   }
 
-  /* History Panel */
+  /* Unit Converter Panel View */
+  .converter-view {
+    display: none;
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .converter-view.active {
+    display: flex;
+  }
+
+  .calculator-view {
+    display: block;
+  }
+
+  .calculator-view.hidden {
+    display: none;
+  }
+
+  .converter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .converter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .converter-select, .converter-input {
+    width: 100%;
+    padding: 12px;
+    background: var(--button-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    color: var(--text-color);
+    font-size: 15px;
+    outline: none;
+  }
+
+  .converter-select option {
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  .converter-output-box {
+    background: var(--header-bg);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: right;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .converter-output-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .converter-output-value {
+    font-size: 28px;
+    font-weight: 700;
+    word-break: break-all;
+  }
+
+  /* History Panels */
   .history-panel {
     width: 220px;
     background: var(--panel-bg);
@@ -203,38 +329,6 @@
     font-weight: 600;
   }
 
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px 0 16px;
-  }
-
-  .app-title {
-    font-size: 14px;
-    font-weight: 700;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.02em;
-  }
-
-  .toggle-theme {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    background-color: var(--button-bg);
-    border-radius: 20px;
-    color: var(--text-color);
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background-color 0.2s;
-  }
-
-  .toggle-theme:hover {
-    background-color: var(--button-bg-hover);
-  }
-
   @media(max-width: 700px) {
     .main-container {
       flex-direction: column;
@@ -256,65 +350,101 @@
   <main class="calculator-wrapper">
     <section class="calculator">
       <div class="top-bar">
-        <span class="app-title">X!Math Pro</span>
+        <span class="app-title" id="appTitle">X!Math Pro</span>
+        <div class="mode-switch">
+          <button class="mode-btn active" id="calcModeBtn">Calc</button>
+          <button class="mode-btn" id="unitModeBtn">Units</button>
+        </div>
         <button id="toggler" class="toggle-theme">Theme</button>
       </div>
       
-      <header class="calculator-header">
-        <div class="calculator-operation" id="operation"></div>
-        <div class="calculator-operation-result" id="result">0</div>
-      </header>
+      <!-- Calculator View -->
+      <div id="calculatorView" class="calculator-view">
+        <header class="calculator-header">
+          <div class="calculator-operation" id="operation"></div>
+          <div class="calculator-operation-result" id="result">0</div>
+        </header>
 
-      <div class="calculator-button-wrapper">
-        <!-- Row 1: Memory & Extra utilities (% now here instead of ÷) -->
-        <button type="button" class="calculator-button highlight" data-action="clear">C</button>
-        <button type="button" class="calculator-button highlight" data-action="backspace">⌫</button>
-        <button type="button" class="calculator-button" data-action="pi">π</button>
-        <button type="button" class="calculator-button" data-action="e">e</button>
-        <button type="button" class="calculator-button highlight" data-action="percent">%</button>
+        <div class="calculator-button-wrapper">
+          <button type="button" class="calculator-button highlight" data-action="clear">C</button>
+          <button type="button" class="calculator-button highlight" data-action="backspace">⌫</button>
+          <button type="button" class="calculator-button" data-action="pi">π</button>
+          <button type="button" class="calculator-button" data-action="e">e</button>
+          <button type="button" class="calculator-button highlight" data-action="percent">%</button>
 
-        <!-- Row 2: Advanced Math 1 -->
-        <button type="button" class="calculator-button" data-action="sqrt">√</button>
-        <button type="button" class="calculator-button" data-action="sqr">x²</button>
-        <button type="button" class="calculator-button" data-number="7">7</button>
-        <button type="button" class="calculator-button" data-number="8">8</button>
-        <button type="button" class="calculator-button" data-number="9">9</button>
+          <button type="button" class="calculator-button" data-action="sqrt">√</button>
+          <button type="button" class="calculator-button" data-action="sqr">x²</button>
+          <button type="button" class="calculator-button" data-number="7">7</button>
+          <button type="button" class="calculator-button" data-number="8">8</button>
+          <button type="button" class="calculator-button" data-number="9">9</button>
 
-        <!-- Row 3: Advanced Math 2 + Multiplier -->
-        <button type="button" class="calculator-button" data-action="cube">x³</button>
-        <button type="button" class="calculator-button" data-action="inverse">1/x</button>
-        <button type="button" class="calculator-button" data-number="4">4</button>
-        <button type="button" class="calculator-button" data-number="5">5</button>
-        <button type="button" class="calculator-button" data-number="6">6</button>
+          <button type="button" class="calculator-button" data-action="cube">x³</button>
+          <button type="button" class="calculator-button" data-action="inverse">1/x</button>
+          <button type="button" class="calculator-button" data-number="4">4</button>
+          <button type="button" class="calculator-button" data-number="5">5</button>
+          <button type="button" class="calculator-button" data-number="6">6</button>
 
-        <!-- Row 4: Trig Functions -->
-        <button type="button" class="calculator-button" data-action="sin">sin</button>
-        <button type="button" class="calculator-button" data-action="cos">cos</button>
-        <button type="button" class="calculator-button" data-number="1">1</button>
-        <button type="button" class="calculator-button" data-number="2">2</button>
-        <button type="button" class="calculator-button" data-number="3">3</button>
+          <button type="button" class="calculator-button" data-action="sin">sin</button>
+          <button type="button" class="calculator-button" data-action="cos">cos</button>
+          <button type="button" class="calculator-button" data-number="1">1</button>
+          <button type="button" class="calculator-button" data-number="2">2</button>
+          <button type="button" class="calculator-button" data-number="3">3</button>
 
-        <!-- Row 5: More Trig / Log / Operators -->
-        <button type="button" class="calculator-button" data-action="tan">tan</button>
-        <button type="button" class="calculator-button" data-action="log">log</button>
-        <button type="button" class="calculator-button" data-action="sign">±</button>
-        <button type="button" class="calculator-button" data-number="0">0</button>
-        <button type="button" class="calculator-button" data-action="decimal">.</button>
+          <button type="button" class="calculator-button" data-action="tan">tan</button>
+          <button type="button" class="calculator-button" data-action="log">log</button>
+          <button type="button" class="calculator-button" data-action="sign">±</button>
+          <button type="button" class="calculator-button" data-number="0">0</button>
+          <button type="button" class="calculator-button" data-action="decimal">.</button>
 
-        <!-- Row 6: Standard operations (÷ now here instead of %) -->
-        <button type="button" class="calculator-button highlight" data-action="divide">÷</button>
-        <button type="button" class="calculator-button highlight" data-action="multiply">×</button>
-        <button type="button" class="calculator-button highlight" data-action="subtract">-</button>
-        <button type="button" class="calculator-button highlight" data-action="add">+</button>
-        <button type="button" class="calculator-button equal" data-action="calculate">=</button>
+          <button type="button" class="calculator-button highlight" data-action="divide">÷</button>
+          <button type="button" class="calculator-button highlight" data-action="multiply">×</button>
+          <button type="button" class="calculator-button highlight" data-action="subtract">-</button>
+          <button type="button" class="calculator-button highlight" data-action="add">+</button>
+          <button type="button" class="calculator-button equal" data-action="calculate">=</button>
+        </div>
+      </div>
+
+      <!-- Unit Converter View (> 100 Units) -->
+      <div id="converterView" class="converter-view">
+        <div class="converter-group">
+          <label class="converter-label">Kategorie</label>
+          <select id="unitCategory" class="converter-select">
+            <option value="length">Länge</option>
+            <option value="weight">Gewicht & Masse</option>
+            <option value="temperature">Temperatur</option>
+            <option value="volume">Volumen</option>
+            <option value="area">Fläche</option>
+            <option value="time">Zeit</option>
+            <option value="speed">Geschwindigkeit</option>
+            <option value="data">Datengröße</option>
+            <option value="energy">Energie & Arbeit</option>
+            <option value="pressure">Druck</option>
+          </select>
+        </div>
+
+        <div class="converter-group">
+          <label class="converter-label">Von</label>
+          <select id="unitFrom" class="converter-select"></select>
+          <input type="number" id="unitInputVal" class="converter-input" value="1" placeholder="Wert eingeben...">
+        </div>
+
+        <div class="converter-group">
+          <label class="converter-label">Zu</label>
+          <select id="unitTo" class="converter-select"></select>
+        </div>
+
+        <div class="converter-output-box">
+          <div class="converter-output-title">Ergebnis</div>
+          <div id="unitOutputVal" class="converter-output-value">0</div>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- History Panel Sidebar -->
+  <!-- Dynamic History Sidebar -->
   <aside class="history-panel">
     <div class="history-title">
-      History 
+      <span id="historyTitleText">History</span>
       <button class="clear-history" id="clearHistory">Clear</button>
     </div>
     <div class="history-list" id="historyList">
@@ -324,22 +454,54 @@
 </div>
 
 <script>
+  // --- UI SWITCHING LOGIC ---
   const toggler = document.getElementById('toggler');
-  const operationEl = document.getElementById('operation');
-  const resultEl = document.getElementById('result');
+  const calcModeBtn = document.getElementById('calcModeBtn');
+  const unitModeBtn = document.getElementById('unitModeBtn');
+  const calculatorView = document.getElementById('calculatorView');
+  const converterView = document.getElementById('converterView');
+  const historyTitleText = document.getElementById('historyTitleText');
   const historyList = document.getElementById('historyList');
   const clearHistoryBtn = document.getElementById('clearHistory');
+  const appTitle = document.getElementById('appTitle');
+
+  let currentMode = 'calc'; // 'calc' or 'unit'
+
+  toggler.addEventListener('click', () => {
+    document.body.classList.toggle('light');
+  });
+
+  calcModeBtn.addEventListener('click', () => {
+    currentMode = 'calc';
+    calcModeBtn.classList.add('active');
+    unitModeBtn.classList.remove('active');
+    calculatorView.classList.remove('hidden');
+    converterView.classList.remove('active');
+    appTitle.textContent = "X!Math Pro";
+    historyTitleText.textContent = "History";
+    renderHistory();
+  });
+
+  unitModeBtn.addEventListener('click', () => {
+    currentMode = 'unit';
+    unitModeBtn.classList.add('active');
+    calcModeBtn.classList.remove('active');
+    calculatorView.classList.add('hidden');
+    converterView.classList.add('active');
+    appTitle.textContent = "Unit Converter";
+    historyTitleText.textContent = "Unit History";
+    renderHistory();
+  });
+
+  // --- CALCULATOR LOGIC ---
+  const operationEl = document.getElementById('operation');
+  const resultEl = document.getElementById('result');
 
   let currentInput = '0';
   let previousInput = '';
   let operation = null;
   let resetNextInput = false;
-  let historyData = [];
-
-  // Theme Toggler
-  toggler.addEventListener('click', () => {
-    document.body.classList.toggle('light');
-  });
+  let calcHistory = [];
 
   function updateDisplay() {
     resultEl.textContent = currentInput;
@@ -357,11 +519,9 @@
 
   function handleOperator(action) {
     const symbols = { add: '+', subtract: '-', multiply: '×', divide: '÷' };
-    
     if (operation !== null && !resetNextInput) {
       calculate();
     }
-    
     previousInput = currentInput;
     operation = symbols[action];
     resetNextInput = true;
@@ -369,7 +529,6 @@
 
   function calculate() {
     if (operation === null || previousInput === '') return;
-
     let prev = parseFloat(previousInput);
     let curr = parseFloat(currentInput);
     let res = 0;
@@ -384,9 +543,8 @@
 
     if (res !== 'Error') {
       res = Number.isInteger(res) ? res : parseFloat(res.toFixed(8));
-      addHistory(exprString, res);
+      addCalcHistory(exprString, res);
     }
-
     currentInput = res.toString();
     operation = null;
     previousInput = '';
@@ -399,51 +557,21 @@
     let expr = '';
 
     switch(action) {
-      case 'sqrt':
-        res = val >= 0 ? Math.sqrt(val) : 'Error';
-        expr = `√(${val})`;
-        break;
-      case 'sqr':
-        res = val * val;
-        expr = `${val}²`;
-        break;
-      case 'cube':
-        res = val * val * val;
-        expr = `${val}³`;
-        break;
-      case 'inverse':
-        res = val !== 0 ? 1 / val : 'Error';
-        expr = `1/${val}`;
-        break;
-      case 'sin':
-        res = Math.sin(val * Math.PI / 180);
-        expr = `sin(${val}°)`;
-        break;
-      case 'cos':
-        res = Math.cos(val * Math.PI / 180);
-        expr = `cos(${val}°)`;
-        break;
-      case 'tan':
-        res = Math.tan(val * Math.PI / 180);
-        expr = `tan(${val}°)`;
-        break;
-      case 'log':
-        res = val > 0 ? Math.log10(val) : 'Error';
-        expr = `log(${val})`;
-        break;
-      case 'pi':
-        res = Math.PI;
-        expr = 'π';
-        break;
-      case 'e':
-        res = Math.E;
-        expr = 'e';
-        break;
+      case 'sqrt': res = val >= 0 ? Math.sqrt(val) : 'Error'; expr = `√(${val})`; break;
+      case 'sqr': res = val * val; expr = `${val}²`; break;
+      case 'cube': res = val * val * val; expr = `${val}³`; break;
+      case 'inverse': res = val !== 0 ? 1 / val : 'Error'; expr = `1/${val}`; break;
+      case 'sin': res = Math.sin(val * Math.PI / 180); expr = `sin(${val}°)`; break;
+      case 'cos': res = Math.cos(val * Math.PI / 180); expr = `cos(${val}°)`; break;
+      case 'tan': res = Math.tan(val * Math.PI / 180); expr = `tan(${val}°)`; break;
+      case 'log': res = val > 0 ? Math.log10(val) : 'Error'; expr = `log(${val})`; break;
+      case 'pi': res = Math.PI; expr = 'π'; break;
+      case 'e': res = Math.E; expr = 'e'; break;
     }
 
     if (res !== 'Error') {
       res = Number.isInteger(res) ? res : parseFloat(res.toFixed(8));
-      addHistory(expr, res);
+      addCalcHistory(expr, res);
       currentInput = res.toString();
     } else {
       currentInput = 'Error';
@@ -451,21 +579,264 @@
     resetNextInput = true;
   }
 
-  function addHistory(expression, result) {
-    if (historyData.length === 0) historyList.innerHTML = '';
-    historyData.unshift({ expression, result });
-    if (historyData.length > 10) historyData.pop();
-    renderHistory();
+  function addCalcHistory(expression, result) {
+    calcHistory.unshift({ expression, result });
+    if (calcHistory.length > 10) calcHistory.pop();
+    if (currentMode === 'calc') renderHistory();
   }
 
+  // --- UNIT CONVERTER DATA & LOGIC (> 100 Units) ---
+  const unitsData = {
+    length: {
+      name: "Länge",
+      base: "meter",
+      units: {
+        meter: { name: "Meter (m)", factor: 1 },
+        kilometer: { name: "Kilometer (km)", factor: 1000 },
+        centimeter: { name: "Zentimeter (cm)", factor: 0.01 },
+        millimeter: { name: "Millimeter (mm)", factor: 0.001 },
+        micrometer: { name: "Mikrometer (µm)", factor: 0.000001 },
+        nanometer: { name: "Nanometer (nm)", factor: 1e-9 },
+        mile: { name: "Meile (mi)", factor: 1609.344 },
+        yard: { name: "Yard (yd)", factor: 0.9144 },
+        foot: { name: "Fuß (ft)", factor: 0.3048 },
+        inch: { name: "Zoll (in)", factor: 0.0254 },
+        nauticalmile: { name: "Seemeile (nmi)", factor: 1852 },
+        lightyear: { name: "Lichtjahr (ly)", factor: 9.461e15 },
+        parsec: { name: "Parsec (pc)", factor: 3.086e16 },
+        angstrom: { name: "Ångström (Å)", factor: 1e-10 },
+        furlong: { name: "Furlong", factor: 201.168 }
+      }
+    },
+    weight: {
+      name: "Gewicht & Masse",
+      base: "gram",
+      units: {
+        gram: { name: "Gramm (g)", factor: 1 },
+        kilogram: { name: "Kilogramm (kg)", factor: 1000 },
+        milligram: { name: "Milligramm (mg)", factor: 0.001 },
+        microgram: { name: "Mikrogramm (µg)", factor: 1e-6 },
+        ton: { name: "Metrische Tonne (t)", factor: 1000000 },
+        pound: { name: "Pfund (lb)", factor: 453.59237 },
+        ounce: { name: "Unze (oz)", factor: 28.349523125 },
+        carat: { name: "Karat (ct)", factor: 0.2 },
+        stone: { name: "Stone (st)", factor: 6350.293 },
+        slug: { name: "Slug", factor: 14593.9 },
+        grain: { name: "Grain (gr)", factor: 0.0647989 }
+      }
+    },
+    temperature: {
+      name: "Temperatur",
+      base: "celsius",
+      units: {
+        celsius: { name: "Celsius (°C)" },
+        fahrenheit: { name: "Fahrenheit (°F)" },
+        kelvin: { name: "Kelvin (K)" }
+      }
+    },
+    volume: {
+      name: "Volumen",
+      base: "liter",
+      units: {
+        liter: { name: "Liter (l)", factor: 1 },
+        milliliter: { name: "Milliliter (ml)", factor: 0.001 },
+        cubicmeter: { name: "Kubikmeter (m³)", factor: 1000 },
+        cubiccentimeter: { name: "Kubikzentimeter (cm³)", factor: 0.001 },
+        cubicinch: { name: "Kubikzoll (in³)", factor: 0.016387 },
+        cubicfoot: { name: "Kubikfuß (ft³)", factor: 28.3168 },
+        gallon_us: { name: "Gallone US (gal)", factor: 3.78541 },
+        quart_us: { name: "Quart US (qt)", factor: 0.946353 },
+        pint_us: { name: "Pint US (pt)", factor: 0.473176 },
+        cup_us: { name: "Cup US", factor: 0.24 },
+        fluidounce_us: { name: "Flüssigunze US (fl oz)", factor: 0.0295735 },
+        tablespoon_us: { name: "Esslöffel US", factor: 0.0147868 },
+        teaspoon_us: { name: "Teelöffel US", factor: 0.00492892 },
+        barrel_oil: { name: "Öl-Barrel", factor: 158.987 }
+      }
+    },
+    area: {
+      name: "Fläche",
+      base: "sqmeter",
+      units: {
+        sqmeter: { name: "Quadratmeter (m²)", factor: 1 },
+        sqkilometer: { name: "Quadratkilometer (km²)", factor: 1000000 },
+        sqcentimeter: { name: "Quadratzentimeter (cm²)", factor: 0.0001 },
+        sqmillimeter: { name: "Quadratmillimeter (mm²)", factor: 1e-6 },
+        hectare: { name: "Hektar (ha)", factor: 10000 },
+        are: { name: "Ar (a)", factor: 100 },
+        acre: { name: "Acre (ac)", factor: 4046.8564224 },
+        sqmile: { name: "Quadratmeile (mi²)", factor: 2589988.11 },
+        sqyard: { name: "Quadratyard (yd²)", factor: 0.836127 },
+        sqfoot: { name: "Quadratfuß (ft²)", factor: 0.092903 },
+        sqinch: { name: "Quadratzoll (in²)", factor: 0.00064516 }
+      }
+    },
+    time: {
+      name: "Zeit",
+      base: "second",
+      units: {
+        second: { name: "Sekunde (s)", factor: 1 },
+        millisecond: { name: "Millisekunde (ms)", factor: 0.001 },
+        microsecond: { name: "Mikrosekunde (µs)", factor: 1e-6 },
+        nanosecond: { name: "Nanosekunde (ns)", factor: 1e-9 },
+        minute: { name: "Minute (min)", factor: 60 },
+        hour: { name: "Stunde (h)", factor: 3600 },
+        day: { name: "Tag (d)", factor: 86400 },
+        week: { name: "Woche", factor: 604800 },
+        month: { name: "Monat (30 Tage)", factor: 2592000 },
+        year: { name: "Jahr (365 Tage)", factor: 31536000 },
+        decade: { name: "Dekade", factor: 315360000 },
+        century: { name: "Jahrhundert", factor: 3153600000 }
+      }
+    },
+    speed: {
+      name: "Geschwindigkeit",
+      base: "mps",
+      units: {
+        mps: { name: "Meter pro Sekunde (m/s)", factor: 1 },
+        kph: { name: "Kilometer pro Stunde (km/h)", factor: 0.277778 },
+        mph: { name: "Meilen pro Stunde (mph)", factor: 0.44704 },
+        knot: { name: "Knoten (kn)", factor: 0.514444 },
+        fps: { name: "Fuß pro Sekunde (ft/s)", factor: 0.3048 },
+        mach: { name: "Mach (Stall-Luft)", factor: 343 }
+      }
+    },
+    data: {
+      name: "Datengröße",
+      base: "byte",
+      units: {
+        bit: { name: "Bit (b)", factor: 0.125 },
+        byte: { name: "Byte (B)", factor: 1 },
+        kilobit: { name: "Kilobit (kb)", factor: 128 },
+        kilobyte: { name: "Kilobyte (KB)", factor: 1024 },
+        megabit: { name: "Megabit (Mb)", factor: 131072 },
+        megabyte: { name: "Megabyte (MB)", factor: 1048576 },
+        gigabit: { name: "Gigabit (Gb)", factor: 1.342e8 },
+        gigabyte: { name: "Gigabyte (GB)", factor: 1.074e9 },
+        terabit: { name: "Terabit (Tb)", factor: 1.374e11 },
+        terabyte: { name: "Terabyte (TB)", factor: 1.099e12 },
+        petabyte: { name: "Petabyte (PB)", factor: 1.126e15 }
+      }
+    },
+    energy: {
+      name: "Energie & Arbeit",
+      base: "joule",
+      units: {
+        joule: { name: "Joule (J)", factor: 1 },
+        kilojoule: { name: "Kilojoule (kJ)", factor: 1000 },
+        calorie: { name: "Kalorie (cal)", factor: 4.184 },
+        kilocalorie: { name: "Kilokalorie (kcal)", factor: 4184 },
+        watthour: { name: "Wattstunde (Wh)", factor: 3600 },
+        kilowatthour: { name: "Kilowattstunde (kWh)", factor: 3.6e6 },
+        electronvolt: { name: "Elektronenvolt (eV)", factor: 1.602e-19 },
+        btu: { name: "British Thermal Unit (BTU)", factor: 1055.06 }
+      }
+    },
+    pressure: {
+      name: "Druck",
+      base: "pascal",
+      units: {
+        pascal: { name: "Pascal (Pa)", factor: 1 },
+        kilopascal: { name: "Kilopascal (kPa)", factor: 1000 },
+        bar: { name: "Bar", factor: 100000 },
+        atmosphere: { name: "Atmosphäre (atm)", factor: 101325 },
+        torr: { name: "Torr (mmHg)", factor: 133.322 },
+        psi: { name: "PSI (lbf/in²)", factor: 6894.76 }
+      }
+    }
+  };
+
+  const unitCategorySelect = document.getElementById('unitCategory');
+  const unitFromSelect = document.getElementById('unitFrom');
+  const unitToSelect = document.getElementById('unitTo');
+  const unitInputVal = document.getElementById('unitInputVal');
+  const unitOutputVal = document.getElementById('unitOutputVal');
+  let unitHistory = [];
+
+  function populateUnitDropdowns() {
+    const cat = unitCategorySelect.value;
+    const unitsObj = unitsData[cat].units;
+    unitFromSelect.innerHTML = '';
+    unitToSelect.innerHTML = '';
+
+    let keys = Object.keys(unitsObj);
+    keys.forEach((key, index) => {
+      let opt1 = document.createElement('option');
+      opt1.value = key;
+      opt1.textContent = unitsObj[key].name;
+      unitFromSelect.appendChild(opt1);
+
+      let opt2 = document.createElement('option');
+      opt2.value = key;
+      opt2.textContent = unitsObj[key].name;
+      unitToSelect.appendChild(opt2);
+    });
+
+    if (keys.length > 1) {
+      unitToSelect.selectedIndex = 1;
+    }
+    convertUnits();
+  }
+
+  function convertUnits() {
+    const cat = unitCategorySelect.value;
+    const fromKey = unitFromSelect.value;
+    const toKey = unitToSelect.value;
+    const val = parseFloat(unitInputVal.value);
+
+    if (isNaN(val)) {
+      unitOutputVal.textContent = "0";
+      return;
+    }
+
+    let result = 0;
+    if (cat === 'temperature') {
+      // Temperature conversion logic
+      let celsiusVal = val;
+      if (fromKey === 'fahrenheit') celsiusVal = (val - 32) * 5/9;
+      if (fromKey === 'kelvin') celsiusVal = val - 273.15;
+
+      let targetVal = celsiusVal;
+      if (toKey === 'fahrenheit') targetVal = celsiusVal * 9/5 + 32;
+      if (toKey === 'kelvin') targetVal = celsiusVal + 273.15;
+      result = targetVal;
+    } else {
+      const unitsObj = unitsData[cat].units;
+      const baseVal = val * unitsObj[fromKey].factor;
+      result = baseVal / unitsObj[toKey].factor;
+    }
+
+    result = Number.isInteger(result) ? result : parseFloat(result.toFixed(6));
+    unitOutputVal.textContent = result;
+
+    // Add to unit history automatically on change
+    const fromName = unitsData[cat].units[fromKey].name.split(' ')[0];
+    const toName = unitsData[cat].units[toKey].name.split(' ')[0];
+    addUnitHistory(`${val} ${fromName} → ${toName}`, result);
+  }
+
+  function addUnitHistory(expression, result) {
+    unitHistory.unshift({ expression, result });
+    if (unitHistory.length > 10) unitHistory.pop();
+    if (currentMode === 'unit') renderHistory();
+  }
+
+  unitCategorySelect.addEventListener('change', populateUnitDropdowns);
+  unitFromSelect.addEventListener('change', convertUnits);
+  unitToSelect.addEventListener('change', convertUnits);
+  unitInputVal.addEventListener('input', convertUnits);
+
+  // --- GENERAL HISTORY RENDERING ---
   function renderHistory() {
-    if (historyData.length === 0) {
+    const targetHistory = currentMode === 'calc' ? calcHistory : unitHistory;
+
+    if (targetHistory.length === 0) {
       historyList.innerHTML = '<div class="history-item" style="opacity: 0.6; cursor: default;">No history yet</div>';
       return;
     }
 
     historyList.innerHTML = '';
-    historyData.forEach((item) => {
+    targetHistory.forEach((item) => {
       const historyItemEl = document.createElement('div');
       historyItemEl.className = 'history-item';
       historyItemEl.innerHTML = `
@@ -473,20 +844,29 @@
         <div class="history-res">${item.result}</div>
       `;
       historyItemEl.addEventListener('click', () => {
-        currentInput = item.result.toString();
-        resetNextInput = true;
-        updateDisplay();
+        if (currentMode === 'calc') {
+          currentInput = item.result.toString();
+          resetNextInput = true;
+          updateDisplay();
+        } else {
+          unitInputVal.value = item.result;
+          convertUnits();
+        }
       });
       historyList.appendChild(historyItemEl);
     });
   }
 
   clearHistoryBtn.addEventListener('click', () => {
-    historyData = [];
+    if (currentMode === 'calc') {
+      calcHistory = [];
+    } else {
+      unitHistory = [];
+    }
     renderHistory();
   });
 
-  // Button Listeners
+  // --- BUTTON LISTENERS & KEYBOARD SUPPORT ---
   document.querySelectorAll('.calculator-button').forEach(button => {
     button.addEventListener('click', () => {
       const number = button.getAttribute('data-number');
@@ -523,13 +903,12 @@
       } else if (action === 'calculate') {
         calculate();
       }
-
       updateDisplay();
     });
   });
 
-  // Keyboard Support
   window.addEventListener('keydown', (e) => {
+    if (currentMode !== 'calc') return;
     if (e.key >= '0' && e.key <= '9') handleNumber(e.key);
     if (e.key === '.') document.querySelector('[data-action="decimal"]').click();
     if (e.key === '+') handleOperator('add');
@@ -541,6 +920,9 @@
     if (e.key === 'Escape') document.querySelector('[data-action="clear"]').click();
     updateDisplay();
   });
+
+  // Init unit converter select fields on startup
+  populateUnitDropdowns();
 </script>
 
 </body>

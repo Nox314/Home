@@ -14,7 +14,7 @@
         --proton-light: #f5f7fa;
         --proton-border: #e0e4eb;
         --proton-text: #333333;
-        --radius: 14px;
+        --radius: 12px;
         --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
         --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
     }
@@ -25,98 +25,87 @@
         font-family: 'Inter', sans-serif;
         background-color: var(--proton-light);
         color: var(--proton-text);
-        min-height: 100vh;
     }
 
     .wrap {
-        max-width: 1200px;
+        max-width: 900px;
         margin: 0 auto;
         padding: 20px;
     }
 
     h1 {
         text-align: center;
-        font-size: 48px;
+        font-size: 42px;
         font-weight: 700;
         color: var(--proton-dark);
         margin-top: 40px;
-        letter-spacing: -1px;
     }
 
     h1 span {
         color: var(--proton-blue);
     }
 
-    /* Search Box */
     .search-box {
-        margin: 40px auto;
-        max-width: 600px;
+        margin: 30px auto;
+        max-width: 500px;
         text-align: center;
-        animation: fadeIn 0.8s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .search-box input {
         width: 100%;
-        padding: 16px;
+        padding: 14px;
         border-radius: var(--radius);
         border: 2px solid var(--proton-border);
-        font-size: 17px;
+        font-size: 16px;
+        background: white;
         outline: none;
         transition: 0.2s;
-        background: white;
     }
 
     .search-box input:focus {
         border-color: var(--proton-blue);
-        box-shadow: 0 0 0 4px rgba(98,74,255,0.15);
+        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
     }
 
     .search-box button {
-        margin-top: 15px;
+        margin-top: 12px;
         width: 100%;
-        padding: 16px;
+        padding: 14px;
         border-radius: var(--radius);
         border: none;
         background: var(--proton-blue);
         color: white;
         font-weight: 600;
-        font-size: 17px;
+        font-size: 16px;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
         transition: 0.2s;
+        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
     }
 
     .search-box button:hover {
         background: var(--proton-blue-hover);
-        transform: translateY(-3px);
+        transform: translateY(-2px);
     }
 
-    /* Result Cards */
     .result-card {
         background: white;
         border-radius: var(--radius);
-        padding: 25px;
-        margin: 20px 0;
+        padding: 20px;
+        margin: 15px 0;
         box-shadow: var(--shadow-sm);
         border: 1px solid transparent;
-        transition: 0.25s;
-        animation: fadeIn 0.5s ease;
+        transition: 0.2s;
     }
 
     .result-card:hover {
         box-shadow: var(--shadow-md);
-        border-color: rgba(98,74,255,0.25);
-        transform: translateY(-3px);
+        border-color: rgba(98,74,255,0.2);
+        transform: translateY(-2px);
     }
 
     .result-card h3 {
         margin: 0;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 600;
         color: var(--proton-dark);
     }
@@ -125,79 +114,59 @@
         color: var(--proton-blue);
         font-weight: 600;
         text-decoration: none;
-        font-size: 15px;
-    }
-
-    .result-card a:hover {
-        text-decoration: underline;
     }
 
     .result-card p {
-        margin-top: 10px;
+        margin-top: 8px;
         color: #666;
-        line-height: 1.6;
-        font-size: 15px;
+        line-height: 1.5;
     }
 
-    /* Import Box */
+    /* Kleine Import-Box */
     .import-box {
-        margin-top: 50px;
+        margin-top: 30px;
         background: white;
-        padding: 30px;
+        padding: 18px;
         border-radius: var(--radius);
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--proton-border);
-        animation: fadeIn 1s ease;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .import-box h2 {
         text-align: center;
         color: var(--proton-blue);
-        font-size: 28px;
-        margin-bottom: 20px;
-        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 10px;
     }
 
     .import-box input {
         width: 100%;
-        padding: 14px;
-        margin-top: 12px;
+        padding: 10px;
+        margin-top: 8px;
         border-radius: var(--radius);
         border: 2px solid var(--proton-border);
-        font-size: 16px;
+        font-size: 14px;
         background: white;
-        transition: 0.2s;
-    }
-
-    .import-box input:focus {
-        border-color: var(--proton-blue);
-        box-shadow: 0 0 0 4px rgba(98,74,255,0.15);
     }
 
     .import-box button {
         width: 100%;
-        margin-top: 25px;
-        padding: 16px;
+        margin-top: 12px;
+        padding: 12px;
         border-radius: var(--radius);
         border: none;
         background: var(--proton-blue);
         color: white;
         font-weight: 600;
-        font-size: 17px;
+        font-size: 15px;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
-        transition: 0.2s;
     }
 
     .import-box button:hover {
         background: var(--proton-blue-hover);
-        transform: translateY(-3px);
-    }
-
-    @media (max-width: 768px) {
-        h1 { font-size: 34px; }
-        .search-box input { font-size: 16px; }
-        .search-box button { font-size: 16px; }
     }
 </style>
 </head>
@@ -215,13 +184,13 @@
     <div id="results"></div>
 
     <div class="import-box">
-        <h2>Website importieren</h2>
+        <h2>Import</h2>
 
         <input id="importUrl" placeholder="Domain (example.com)">
         <input id="importDesc" placeholder="Beschreibung">
         <input id="importPrev" placeholder="Vorschau">
 
-        <button onclick="importEntry()">Importieren</button>
+        <button onclick="importEntry()">Hinzufügen</button>
     </div>
 
 </div>
@@ -245,6 +214,7 @@ function loadImported() {
     if (saved) entries = entries.concat(JSON.parse(saved));
 }
 
+// Import-Funktion
 function importEntry() {
     const url = document.getElementById("importUrl").value.trim();
     const desc = document.getElementById("importDesc").value.trim();
@@ -259,7 +229,35 @@ function importEntry() {
     saved.push(entry);
     localStorage.setItem("xsearch_imports", JSON.stringify(saved));
 
-    alert("Website importiert!");
+    alert("Website hinzugefügt!");
+}
+
+// Rechtschreibtoleranz (Fuzzy Search)
+function fuzzyMatch(text, query) {
+    text = text.toLowerCase();
+    query = query.toLowerCase();
+
+    if (text.includes(query)) return true;
+
+    // Levenshtein Distance (Mini-Version)
+    let dp = Array(query.length + 1).fill(null).map(() =>
+        Array(text.length + 1).fill(0)
+    );
+
+    for (let i = 0; i <= query.length; i++) dp[i][0] = i;
+    for (let j = 0; j <= text.length; j++) dp[0][j] = j;
+
+    for (let i = 1; i <= query.length; i++) {
+        for (let j = 1; j <= text.length; j++) {
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (query[i - 1] === text[j - 1] ? 0 : 1)
+            );
+        }
+    }
+
+    return dp[query.length][text.length] <= 2; // toleriert 2 Fehler
 }
 
 function search() {
@@ -268,9 +266,9 @@ function search() {
     out.innerHTML = "";
 
     const results = entries.filter(e =>
-        e.url.toLowerCase().includes(q) ||
-        e.description.toLowerCase().includes(q) ||
-        e.preview.toLowerCase().includes(q)
+        fuzzyMatch(e.url, q) ||
+        fuzzyMatch(e.description, q) ||
+        fuzzyMatch(e.preview, q)
     );
 
     if (!results.length) {

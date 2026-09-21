@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="de">
 <head>
@@ -136,6 +135,11 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
   background:#f0f2ff; color:#555;
 }
 
+/* Image result */
+.result-image {
+  max-width:100%; max-height:200px; margin-top:8px; border-radius:8px;
+}
+
 /* Pagination */
 .pagination {
   display:flex; gap:6px; margin-top:12px; font-size:13px;
@@ -224,7 +228,7 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
 
   <div class="sidepanel" id="sidepanel">
     <h2>x!search Info</h2>
-    <p>Tippe, nutze Operatoren (<code>site:</code>, <code>inurl:</code>, <code>intitle:</code>, <code>tag:</code>, <code>category:</code>, <code>"phrase"</code>) und drücke <b>Enter</b>.</p>
+    <p>Nur URLs, der Rest wird automatisch erkannt: Titel, Kategorie, Bilder, News, Code, Docs.</p>
     <p><b>Shortcuts:</b> <code>/</code> Fokus · <code>Esc</code> leeren · <code>Enter</code> suchen · <code>Ctrl+Enter</code> lucky.</p>
     <div class="meta" id="meta-info"></div>
 
@@ -261,7 +265,9 @@ const synonyms = {
   "auto": ["fahrzeug","wagen","kfz"],
   "haus": ["gebäude","wohnung"],
   "blog": ["artikel","post"],
-  "code": ["programmierung","dev","entwicklung"]
+  "code": ["programmierung","dev","entwicklung"],
+  "news": ["artikel","post","press"],
+  "image": ["bild","foto","pic"]
 };
 
 function tokenize(text) {
@@ -290,6 +296,72 @@ function stem(w) {
 
 function analyze(text) {
   return [...new Set(tokenize(normalize(text)).map(stem))];
+}
+
+// URL-Analyse: Titel, Beschreibung, Kategorie, Tags
+function analyzeUrl(url) {
+  const clean = url.replace(/^https?:\/\//, "");
+  const parts = clean.split("/");
+  const domain = parts[0];
+  const pathParts = parts.slice(1).filter(Boolean);
+
+  const last = pathParts[pathParts.length - 1] || "";
+  const extMatch = last.match(/\.(\w+)$/);
+  const ext = extMatch ? extMatch[1].toLowerCase() : "";
+
+  // Kategorie
+  let category = "web";
+  if (/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(last) || clean.includes("/img/") || clean.includes("/image")) {
+    category = "images";
+  } else if (/news|blog|article|post|press/i.test(clean)) {
+    category = "news";
+  } else if (/github|gitlab|bitbucket|src|api|code/i.test(clean) || /\.(js|ts|py|java|c|cpp|html|css)$/i.test(last)) {
+    category = "code";
+  } else if (/docs|documentation|guide|manual|wiki/i.test(clean)) {
+    category = "docs";
+  }
+
+  // Titel
+  function humanizeSegment(seg) {
+    return seg
+      .replace(/\.(\w+)$/, "")
+      .replace(/[-_]+/g, " ")
+      .replace(/\d+/g, m => " " + m)
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  let title = domain;
+  if (pathParts.length) {
+    const main = humanizeSegment(last || pathParts[pathParts.length - 1]);
+    if (category === "images") title = "Bild: " + main;
+    else if (category === "news") title = "News: " + main;
+    else if (category === "code") title = "Code: " + main;
+    else if (category === "docs") title = "Dokument: " + main;
+    else title = main || domain;
+  }
+
+  // Beschreibung
+  let description = "";
+  if (pathParts.length) {
+    description = pathParts
+      .map(humanizeSegment)
+      .filter(Boolean)
+      .join(" › ");
+  } else {
+    description = "Startseite von " + domain;
+  }
+
+  // Tags
+  const tags = [];
+  pathParts.forEach(p => {
+    humanizeSegment(p).split(" ").forEach(w => {
+      if (w.length > 2) tags.push(w.toLowerCase());
+    });
+  });
+  if (category !== "web") tags.push(category);
+
+  return { domain, title, description, category, tags, ext };
 }
 
 const entries = [];
@@ -367,7 +439,8 @@ function parseQuery(raw) {
   return { phrases, operators, terms: analyzed };
 }
 
-function makeSnippet(text, queryTerms) {
+function makeSnippet(entry, queryTerms) {
+  const text = entry.description || entry.url;
   if (!text) return "";
   const lower = text.toLowerCase();
   for (const term of queryTerms) {
@@ -438,10 +511,10 @@ function doSearch(rawQuery, tab) {
     });
 
     // Tab-Filter
-    if (tab === "images" && !/\.(png|jpg|jpeg|gif|webp)$/i.test(e.url)) score *= 0.01;
-    if (tab === "news" && e.category.toLowerCase() !== "news") score *= 0.3;
-    if (tab === "code" && e.category.toLowerCase() !== "code") score *= 0.3;
-    if (tab === "docs" && e.category.toLowerCase() !== "docs") score *= 0.3;
+    if (tab === "images" && e.category !== "images") score *= 0.01;
+    if (tab === "news" && e.category !== "news") score *= 0.3;
+    if (tab === "code" && e.category !== "code") score *= 0.3;
+    if (tab === "docs" && e.category !== "docs") score *= 0.3;
 
     // Länge / Popularität
     score *= 1 / (1 + e.url.length / 200);
@@ -632,9 +705,15 @@ function renderResults() {
 
   const frag = document.createDocumentFragment();
   slice.forEach(({ e }, idx) => {
-    const snippet = makeSnippet(e.description || e.url, lastMatchedTerms.length ? lastMatchedTerms : parseQuery(input.value).terms);
+    const snippet = makeSnippet(e, lastMatchedTerms.length ? lastMatchedTerms : parseQuery(input.value).terms);
     const card = document.createElement("div");
     card.className = "result-card";
+
+    let imageHtml = "";
+    if (e.category === "images") {
+      imageHtml = `<img src="https://${escapeHtml(e.url)}" alt="${escapeHtml(e.title)}" class="result-image">`;
+    }
+
     card.innerHTML = `
       <div class="result-header">
         <div>
@@ -643,6 +722,7 @@ function renderResults() {
         </div>
       </div>
       <div class="snippet">${highlight(snippet, lastMatchedTerms)}</div>
+      ${imageHtml}
       <div class="badges">
         <span class="badge">${e.url.length < 40 ? "Kurze URL" : "Lange URL"}</span>
         <span class="badge">${e.category || "Kategorie unbekannt"}</span>
@@ -757,13 +837,16 @@ fetch(`https://raw.githubusercontent.com/${githubuser}/${githubrepo}/main/${gith
     text.split("\n").forEach(line => {
       const raw = line.trim();
       if (!raw) return;
-      const parts = raw.split("|");
-      const url = parts[0].trim();
-      const title = (parts[1] || url).trim();
-      const description = (parts[2] || "Keine Beschreibung.").trim();
-      const tags = (parts[3] || "").split(",").map(t => t.trim()).filter(Boolean);
-      const category = (parts[4] || "web").trim();
-      entries.push({ url, title, description, tags, category, popularity: 1 });
+      const url = raw;
+      const info = analyzeUrl(url);
+      entries.push({
+        url,
+        title: info.title,
+        description: info.description,
+        tags: info.tags,
+        category: info.category,
+        popularity: 1
+      });
     });
     buildIndex();
     statsEl.innerHTML = `Index bereit: <b>${entries.length}</b> Seiten · <b>${index.size}</b> eindeutige Begriffe · aufgebaut in ${(builtAt - 0).toFixed(0)}ms`;

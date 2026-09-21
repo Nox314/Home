@@ -8,164 +8,171 @@
 
 <style>
     :root {
-        --proton-blue: #624aff;
-        --proton-blue-hover: #4f37e0;
-        --proton-dark: #1c1c1c;
-        --proton-light: #f5f7fa;
-        --proton-border: #e0e4eb;
-        --proton-text: #333333;
-        --radius: 12px;
-        --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-        --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        --blue: #624aff;
+        --blue-hover: #4f37e0;
+        --dark: #1c1c1c;
+        --light: #f5f7fa;
+        --border: #e0e4eb;
+        --text: #333;
+        --radius: 14px;
+        --shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
     body {
         margin: 0;
         padding: 0;
         font-family: 'Inter', sans-serif;
-        background-color: var(--proton-light);
-        color: var(--proton-text);
+        background: var(--light);
+        color: var(--text);
+        transition: 0.3s;
     }
 
     .wrap {
         max-width: 900px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 30px;
     }
 
     h1 {
         text-align: center;
-        font-size: 42px;
+        font-size: 46px;
         font-weight: 700;
-        color: var(--proton-dark);
-        margin-top: 40px;
+        margin-top: 20px;
+        color: var(--dark);
     }
 
     h1 span {
-        color: var(--proton-blue);
+        color: var(--blue);
     }
 
     .search-box {
-        margin: 30px auto;
+        margin: 40px auto;
         max-width: 500px;
         text-align: center;
     }
 
     .search-box input {
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         border-radius: var(--radius);
-        border: 2px solid var(--proton-border);
-        font-size: 16px;
+        border: 2px solid var(--border);
+        font-size: 17px;
         background: white;
-        outline: none;
         transition: 0.2s;
     }
 
     .search-box input:focus {
-        border-color: var(--proton-blue);
+        border-color: var(--blue);
         box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
+        outline: none;
     }
 
     .search-box button {
-        margin-top: 12px;
+        margin-top: 14px;
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         border-radius: var(--radius);
         border: none;
-        background: var(--proton-blue);
+        background: var(--blue);
         color: white;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 17px;
         cursor: pointer;
         transition: 0.2s;
-        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
+        box-shadow: 0 4px 14px rgba(98,74,255,0.25);
     }
 
     .search-box button:hover {
-        background: var(--proton-blue-hover);
+        background: var(--blue-hover);
         transform: translateY(-2px);
+    }
+
+    #results {
+        margin-top: 20px;
     }
 
     .result-card {
         background: white;
         border-radius: var(--radius);
-        padding: 20px;
-        margin: 15px 0;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid transparent;
+        padding: 22px;
+        margin: 18px 0;
+        box-shadow: var(--shadow);
         transition: 0.2s;
     }
 
     .result-card:hover {
-        box-shadow: var(--shadow-md);
-        border-color: rgba(98,74,255,0.2);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
     }
 
     .result-card h3 {
         margin: 0;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 600;
-        color: var(--proton-dark);
+        color: var(--dark);
     }
 
     .result-card a {
-        color: var(--proton-blue);
+        color: var(--blue);
         font-weight: 600;
         text-decoration: none;
     }
 
     .result-card p {
-        margin-top: 8px;
-        color: #666;
-        line-height: 1.5;
+        margin-top: 10px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .result-card img {
+        width: 100%;
+        border-radius: 12px;
+        margin-top: 12px;
     }
 
     .import-box {
-        margin-top: 30px;
+        margin-top: 40px;
         background: white;
-        padding: 18px;
+        padding: 22px;
         border-radius: var(--radius);
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--proton-border);
-        max-width: 400px;
+        box-shadow: var(--shadow);
+        max-width: 420px;
         margin-left: auto;
         margin-right: auto;
     }
 
     .import-box h2 {
         text-align: center;
-        color: var(--proton-blue);
-        font-size: 20px;
-        margin-bottom: 10px;
+        color: var(--blue);
+        font-size: 22px;
+        margin-bottom: 12px;
     }
 
     .import-box input {
         width: 100%;
-        padding: 10px;
-        margin-top: 8px;
+        padding: 12px;
+        margin-top: 10px;
         border-radius: var(--radius);
-        border: 2px solid var(--proton-border);
-        font-size: 14px;
+        border: 2px solid var(--border);
+        font-size: 15px;
         background: white;
     }
 
     .import-box button {
         width: 100%;
-        margin-top: 12px;
-        padding: 12px;
+        margin-top: 14px;
+        padding: 14px;
         border-radius: var(--radius);
         border: none;
-        background: var(--proton-blue);
+        background: var(--blue);
         color: white;
         font-weight: 600;
-        font-size: 15px;
+        font-size: 16px;
         cursor: pointer;
+        transition: 0.2s;
     }
 
     .import-box button:hover {
-        background: var(--proton-blue-hover);
+        background: var(--blue-hover);
     }
 </style>
 </head>
@@ -184,11 +191,7 @@
 
     <div class="import-box">
         <h2>Import</h2>
-
         <input id="importUrl" placeholder="Domain (example.com)">
-        <input id="importDesc" placeholder="Beschreibung">
-        <input id="importPrev" placeholder="Vorschau">
-
         <button onclick="importEntry()">Hinzufügen</button>
     </div>
 
@@ -196,98 +199,192 @@
 
 <script>
 let entries = [];
-let githubToken = "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";
 let githubUser = "nox314";
 let githubRepo = "Home";
 let githubFile = "websites.txt";
+// HIER deinen Token wieder einsetzen:
+let githubToken = "DEIN_GITHUB_TOKEN_HIER";
 
-// TXT laden
+// Deep Mode Easter Egg
+window.XSEARCH_DEEP = false;
+
+// TXT laden: jede Zeile = URL
 fetch(`https://raw.githubusercontent.com/${githubUser}/${githubRepo}/main/${githubFile}`)
     .then(r => r.text())
     .then(text => {
         text.split("\n").forEach(line => {
-            const m = line.match(/(.*?)="(.*?)"\/"(.*?)"/);
-            if (m) entries.push({ url: m[1].trim(), description: m[2].trim(), preview: m[3].trim() });
+            const url = line.trim();
+            if (url.length > 0) entries.push({ url });
         });
     });
 
-// Import-Funktion → schreibt in GitHub TXT
+// Metadaten aus Website extrahieren
+async function extractMeta(url) {
+    try {
+        const html = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://" + url))
+            .then(r => r.json())
+            .then(d => d.contents);
+
+        const doc = new DOMParser().parseFromString(html, "text/html");
+
+        const title = doc.querySelector("title")?.innerText || url;
+        const desc =
+            doc.querySelector('meta[name="description"]')?.content ||
+            doc.querySelector('meta[property="og:description"]')?.content ||
+            "Keine Beschreibung gefunden";
+
+        const preview =
+            doc.querySelector('meta[property="og:image"]')?.content ||
+            doc.querySelector('meta[name="twitter:image"]')?.content ||
+            null;
+
+        return { title, desc, preview };
+
+    } catch (e) {
+        return {
+            title: url,
+            desc: "Die Website konnte nicht analysiert werden.",
+            preview: null
+        };
+    }
+}
+
+// Deep Crawler (Depth bis maxDepth)
+async function deepCrawler(domain, maxPages = 50, maxDepth = 3) {
+    const visited = new Set();
+    const queue = [{ url: "https://" + domain, depth: 1 }];
+    const found = [];
+
+    while (queue.length > 0 && found.length < maxPages) {
+        const { url, depth } = queue.shift();
+
+        if (visited.has(url)) continue;
+        visited.add(url);
+
+        try {
+            const html = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url))
+                .then(r => r.json())
+                .then(d => d.contents);
+
+            found.push(url);
+
+            if (depth < maxDepth) {
+                const doc = new DOMParser().parseFromString(html, "text/html");
+                const anchors = Array.from(doc.querySelectorAll("a[href]"));
+
+                anchors.forEach(a => {
+                    let href = a.getAttribute("href");
+                    if (!href) return;
+
+                    try {
+                        const full = new URL(href, url).href;
+                        const host = new URL(full).hostname;
+
+                        if (host === domain && !visited.has(full)) {
+                            queue.push({ url: full, depth: depth + 1 });
+                        }
+                    } catch {}
+                });
+            }
+
+        } catch (e) {
+            console.log("Crawler error:", e);
+        }
+    }
+
+    // zurück zu „domain/pfad“ ohne https://
+    return found.map(u => u.replace("https://", ""));
+}
+
+// Import mit Deep Crawl
 async function importEntry() {
     const url = document.getElementById("importUrl").value.trim();
-    const desc = document.getElementById("importDesc").value.trim();
-    const prev = document.getElementById("importPrev").value.trim();
-
-    if (!url || !desc || !prev) return alert("Bitte alle Felder ausfüllen!");
+    if (!url) return alert("Bitte Domain eingeben!");
 
     if (entries.some(e => e.url.toLowerCase() === url.toLowerCase())) {
         alert("Diese Website existiert bereits!");
         return;
     }
 
-    const entry = { url, description: desc, preview: prev };
-    entries.push(entry);
+    const depth = window.XSEARCH_DEEP ? 5 : 3;
+    const maxPages = window.XSEARCH_DEEP ? 200 : 80;
 
-    let newTXT = entries
-        .map(e => `${e.url}="${e.description}"/"${e.preview}"`)
-        .join("\n");
+    const crawled = await deepCrawler(url, maxPages, depth);
 
-    // SHA der Datei holen
-    const fileInfo = await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`)
-        .then(r => r.json());
-
-    // Datei aktualisieren
-    await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`, {
-        method: "PUT",
-        headers: {
-            "Authorization": `Bearer ${githubToken}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            message: "X!Search update",
-            content: btoa(newTXT),
-            sha: fileInfo.sha
-        })
+    crawled.forEach(link => {
+        if (!entries.some(e => e.url.toLowerCase() === link.toLowerCase())) {
+            entries.push({ url: link });
+        }
     });
 
-    alert("Website hinzugefügt und TXT aktualisiert!");
-}
+    const newTXT = entries.map(e => e.url).join("\n");
 
-// Rechtschreibtoleranz
-function fuzzyMatch(text, query) {
-    text = text.toLowerCase();
-    query = query.toLowerCase();
+    // TXT in GitHub aktualisieren
+    try {
+        const fileInfo = await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`)
+            .then(r => r.json());
 
-    if (text.includes(query)) return true;
+        await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${githubToken}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: "X!Search deep crawl update",
+                content: btoa(newTXT),
+                sha: fileInfo.sha
+            })
+        });
 
-    let dp = Array(query.length + 1).fill(null).map(() =>
-        Array(text.length + 1).fill(0)
-    );
-
-    for (let i = 0; i <= query.length; i++) dp[i][0] = i;
-    for (let j = 0; j <= text.length; j++) dp[0][j] = j;
-
-    for (let i = 1; i <= query.length; i++) {
-        for (let j = 1; j <= text.length; j++) {
-            dp[i][j] = Math.min(
-                dp[i - 1][j] + 1,
-                dp[i][j - 1] + 1,
-                dp[i - 1][j - 1] + (query[i - 1] === text[j - 1] ? 0 : 1)
-            );
-        }
+        alert(`Import abgeschlossen: ${crawled.length} Seiten gefunden und TXT aktualisiert!`);
+    } catch (e) {
+        console.log(e);
+        alert("Fehler beim Aktualisieren der TXT in GitHub.");
     }
-
-    return dp[query.length][text.length] <= 2;
 }
 
-function search() {
+// Easter Egg: „nox314“ im Suchfeld → Deep Mode
+function triggerDeepMode() {
+    document.body.style.background = "#000";
+    document.body.style.color = "#0f0";
+    window.XSEARCH_DEEP = true;
+
+    const msg = document.createElement("div");
+    msg.style.position = "fixed";
+    msg.style.bottom = "20px";
+    msg.style.right = "20px";
+    msg.style.padding = "12px 18px";
+    msg.style.borderRadius = "10px";
+    msg.style.background = "rgba(0,0,0,0.8)";
+    msg.style.color = "#0f0";
+    msg.style.fontFamily = "monospace";
+    msg.style.zIndex = "9999";
+    msg.textContent = "X!Search Deep Mode – nox314";
+
+    document.body.appendChild(msg);
+
+    setTimeout(() => {
+        document.body.style.background = "";
+        document.body.style.color = "";
+        msg.remove();
+    }, 5000);
+}
+
+// Suche
+async function search() {
     const q = document.getElementById("query").value.toLowerCase();
     const out = document.getElementById("results");
     out.innerHTML = "";
 
+    // Easter Egg
+    if (q === "nox314") {
+        triggerDeepMode();
+        return;
+    }
+
     const results = entries.filter(e =>
-        fuzzyMatch(e.url, q) ||
-        fuzzyMatch(e.description, q) ||
-        fuzzyMatch(e.preview, q)
+        e.url.toLowerCase().includes(q)
     );
 
     if (!results.length) {
@@ -295,17 +392,21 @@ function search() {
         return;
     }
 
-    results.forEach(e => {
+    for (const e of results) {
+        const meta = await extractMeta(e.url);
+
         const div = document.createElement("div");
         div.className = "result-card";
+
         div.innerHTML = `
-            <h3>${e.url}</h3>
+            <h3>${meta.title}</h3>
             <a href="https://${e.url}" target="_blank">${e.url}</a>
-            <p><strong>Beschreibung:</strong> ${e.description}</p>
-            <p><strong>Vorschau:</strong> ${e.preview}</p>
+            <p><strong>Beschreibung:</strong> ${meta.desc}</p>
+            ${meta.preview ? `<img src="${meta.preview}" alt="Preview">` : ""}
         `;
+
         out.appendChild(div);
-    });
+    }
 }
 </script>
 

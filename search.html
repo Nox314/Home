@@ -1,79 +1,278 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>X!Search</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X!Search – nox!314</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --proton-blue: #624aff;
+        --proton-blue-hover: #4f37e0;
+        --proton-dark: #1c1c1c;
+        --proton-light: #f5f7fa;
+        --proton-border: #e0e4eb;
+        --proton-text: #333333;
+        --radius: 12px;
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+        --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      text-align: center;
-      padding-top: 80px;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: var(--proton-light);
+        color: var(--proton-text);
+        min-height: 100vh;
     }
-    input {
-      width: 60%;
-      padding: 12px;
-      border-radius: 30px;
-      border: none;
-      font-size: 1rem;
+
+    .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
-    button {
-      padding: 12px 20px;
-      border-radius: 30px;
-      border: none;
-      background: #38bdf8;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      margin-left: 10px;
+
+    h1 {
+        text-align: center;
+        font-size: 42px;
+        font-weight: 700;
+        color: var(--proton-dark);
+        margin-top: 40px;
     }
-    .engines {
-      margin-top: 20px;
+
+    h1 span {
+        color: var(--proton-blue);
     }
-    .engines button {
-      margin: 5px;
-      background: #22c55e;
+
+    .search-box {
+        margin: 40px auto;
+        max-width: 600px;
+        text-align: center;
     }
-  </style>
+
+    .search-box input {
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--radius);
+        border: 2px solid var(--proton-border);
+        font-size: 16px;
+        outline: none;
+        transition: 0.2s;
+        background: white;
+    }
+
+    .search-box input:focus {
+        border-color: var(--proton-blue);
+        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
+    }
+
+    .search-box button {
+        margin-top: 15px;
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--radius);
+        border: none;
+        background: var(--proton-blue);
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
+        transition: 0.2s;
+    }
+
+    .search-box button:hover {
+        background: var(--proton-blue-hover);
+        transform: translateY(-2px);
+    }
+
+    .result-card {
+        background: white;
+        border-radius: var(--radius);
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid transparent;
+        transition: 0.2s;
+    }
+
+    .result-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: rgba(98,74,255,0.2);
+    }
+
+    .result-card h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--proton-dark);
+    }
+
+    .result-card a {
+        color: var(--proton-blue);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .result-card a:hover {
+        text-decoration: underline;
+    }
+
+    .result-card p {
+        margin-top: 10px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .import-box {
+        margin-top: 50px;
+        background: white;
+        padding: 25px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--proton-border);
+    }
+
+    .import-box h2 {
+        text-align: center;
+        color: var(--proton-blue);
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+
+    .import-box input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: var(--radius);
+        border: 2px solid var(--proton-border);
+        font-size: 15px;
+        background: white;
+    }
+
+    .import-box input:focus {
+        border-color: var(--proton-blue);
+        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
+    }
+
+    .import-box button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 14px;
+        border-radius: var(--radius);
+        border: none;
+        background: var(--proton-blue);
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(98,74,255,0.25);
+    }
+
+    .import-box button:hover {
+        background: var(--proton-blue-hover);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 32px; }
+        .search-box input { font-size: 15px; }
+        .search-box button { font-size: 15px; }
+    }
+</style>
 </head>
 <body>
 
-  <h1>X!Search</h1>
-  <p>Die Meta‑Suchmaschine ohne API</p>
+<div class="wrap">
 
-  <input id="query" placeholder="Suchbegriff eingeben...">
-  <button onclick="search()">Suchen</button>
+    <h1>X!<span>Search</span></h1>
 
-  <div class="engines">
-    <button onclick="engine('ecosia')">Ecosia</button>
-    <button onclick="engine('bing')">Bing</button>
-    <button onclick="engine('duck')">DuckDuckGo</button>
-    <button onclick="engine('youtube')">YouTube</button>
-    <button onclick="engine('wiki')">Wikipedia</button>
-  </div>
+    <div class="search-box">
+        <input id="query" placeholder="Suchbegriff eingeben...">
+        <button onclick="search()">Suchen</button>
+    </div>
 
-  <script>
-    function search() {
-      const q = document.getElementById("query").value;
-      if (!q) return;
-      window.location.href = "https://ecosia.org/?q=" + encodeURIComponent(q);
+    <div id="results"></div>
+
+    <div class="import-box">
+        <h2>Website importieren</h2>
+
+        <input id="import-url" placeholder="Domain (example.com)">
+        <input id="import-desc" placeholder="Beschreibung">
+        <input id="import-prev" placeholder="Vorschau">
+
+        <button onclick="importEntry()">Importieren</button>
+    </div>
+
+</div>
+
+<script>
+let entries = [];
+
+// TXT laden
+fetch("websites.txt")
+    .then(r => r.text())
+    .then(text => {
+        text.split("\n").forEach(line => {
+            const m = line.match(/(.*?)="(.*?)"\/"(.*?)"/);
+            if (m) entries.push({ url: m[1].trim(), description: m[2].trim(), preview: m[3].trim() });
+        });
+        loadImported();
+    });
+
+function loadImported() {
+    const saved = localStorage.getItem("xsearch_imports");
+    if (saved) entries = entries.concat(JSON.parse(saved));
+}
+
+function importEntry() {
+    const url = import-url.value.trim();
+    const desc = import-desc.value.trim();
+    const prev = import-prev.value.trim();
+
+    if (!url || !desc || !prev) return alert("Bitte alle Felder ausfüllen!");
+
+    const entry = { url, description: desc, preview: prev };
+    entries.push(entry);
+
+    const saved = JSON.parse(localStorage.getItem("xsearch_imports") || "[]");
+    saved.push(entry);
+    localStorage.setItem("xsearch_imports", JSON.stringify(saved));
+
+    alert("Website importiert!");
+}
+
+function search() {
+    const q = query.value.toLowerCase();
+    const out = document.getElementById("results");
+    out.innerHTML = "";
+
+    const results = entries.filter(e =>
+        e.url.toLowerCase().includes(q) ||
+        e.description.toLowerCase().includes(q) ||
+        e.preview.toLowerCase().includes(q)
+    );
+
+    if (!results.length) {
+        out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Keine Ergebnisse gefunden.</p>";
+        return;
     }
 
-    function engine(type) {
-      const q = document.getElementById("query").value;
-      if (!q) return;
-
-      const urls = {
-        ecosia: "https://ecosia.org/?q=",
-        duck: "https://duckduckgo.com/?q=",
-        youtube: "https://www.youtube.com/results?search_query=",
-        wiki: "https://de.wikipedia.org/wiki/Special:Search?search="
-      };
-
-      window.location.href = urls[type] + encodeURIComponent(q);
-    }
-  </script>
+    results.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "result-card";
+        div.innerHTML = `
+            <h3>${e.url}</h3>
+            <a href="https://${e.url}" target="_blank">${e.url}</a>
+            <p><strong>Beschreibung:</strong> ${e.description}</p>
+            <p><strong>Vorschau:</strong> ${e.preview}</p>
+        `;
+        out.appendChild(div);
+    });
+}
+</script>
 
 </body>
 </html>

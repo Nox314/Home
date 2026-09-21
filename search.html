@@ -122,7 +122,6 @@
         line-height: 1.5;
     }
 
-    /* Kleine Import-Box */
     .import-box {
         margin-top: 30px;
         background: white;
@@ -197,49 +196,69 @@
 
 <script>
 let entries = [];
+let githubToken = "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";
+let githubUser = "nox314";
+let githubRepo = "Home";
+let githubFile = "websites.txt";
 
 // TXT laden
-fetch("websites.txt")
+fetch(`https://raw.githubusercontent.com/${githubUser}/${githubRepo}/main/${githubFile}`)
     .then(r => r.text())
     .then(text => {
         text.split("\n").forEach(line => {
             const m = line.match(/(.*?)="(.*?)"\/"(.*?)"/);
             if (m) entries.push({ url: m[1].trim(), description: m[2].trim(), preview: m[3].trim() });
         });
-        loadImported();
     });
 
-function loadImported() {
-    const saved = localStorage.getItem("xsearch_imports");
-    if (saved) entries = entries.concat(JSON.parse(saved));
-}
-
-// Import-Funktion
-function importEntry() {
+// Import-Funktion → schreibt in GitHub TXT
+async function importEntry() {
     const url = document.getElementById("importUrl").value.trim();
     const desc = document.getElementById("importDesc").value.trim();
     const prev = document.getElementById("importPrev").value.trim();
 
     if (!url || !desc || !prev) return alert("Bitte alle Felder ausfüllen!");
 
+    if (entries.some(e => e.url.toLowerCase() === url.toLowerCase())) {
+        alert("Diese Website existiert bereits!");
+        return;
+    }
+
     const entry = { url, description: desc, preview: prev };
     entries.push(entry);
 
-    const saved = JSON.parse(localStorage.getItem("xsearch_imports") || "[]");
-    saved.push(entry);
-    localStorage.setItem("xsearch_imports", JSON.stringify(saved));
+    let newTXT = entries
+        .map(e => `${e.url}="${e.description}"/"${e.preview}"`)
+        .join("\n");
 
-    alert("Website hinzugefügt!");
+    // SHA der Datei holen
+    const fileInfo = await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`)
+        .then(r => r.json());
+
+    // Datei aktualisieren
+    await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${githubToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: "X!Search update",
+            content: btoa(newTXT),
+            sha: fileInfo.sha
+        })
+    });
+
+    alert("Website hinzugefügt und TXT aktualisiert!");
 }
 
-// Rechtschreibtoleranz (Fuzzy Search)
+// Rechtschreibtoleranz
 function fuzzyMatch(text, query) {
     text = text.toLowerCase();
     query = query.toLowerCase();
 
     if (text.includes(query)) return true;
 
-    // Levenshtein Distance (Mini-Version)
     let dp = Array(query.length + 1).fill(null).map(() =>
         Array(text.length + 1).fill(0)
     );
@@ -257,7 +276,7 @@ function fuzzyMatch(text, query) {
         }
     }
 
-    return dp[query.length][text.length] <= 2; // toleriert 2 Fehler
+    return dp[query.length][text.length] <= 2;
 }
 
 function search() {

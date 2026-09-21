@@ -14,7 +14,7 @@
         --proton-light: #f5f7fa;
         --proton-border: #e0e4eb;
         --proton-text: #333333;
-        --radius: 12px;
+        --radius: 14px;
         --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
         --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
     }
@@ -36,28 +36,36 @@
 
     h1 {
         text-align: center;
-        font-size: 42px;
+        font-size: 48px;
         font-weight: 700;
         color: var(--proton-dark);
         margin-top: 40px;
+        letter-spacing: -1px;
     }
 
     h1 span {
         color: var(--proton-blue);
     }
 
+    /* Search Box */
     .search-box {
         margin: 40px auto;
         max-width: 600px;
         text-align: center;
+        animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .search-box input {
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         border-radius: var(--radius);
         border: 2px solid var(--proton-border);
-        font-size: 16px;
+        font-size: 17px;
         outline: none;
         transition: 0.2s;
         background: white;
@@ -65,19 +73,19 @@
 
     .search-box input:focus {
         border-color: var(--proton-blue);
-        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
+        box-shadow: 0 0 0 4px rgba(98,74,255,0.15);
     }
 
     .search-box button {
         margin-top: 15px;
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         border-radius: var(--radius);
         border: none;
         background: var(--proton-blue);
         color: white;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 17px;
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(98,74,255,0.25);
         transition: 0.2s;
@@ -85,9 +93,10 @@
 
     .search-box button:hover {
         background: var(--proton-blue-hover);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
     }
 
+    /* Result Cards */
     .result-card {
         background: white;
         border-radius: var(--radius);
@@ -95,17 +104,19 @@
         margin: 20px 0;
         box-shadow: var(--shadow-sm);
         border: 1px solid transparent;
-        transition: 0.2s;
+        transition: 0.25s;
+        animation: fadeIn 0.5s ease;
     }
 
     .result-card:hover {
         box-shadow: var(--shadow-md);
-        border-color: rgba(98,74,255,0.2);
+        border-color: rgba(98,74,255,0.25);
+        transform: translateY(-3px);
     }
 
     .result-card h3 {
         margin: 0;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 600;
         color: var(--proton-dark);
     }
@@ -114,6 +125,7 @@
         color: var(--proton-blue);
         font-weight: 600;
         text-decoration: none;
+        font-size: 15px;
     }
 
     .result-card a:hover {
@@ -123,63 +135,69 @@
     .result-card p {
         margin-top: 10px;
         color: #666;
-        line-height: 1.5;
+        line-height: 1.6;
+        font-size: 15px;
     }
 
+    /* Import Box */
     .import-box {
         margin-top: 50px;
         background: white;
-        padding: 25px;
+        padding: 30px;
         border-radius: var(--radius);
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--proton-border);
+        animation: fadeIn 1s ease;
     }
 
     .import-box h2 {
         text-align: center;
         color: var(--proton-blue);
-        font-size: 26px;
+        font-size: 28px;
         margin-bottom: 20px;
+        font-weight: 700;
     }
 
     .import-box input {
         width: 100%;
-        padding: 12px;
-        margin-top: 10px;
+        padding: 14px;
+        margin-top: 12px;
         border-radius: var(--radius);
         border: 2px solid var(--proton-border);
-        font-size: 15px;
+        font-size: 16px;
         background: white;
+        transition: 0.2s;
     }
 
     .import-box input:focus {
         border-color: var(--proton-blue);
-        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
+        box-shadow: 0 0 0 4px rgba(98,74,255,0.15);
     }
 
     .import-box button {
         width: 100%;
-        margin-top: 20px;
-        padding: 14px;
+        margin-top: 25px;
+        padding: 16px;
         border-radius: var(--radius);
         border: none;
         background: var(--proton-blue);
         color: white;
         font-weight: 600;
-        font-size: 16px;
+        font-size: 17px;
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(98,74,255,0.25);
+        transition: 0.2s;
     }
 
     .import-box button:hover {
         background: var(--proton-blue-hover);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
     }
 
     @media (max-width: 768px) {
-        h1 { font-size: 32px; }
-        .search-box input { font-size: 15px; }
-        .search-box button { font-size: 15px; }
+        h1 { font-size: 34px; }
+        .search-box input { font-size: 16px; }
+        .search-box button { font-size: 16px; }
     }
 </style>
 </head>
@@ -199,9 +217,9 @@
     <div class="import-box">
         <h2>Website importieren</h2>
 
-        <input id="import-url" placeholder="Domain (example.com)">
-        <input id="import-desc" placeholder="Beschreibung">
-        <input id="import-prev" placeholder="Vorschau">
+        <input id="importUrl" placeholder="Domain (example.com)">
+        <input id="importDesc" placeholder="Beschreibung">
+        <input id="importPrev" placeholder="Vorschau">
 
         <button onclick="importEntry()">Importieren</button>
     </div>
@@ -228,9 +246,9 @@ function loadImported() {
 }
 
 function importEntry() {
-    const url = import-url.value.trim();
-    const desc = import-desc.value.trim();
-    const prev = import-prev.value.trim();
+    const url = document.getElementById("importUrl").value.trim();
+    const desc = document.getElementById("importDesc").value.trim();
+    const prev = document.getElementById("importPrev").value.trim();
 
     if (!url || !desc || !prev) return alert("Bitte alle Felder ausfüllen!");
 
@@ -245,7 +263,7 @@ function importEntry() {
 }
 
 function search() {
-    const q = query.value.toLowerCase();
+    const q = document.getElementById("query").value.toLowerCase();
     const out = document.getElementById("results");
     out.innerHTML = "";
 

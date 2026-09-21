@@ -1,1 +1,3 @@
-google.com="hi"/"hallo"
+example.com="Eine Beispielseite"/"Dies ist eine Vorschau der Seite"
+google.com="Die größte Suchmaschine"/"Google Vorschau"
+xsearch.dev="Deine eigene Suchmaschine"/"X!Search Vorschau"

@@ -1,414 +1,267 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>X!Search – nox!314</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<title>x!search – nox!314</title>
+<link href="https://fonts.googleapis.com/css2?family=inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --blue: #624aff;
-        --blue-hover: #4f37e0;
-        --dark: #1c1c1c;
-        --light: #f5f7fa;
-        --border: #e0e4eb;
-        --text: #333;
-        --radius: 14px;
-        --shadow: 0 6px 20px rgba(0,0,0,0.08);
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Inter', sans-serif;
-        background: var(--light);
-        color: var(--text);
-        transition: 0.3s;
-    }
-
-    .wrap {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 30px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 46px;
-        font-weight: 700;
-        margin-top: 20px;
-        color: var(--dark);
-    }
-
-    h1 span {
-        color: var(--blue);
-    }
-
-    .search-box {
-        margin: 40px auto;
-        max-width: 500px;
-        text-align: center;
-    }
-
-    .search-box input {
-        width: 100%;
-        padding: 16px;
-        border-radius: var(--radius);
-        border: 2px solid var(--border);
-        font-size: 17px;
-        background: white;
-        transition: 0.2s;
-    }
-
-    .search-box input:focus {
-        border-color: var(--blue);
-        box-shadow: 0 0 0 3px rgba(98,74,255,0.15);
-        outline: none;
-    }
-
-    .search-box button {
-        margin-top: 14px;
-        width: 100%;
-        padding: 16px;
-        border-radius: var(--radius);
-        border: none;
-        background: var(--blue);
-        color: white;
-        font-weight: 600;
-        font-size: 17px;
-        cursor: pointer;
-        transition: 0.2s;
-        box-shadow: 0 4px 14px rgba(98,74,255,0.25);
-    }
-
-    .search-box button:hover {
-        background: var(--blue-hover);
-        transform: translateY(-2px);
-    }
-
-    #results {
-        margin-top: 20px;
-    }
-
-    .result-card {
-        background: white;
-        border-radius: var(--radius);
-        padding: 22px;
-        margin: 18px 0;
-        box-shadow: var(--shadow);
-        transition: 0.2s;
-    }
-
-    .result-card:hover {
-        transform: translateY(-3px);
-    }
-
-    .result-card h3 {
-        margin: 0;
-        font-size: 22px;
-        font-weight: 600;
-        color: var(--dark);
-    }
-
-    .result-card a {
-        color: var(--blue);
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    .result-card p {
-        margin-top: 10px;
-        color: #555;
-        line-height: 1.6;
-    }
-
-    .result-card img {
-        width: 100%;
-        border-radius: 12px;
-        margin-top: 12px;
-    }
-
-    .import-box {
-        margin-top: 40px;
-        background: white;
-        padding: 22px;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        max-width: 420px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .import-box h2 {
-        text-align: center;
-        color: var(--blue);
-        font-size: 22px;
-        margin-bottom: 12px;
-    }
-
-    .import-box input {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border-radius: var(--radius);
-        border: 2px solid var(--border);
-        font-size: 15px;
-        background: white;
-    }
-
-    .import-box button {
-        width: 100%;
-        margin-top: 14px;
-        padding: 14px;
-        border-radius: var(--radius);
-        border: none;
-        background: var(--blue);
-        color: white;
-        font-weight: 600;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-
-    .import-box button:hover {
-        background: var(--blue-hover);
-    }
+:root {
+  --blue: #624aff; --blue-hover: #4f37e0; --dark: #1c1c1c; --light: #f5f7fa;
+  --border: #e0e4eb; --text: #333; --radius: 14px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; }
+body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:var(--text); }
+.wrap { max-width: 900px; margin: 0 auto; padding: 30px; }
+h1 { text-align:center; font-size:46px; font-weight:700; margin-top:20px; color:var(--dark); }
+h1 span { color:var(--blue); }
+.search-box { margin:30px auto 10px; max-width:560px; position:relative; }
+.search-box input { width:100%; padding:16px 46px 16px 16px; border-radius:28px;
+  border:2px solid var(--border); font-size:17px; background:white; transition:0.2s; }
+.search-box input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(98,74,255,0.15); outline:none; }
+.search-box .count { position:absolute; right:16px; top:50%; transform:translateY(-50%);
+  font-size:13px; color:#999; }
+.stats { text-align:center; color:#888; font-size:14px; min-height:20px; margin-bottom:6px; }
+#results { margin-top:10px; }
+.result-card { background:white; border-radius:var(--radius); padding:18px 22px; margin:14px 0;
+  box-shadow:var(--shadow); transition:0.15s; }
+.result-card:hover, .result-card.active { transform:translateY(-2px); border:1px solid var(--blue); }
+.result-card h3 { margin:0; font-size:19px; font-weight:600; color:var(--dark); overflow-wrap:anywhere; }
+.result-card h3 mark, .result-card .snippet mark { background:rgba(98,74,255,0.15); color:var(--blue);
+  border-radius:3px; padding:0 2px; }
+.result-card a { color:var(--blue); font-weight:600; text-decoration:none; font-size:14px;
+  display:block; margin-top:2px; overflow-wrap:anywhere; }
+.result-card .snippet { margin-top:8px; color:#555; line-height:1.6; font-size:14px;
+  word-break:break-all; }
+.loading { text-align:center; color:var(--blue); font-weight:600; padding:20px; }
 </style>
 </head>
 <body>
-
 <div class="wrap">
-
-    <h1>X!<span>Search</span></h1>
-
-    <div class="search-box">
-        <input id="query" placeholder="Suchbegriff eingeben...">
-        <button onclick="search()">Suchen</button>
-    </div>
-
-    <div id="results"></div>
-
-    <div class="import-box">
-        <h2>Import</h2>
-        <input id="importUrl" placeholder="Domain (example.com)">
-        <button onclick="importEntry()">Hinzufügen</button>
-    </div>
-
+  <h1>x!<span>search</span></h1>
+  <div class="search-box">
+    <input id="query" placeholder="Suchbegriff eingeben…" autofocus autocomplete="off">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div id="results"></div>
 </div>
 
 <script>
-let entries = [];
-let githubUser = "nox314";
-let githubRepo = "Home";
-let githubFile = "websites.txt";
-// HIER deinen Token wieder einsetzen:
-let githubToken = "DEIN_GITHUB_TOKEN_HIER";
 
-// Deep Mode Easter Egg
-window.XSEARCH_DEEP = false;
+const githubuser = "nox314";
+const githubrepo = "home";
+const githubfile = "websites.txt";
 
-// TXT laden: jede Zeile = URL
-fetch(`https://raw.githubusercontent.com/${githubUser}/${githubRepo}/main/${githubFile}`)
-    .then(r => r.text())
-    .then(text => {
-        text.split("\n").forEach(line => {
-            const url = line.trim();
-            if (url.length > 0) entries.push({ url });
-        });
+function tokenize(text) {
+  return text
+    .toLowerCase()
+    .replace(/https?:\/\//g, "")
+    .split(/[\/\.\-\_\?\&\=\#\+\~\:]+/)
+    .flatMap(t => t.split(/(?=[A-Z])/))       // camelCase trennen (fallback)
+    .filter(t => t.length > 1 && !/^\d+$/.test(t));
+}
+
+function normalize(word) {
+  return word
+    .replace(/ä/g, "a").replace(/ö/g, "o")
+    .replace(/ü/g, "u").replace(/ß/g, "ss");
+}
+
+function stem(w) {
+  const endings = ["ungen", "eren", "isch", "lich", "heit", "keit", "ung", "ern", "em",
+                   "en", "er", "es", "st", "e", "n", "s"];
+  for (const end of endings) {
+    if (w.length > end.length + 3 && w.endsWith(end)) return w.slice(0, -end.length);
+  }
+  return w;
+}
+
+function analyze(text) {
+  return [...new Set(tokenize(normalize(text)).map(stem))];
+}
+
+const entries = [];
+const index = new Map()
+const df = new Map();      
+let builtAt = 0;
+
+function buildIndex() {
+  index.clear(); df.clear();
+  entries.forEach((e, i) => {
+    const terms = analyze(e.url);
+    e._terms = terms;
+    const freq = new Map();
+    terms.forEach(t => freq.set(t, (freq.get(t) || 0) + 1));
+    freq.forEach((tf, term) => {
+      if (!index.has(term)) index.set(term, new Map());
+      index.get(term).set(i, tf);
+      df.set(term, (df.get(term) || 0) + 1);
     });
-
-// Metadaten aus Website extrahieren
-async function extractMeta(url) {
-    try {
-        const html = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://" + url))
-            .then(r => r.json())
-            .then(d => d.contents);
-
-        const doc = new DOMParser().parseFromString(html, "text/html");
-
-        const title = doc.querySelector("title")?.innerText || url;
-        const desc =
-            doc.querySelector('meta[name="description"]')?.content ||
-            doc.querySelector('meta[property="og:description"]')?.content ||
-            "Keine Beschreibung gefunden";
-
-        const preview =
-            doc.querySelector('meta[property="og:image"]')?.content ||
-            doc.querySelector('meta[name="twitter:image"]')?.content ||
-            null;
-
-        return { title, desc, preview };
-
-    } catch (e) {
-        return {
-            title: url,
-            desc: "Die Website konnte nicht analysiert werden.",
-            preview: null
-        };
-    }
+  });
+  builtAt = performance.now();
 }
 
-// Deep Crawler (Depth bis maxDepth)
-async function deepCrawler(domain, maxPages = 50, maxDepth = 3) {
-    const visited = new Set();
-    const queue = [{ url: "https://" + domain, depth: 1 }];
-    const found = [];
-
-    while (queue.length > 0 && found.length < maxPages) {
-        const { url, depth } = queue.shift();
-
-        if (visited.has(url)) continue;
-        visited.add(url);
-
-        try {
-            const html = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url))
-                .then(r => r.json())
-                .then(d => d.contents);
-
-            found.push(url);
-
-            if (depth < maxDepth) {
-                const doc = new DOMParser().parseFromString(html, "text/html");
-                const anchors = Array.from(doc.querySelectorAll("a[href]"));
-
-                anchors.forEach(a => {
-                    let href = a.getAttribute("href");
-                    if (!href) return;
-
-                    try {
-                        const full = new URL(href, url).href;
-                        const host = new URL(full).hostname;
-
-                        if (host === domain && !visited.has(full)) {
-                            queue.push({ url: full, depth: depth + 1 });
-                        }
-                    } catch {}
-                });
-            }
-
-        } catch (e) {
-            console.log("Crawler error:", e);
-        }
-    }
-
-    // zurück zu „domain/pfad“ ohne https://
-    return found.map(u => u.replace("https://", ""));
+function levenshtein(a, b) {
+  const dp = Array.from({length: a.length + 1}, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      dp[i][j] = Math.min(
+        dp[i-1][j] + 1,
+        dp[i][j-1] + 1,
+        dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
+      );
+  return dp[a.length][b.length];
 }
 
-// Import mit Deep Crawl
-async function importEntry() {
-    const url = document.getElementById("importUrl").value.trim();
-    if (!url) return alert("Bitte Domain eingeben!");
 
-    if (entries.some(e => e.url.toLowerCase() === url.toLowerCase())) {
-        alert("Diese Website existiert bereits!");
-        return;
+function expandTerm(term, tolerance = 2) {
+  if (index.has(term)) return [term];
+  const candidates = [];
+  for (const t of index.keys()) {
+    if (Math.abs(t.length - term.length) <= tolerance && levenshtein(term, t) <= tolerance) {
+      candidates.push(t);
     }
+  }
+  return candidates;
+}
 
-    const depth = window.XSEARCH_DEEP ? 5 : 3;
-    const maxPages = window.XSEARCH_DEEP ? 200 : 80;
+function doSearch(query) {
+  const t0 = performance.now();
+  const queryTerms = analyze(query);
+  if (!queryTerms.length) return { results: [], ms: 0 };
 
-    const crawled = await deepCrawler(url, maxPages, depth);
+  const scores = new Map(); // rowIndex -> score
+  const matchedTerms = [];
 
-    crawled.forEach(link => {
-        if (!entries.some(e => e.url.toLowerCase() === link.toLowerCase())) {
-            entries.push({ url: link });
-        }
+  for (const qt of queryTerms) {
+    // Original-Term + Tippfehler-Varianten
+    const variants = expandTerm(qt, qt.length > 5 ? 2 : 1);
+    for (const v of variants) {
+      const postings = index.get(v);
+      if (!postings) continue;
+      matchedTerms.push(v);
+
+      const idf = Math.log(1 + entries.length / postings.size);
+      const isFuzzy = (v !== qt) ? 0.5 : 1; // exakte Treffer doppelt gewichten
+
+      postings.forEach((tf, i) => {
+        const score = idf * (1 + Math.log(tf)) * isFuzzy;
+        scores.set(i, (scores.get(i) || 0) + score);
+      });
+    }
+  }
+
+  // Bonus: Treffer in der Domain (nicht nur im Pfad) = wichtiger
+  const final = [...scores.entries()].map(([i, score]) => {
+    const e = entries[i];
+    const domain = e.url.split("/")[0].toLowerCase();
+    let bonus = 1;
+    queryTerms.forEach(qt => { if (domain.includes(qt)) bonus *= 1.6; });
+    if (queryTerms.every(qt => e._terms.includes(qt))) bonus *= 1.3; // Alle Begriffe da
+    bonus *= 1 / (1 + e.url.length / 200);                           // kürzere URLs leicht bevorzugen
+    return { e, score: score * bonus };
+  });
+
+  final.sort((a, b) => b.score - a.score);
+  return { results: final.slice(0, 30), ms: (performance.now() - t0), matchedTerms };
+}
+
+// ---------- 5. UI: INSTANT-SEARCH BEIM TIPPEN ----------
+const input = document.getElementById("query");
+const out = document.getElementById("results");
+const statsEl = document.getElementById("stats");
+const countEl = document.getElementById("count");
+let debounceTimer;
+
+function escapeHtml(s) {
+  const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
+}
+
+// Treffer im Text hervorheben
+function highlight(text, terms) {
+  let html = escapeHtml(text);
+  terms.forEach(t => {
+    // auch Wortstamm-Treffer markieren (erste 5 Zeichen des Stemms)
+    const frag = t.slice(0, Math.max(3, t.length - 1));
+    const re = new RegExp("(" + frag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[a-zäöüß0-9]*)", "gi");
+    html = html.replace(re, "<mark>$1</mark>");
+  });
+  return html;
+}
+
+function render() {
+  const q = input.value.trim();
+
+  if (q.toLowerCase() === "nox314") {
+    document.body.style.background = "#000"; document.body.style.color = "#0f0";
+    setTimeout(() => { document.body.style.background=""; document.body.style.color=""; }, 5000);
+    out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Deep Mode!</p>";
+    return;
+  }
+
+  if (!q) { out.innerHTML = ""; statsEl.innerHTML = ""; countEl.textContent = ""; return; }
+
+  const { results, ms, matchedTerms } = doSearch(q);
+  countEl.textContent = results.length || "";
+  statsEl.innerHTML = results.length
+    ? `Ungefähr <b>${results.length}</b> Ergebnisse (<b>${ms.toFixed(1)}</b> Millisekunden)`
+    : "";
+
+  if (!results.length) {
+    out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Keine Ergebnisse gefunden.</p>";
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  for (const { e } of results) {
+    // Snippet aus URL-Pfad generieren (wie Google: Ausschnitt mit Kontext)
+    const parts = e.url.split("/");
+    const domain = parts[0];
+    const path = parts.slice(1).join(" › ") || "Startseite";
+
+    const card = document.createElement("div");
+    card.className = "result-card";
+    card.innerHTML = `
+      <h3>${highlight(domain, matchedTerms)}</h3>
+      <a href="https://${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(domain)}</a>
+      <div class="snippet">${path ? highlight(path, matchedTerms) : ""}</div>
+    `;
+    frag.appendChild(card);
+  }
+  out.innerHTML = "";
+  out.appendChild(frag);
+}
+
+input.addEventListener("input", () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(render, 40); // Praktisch instant
+});
+
+// Enter öffnet das beste Ergebnis direkt (wie "I'm feeling lucky")
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const { results } = doSearch(input.value.trim());
+    if (results.length) window.open("https://" + results[0].e.url, "_blank");
+  }
+});
+
+// ---------- 6. DATEN LADEN (einmalig) ----------
+fetch(`https://raw.githubusercontent.com/${githubuser}/${githubrepo}/main/${githubfile}`)
+  .then(r => r.text())
+  .then(text => {
+    text.split("\n").forEach(line => {
+      const url = line.trim();
+      if (url.length > 0) entries.push({ url });
     });
-
-    const newTXT = entries.map(e => e.url).join("\n");
-
-    // TXT in GitHub aktualisieren
-    try {
-        const fileInfo = await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`)
-            .then(r => r.json());
-
-        await fetch(`https://api.github.com/repos/${githubUser}/${githubRepo}/contents/${githubFile}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${githubToken}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: "X!Search deep crawl update",
-                content: btoa(newTXT),
-                sha: fileInfo.sha
-            })
-        });
-
-        alert(`Import abgeschlossen: ${crawled.length} Seiten gefunden und TXT aktualisiert!`);
-    } catch (e) {
-        console.log(e);
-        alert("Fehler beim Aktualisieren der TXT in GitHub.");
-    }
-}
-
-// Easter Egg: „nox314“ im Suchfeld → Deep Mode
-function triggerDeepMode() {
-    document.body.style.background = "#000";
-    document.body.style.color = "#0f0";
-    window.XSEARCH_DEEP = true;
-
-    const msg = document.createElement("div");
-    msg.style.position = "fixed";
-    msg.style.bottom = "20px";
-    msg.style.right = "20px";
-    msg.style.padding = "12px 18px";
-    msg.style.borderRadius = "10px";
-    msg.style.background = "rgba(0,0,0,0.8)";
-    msg.style.color = "#0f0";
-    msg.style.fontFamily = "monospace";
-    msg.style.zIndex = "9999";
-    msg.textContent = "X!Search Deep Mode – nox314";
-
-    document.body.appendChild(msg);
-
-    setTimeout(() => {
-        document.body.style.background = "";
-        document.body.style.color = "";
-        msg.remove();
-    }, 5000);
-}
-
-// Suche
-async function search() {
-    const q = document.getElementById("query").value.toLowerCase();
-    const out = document.getElementById("results");
-    out.innerHTML = "";
-
-    // Easter Egg
-    if (q === "nox314") {
-        triggerDeepMode();
-        return;
-    }
-
-    const results = entries.filter(e =>
-        e.url.toLowerCase().includes(q)
-    );
-
-    if (!results.length) {
-        out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Keine Ergebnisse gefunden.</p>";
-        return;
-    }
-
-    for (const e of results) {
-        const meta = await extractMeta(e.url);
-
-        const div = document.createElement("div");
-        div.className = "result-card";
-
-        div.innerHTML = `
-            <h3>${meta.title}</h3>
-            <a href="https://${e.url}" target="_blank">${e.url}</a>
-            <p><strong>Beschreibung:</strong> ${meta.desc}</p>
-            ${meta.preview ? `<img src="${meta.preview}" alt="Preview">` : ""}
-        `;
-
-        out.appendChild(div);
-    }
-}
+    buildIndex();
+    statsEl.innerHTML = `Index bereit: <b>${entries.length}</b> Seiten · <b>${index.size}</b> eindeutige Begriffe · aufgebaut in ${(builtAt - 0).toFixed(0)}ms`;
+  })
+  .catch(() => {
+    statsEl.innerHTML = "Daten konnten nicht geladen werden.";
+  });
 </script>
-
 </body>
 </html>

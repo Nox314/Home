@@ -1,25 +1,25 @@
+
 <!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>x!search – nox!314</title>
-<link href="https://fonts.googleapis.com/css2?family=inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --blue: #624aff; --blue-hover: #4f37e0; --dark: #1c1c1c; --light: #f5f7fa;
+  --blue: #624aff; --blue-hover: #4f37e0; --light: #f5f7fa;
   --border: #e0e4eb; --text: #333; --radius: 14px;
   --shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; }
-body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:var(--text); }
+body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--light); color:var(--text); }
 
 /* Topbar */
 .topbar {
   display:flex; justify-content:space-between; align-items:center;
   padding:10px 30px; background:white; border-bottom:1px solid var(--border);
 }
-.topbar .logo { font-size:26px; font-weight:700; color:var(--dark); }
+.topbar .logo { font-size:26px; font-weight:700; color:#111; }
 .topbar .logo span { color:var(--blue); }
 .topbar .nav-links { display:flex; align-items:center; gap:18px; font-size:14px; }
 .topbar .nav-links a { text-decoration:none; color:#555; }
@@ -40,7 +40,7 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
 
 /* Search area */
 .search-area h1 {
-  font-size:40px; font-weight:700; margin:10px 0 6px; color:var(--dark);
+  font-size:40px; font-weight:700; margin:10px 0 6px; color:#111;
 }
 .search-area h1 span { color:var(--blue); }
 
@@ -115,7 +115,7 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
   display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
 }
 .result-card h3 {
-  margin:0; font-size:18px; font-weight:600; color:var(--dark); overflow-wrap:anywhere;
+  margin:0; font-size:18px; font-weight:600; color:#111; overflow-wrap:anywhere;
 }
 .result-card h3 mark, .result-card .snippet mark {
   background:rgba(98,74,255,0.15); color:var(--blue);
@@ -127,7 +127,6 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
 }
 .result-card .snippet {
   margin-top:6px; color:#555; line-height:1.6; font-size:13px;
-  word-break:break-all;
 }
 .badges {
   display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;
@@ -187,7 +186,7 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
     <a href="#">Web</a>
     <a href="#">Images</a>
     <a href="#">News</a>
-    <a href="#">Labs</a>
+    <a href="#">Code</a>
     <span class="user-pill">nox!314</span>
   </div>
 </div>
@@ -198,7 +197,7 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
 
     <div class="search-box">
       <div class="search-box-inner">
-        <input id="query" placeholder="Suchbegriff eingeben…" autofocus autocomplete="off">
+        <input id="query" placeholder="Suchbegriff, Operatoren, \"exakte Phrasen\"…" autofocus autocomplete="off">
         <span class="count" id="count"></span>
         <ul id="suggestions" class="suggestions"></ul>
       </div>
@@ -208,12 +207,12 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
       </div>
     </div>
 
-    <div class="filterbar">
-      <span class="active">Web</span>
-      <span>Bilder</span>
-      <span>News</span>
-      <span>Videos</span>
-      <span>Code</span>
+    <div class="filterbar" id="filterbar">
+      <span data-tab="web" class="active">Web</span>
+      <span data-tab="images">Bilder</span>
+      <span data-tab="news">News</span>
+      <span data-tab="code">Code</span>
+      <span data-tab="docs">Docs</span>
     </div>
 
     <div class="stats" id="stats"></div>
@@ -225,8 +224,8 @@ body { margin:0; font-family:'Inter',sans-serif; background:var(--light); color:
 
   <div class="sidepanel" id="sidepanel">
     <h2>x!search Info</h2>
-    <p>Tippe, drücke <b>Enter</b> oder klicke auf „Suche“.</p>
-    <p><b>Shortcuts:</b> <code>/</code> Fokus · <code>↑/↓</code> Vorschläge · <code>Esc</code> leeren.</p>
+    <p>Tippe, nutze Operatoren (<code>site:</code>, <code>inurl:</code>, <code>intitle:</code>, <code>tag:</code>, <code>category:</code>, <code>"phrase"</code>) und drücke <b>Enter</b>.</p>
+    <p><b>Shortcuts:</b> <code>/</code> Fokus · <code>Esc</code> leeren · <code>Enter</code> suchen · <code>Ctrl+Enter</code> lucky.</p>
     <div class="meta" id="meta-info"></div>
 
     <div class="settings">
@@ -258,11 +257,18 @@ const githubuser = "nox314";
 const githubrepo = "home";
 const githubfile = "websites.txt";
 
+const synonyms = {
+  "auto": ["fahrzeug","wagen","kfz"],
+  "haus": ["gebäude","wohnung"],
+  "blog": ["artikel","post"],
+  "code": ["programmierung","dev","entwicklung"]
+};
+
 function tokenize(text) {
   return text
     .toLowerCase()
     .replace(/https?:\/\//g, "")
-    .split(/[\/\.\-\_\?\&\=\#\+\~\:]+/)
+    .split(/[\/\.\-\_\?\&\=\#\+\~\:\|\s]+/)
     .flatMap(t => t.split(/(?=[A-Z])/))
     .filter(t => t.length > 1 && !/^\d+$/.test(t));
 }
@@ -274,8 +280,8 @@ function normalize(word) {
 }
 
 function stem(w) {
-  const endings = ["ungen", "eren", "isch", "lich", "heit", "keit", "ung", "ern", "em",
-                   "en", "er", "es", "st", "e", "n", "s"];
+  const endings = ["ungen","eren","isch","lich","heit","keit","ung","ern","em",
+                   "en","er","es","st","e","n","s"];
   for (const end of endings) {
     if (w.length > end.length + 3 && w.endsWith(end)) return w.slice(0, -end.length);
   }
@@ -294,7 +300,8 @@ let builtAt = 0;
 function buildIndex() {
   index.clear(); df.clear();
   entries.forEach((e, i) => {
-    const terms = analyze(e.url);
+    const text = [e.url, e.title, e.description, e.tags.join(" "), e.category].join(" ");
+    const terms = analyze(text);
     e._terms = terms;
     const freq = new Map();
     terms.forEach(t => freq.set(t, (freq.get(t) || 0) + 1));
@@ -322,25 +329,75 @@ function levenshtein(a, b) {
 }
 
 function expandTerm(term, tolerance = 2) {
-  if (index.has(term)) return [term];
+  const variants = [term, ...(synonyms[term] || [])];
+  if (index.has(term)) return variants;
   const candidates = [];
   for (const t of index.keys()) {
     if (Math.abs(t.length - term.length) <= tolerance && levenshtein(term, t) <= tolerance) {
       candidates.push(t);
     }
   }
-  return candidates;
+  return [...new Set([...variants, ...candidates])];
 }
 
-function doSearch(query) {
+function parseQuery(raw) {
+  const q = raw.trim();
+  const phrases = [];
+  const phraseRegex = /"([^"]+)"/g;
+  let m;
+  while ((m = phraseRegex.exec(q)) !== null) {
+    phrases.push(m[1].toLowerCase());
+  }
+  const cleaned = q.replace(/"[^"]+"/g, "").trim();
+
+  const tokens = cleaned.split(/\s+/);
+  const operators = { site:[], inurl:[], intitle:[], tag:[], category:[] };
+  const normalTerms = [];
+
+  tokens.forEach(t => {
+    if (t.startsWith("site:")) operators.site.push(t.slice(5).toLowerCase());
+    else if (t.startsWith("inurl:")) operators.inurl.push(t.slice(6).toLowerCase());
+    else if (t.startsWith("intitle:")) operators.intitle.push(t.slice(8).toLowerCase());
+    else if (t.startsWith("tag:")) operators.tag.push(t.slice(4).toLowerCase());
+    else if (t.startsWith("category:")) operators.category.push(t.slice(9).toLowerCase());
+    else if (t) normalTerms.push(t.toLowerCase());
+  });
+
+  const analyzed = analyze(normalTerms.join(" "));
+  return { phrases, operators, terms: analyzed };
+}
+
+function makeSnippet(text, queryTerms) {
+  if (!text) return "";
+  const lower = text.toLowerCase();
+  for (const term of queryTerms) {
+    const idx = lower.indexOf(term);
+    if (idx !== -1) {
+      const start = Math.max(0, idx - 40);
+      const end = Math.min(text.length, idx + 80);
+      return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
+    }
+  }
+  return text.slice(0, 140) + (text.length > 140 ? "…" : "");
+}
+
+function doSearch(rawQuery, tab) {
   const t0 = performance.now();
-  const queryTerms = analyze(query);
-  if (!queryTerms.length) return { results: [], ms: 0, matchedTerms: [] };
+  const parsed = parseQuery(rawQuery);
+  const queryTerms = parsed.terms;
+  const phrases = parsed.phrases;
+  const ops = parsed.operators;
+
+  if (!queryTerms.length && !phrases.length && !Object.values(ops).some(a => a.length)) {
+    return { results: [], ms: 0, matchedTerms: [] };
+  }
 
   const scores = new Map();
   const matchedTerms = [];
 
-  for (const qt of queryTerms) {
+  const allQueryTerms = queryTerms.length ? queryTerms : [];
+
+  for (const qt of allQueryTerms) {
     const variants = expandTerm(qt, qt.length > 5 ? 2 : 1);
     for (const v of variants) {
       const postings = index.get(v);
@@ -351,20 +408,51 @@ function doSearch(query) {
       const isFuzzy = (v !== qt) ? 0.5 : 1;
 
       postings.forEach((tf, i) => {
-        const score = idf * (1 + Math.log(tf)) * isFuzzy;
+        const e = entries[i];
+        let score = idf * (1 + Math.log(tf)) * isFuzzy;
+
+        if (e.title.toLowerCase().includes(v)) score *= 1.6;
+        if (e.tags.some(tag => tag.toLowerCase().includes(v))) score *= 1.3;
+
         scores.set(i, (scores.get(i) || 0) + score);
       });
     }
   }
 
+  entries.forEach((e, i) => {
+    let score = scores.get(i) || 0;
+
+    // Operatoren
+    if (ops.site.length && !ops.site.some(s => e.url.toLowerCase().includes(s))) score *= 0.01;
+    if (ops.inurl.length && !ops.inurl.some(s => e.url.toLowerCase().includes(s))) score *= 0.01;
+    if (ops.intitle.length && !ops.intitle.some(s => e.title.toLowerCase().includes(s))) score *= 0.01;
+    if (ops.tag.length && !ops.tag.some(s => e.tags.map(t=>t.toLowerCase()).includes(s))) score *= 0.01;
+    if (ops.category.length && !ops.category.some(s => e.category.toLowerCase().includes(s))) score *= 0.01;
+
+    // Phrasen
+    phrases.forEach(ph => {
+      const phLower = ph.toLowerCase();
+      if (e.description.toLowerCase().includes(phLower) || e.title.toLowerCase().includes(phLower)) {
+        score *= 2.0;
+      }
+    });
+
+    // Tab-Filter
+    if (tab === "images" && !/\.(png|jpg|jpeg|gif|webp)$/i.test(e.url)) score *= 0.01;
+    if (tab === "news" && e.category.toLowerCase() !== "news") score *= 0.3;
+    if (tab === "code" && e.category.toLowerCase() !== "code") score *= 0.3;
+    if (tab === "docs" && e.category.toLowerCase() !== "docs") score *= 0.3;
+
+    // Länge / Popularität
+    score *= 1 / (1 + e.url.length / 200);
+    if (e.popularity) score *= (1 + e.popularity / 10);
+
+    if (score > 0) scores.set(i, score);
+  });
+
   const final = [...scores.entries()].map(([i, score]) => {
     const e = entries[i];
-    const domain = e.url.split("/")[0].toLowerCase();
-    let bonus = 1;
-    queryTerms.forEach(qt => { if (domain.includes(qt)) bonus *= 1.6; });
-    if (queryTerms.every(qt => e._terms.includes(qt))) bonus *= 1.3;
-    bonus *= 1 / (1 + e.url.length / 200);
-    return { e, score: score * bonus };
+    return { e, score };
   });
 
   final.sort((a, b) => b.score - a.score);
@@ -378,15 +466,16 @@ const countEl = document.getElementById("count");
 const suggestionsEl = document.getElementById("suggestions");
 const trendingEl = document.getElementById("trending");
 const sidepanel = document.getElementById("sidepanel");
-const metaInfo = document.getElementById("meta-info");
 const historyList = document.getElementById("history-list");
 const paginationEl = document.getElementById("pagination");
 const pageSizeInput = document.getElementById("pageSize");
+const filterbar = document.getElementById("filterbar");
 
 let debounceTimer;
 let lastResults = [];
 let lastMatchedTerms = [];
 let currentPage = 1;
+let currentTab = "web";
 
 function escapeHtml(s) {
   const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
@@ -452,7 +541,7 @@ function renderSuggestions() {
   if (!q) { suggestionsEl.innerHTML = ""; return; }
 
   const fromEntries = entries
-    .map(e => e.url)
+    .map(e => e.title || e.url)
     .filter(u => u.toLowerCase().includes(q))
     .slice(0, 6);
 
@@ -480,11 +569,13 @@ function renderSuggestions() {
   });
 }
 
-function showPanel(domain, url) {
+function showPanel(entry) {
   sidepanel.innerHTML = `
-    <h2>${escapeHtml(domain)}</h2>
-    <p>Gefundene Seite aus deinem GitHub-Index.</p>
-    <p><b>URL:</b> ${escapeHtml(url)}</p>
+    <h2>${escapeHtml(entry.title || entry.url)}</h2>
+    <p>${escapeHtml(entry.description || "Keine Beschreibung verfügbar.")}</p>
+    <p><b>Tags:</b> ${escapeHtml(entry.tags.join(", ") || "–")}</p>
+    <p><b>Kategorie:</b> ${escapeHtml(entry.category || "–")}</p>
+    <p><b>URL:</b> ${escapeHtml(entry.url)}</p>
     <div class="meta">
       Index: ${entries.length} Seiten · Begriffe: ${index.size} · aufgebaut in ${builtAt.toFixed(0)}ms
     </div>
@@ -499,7 +590,6 @@ function showPanel(domain, url) {
       <ul id="history-list"></ul>
     </div>
   `;
-  // re-bind pageSize and history
   const newPageSizeInput = document.getElementById("pageSize");
   newPageSizeInput.onchange = () => {
     pageSizeInput.value = newPageSizeInput.value;
@@ -542,33 +632,29 @@ function renderResults() {
 
   const frag = document.createDocumentFragment();
   slice.forEach(({ e }, idx) => {
-    const parts = e.url.split("/");
-    const domain = parts[0];
-    const path = parts.slice(1).join(" › ") || "Startseite";
-
+    const snippet = makeSnippet(e.description || e.url, lastMatchedTerms.length ? lastMatchedTerms : parseQuery(input.value).terms);
     const card = document.createElement("div");
     card.className = "result-card";
     card.innerHTML = `
       <div class="result-header">
         <div>
-          <h3>${highlight(domain, lastMatchedTerms)}</h3>
-          <a href="https://${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(domain)}</a>
+          <h3>${highlight(e.title || e.url, lastMatchedTerms)}</h3>
+          <a href="https://${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(e.url)}</a>
         </div>
       </div>
-      <div class="snippet">${path ? highlight(path, lastMatchedTerms) : ""}</div>
+      <div class="snippet">${highlight(snippet, lastMatchedTerms)}</div>
       <div class="badges">
-        <span class="badge">${e.url.length < 40 ? "Kurz" : "Lang"}e URL</span>
-        <span class="badge">${path === "Startseite" ? "Startseite" : "Pfad vorhanden"}</span>
-        <span class="badge">Index-Eintrag #${entries.indexOf(e)+1}</span>
+        <span class="badge">${e.url.length < 40 ? "Kurze URL" : "Lange URL"}</span>
+        <span class="badge">${e.category || "Kategorie unbekannt"}</span>
+        <span class="badge">Index #${entries.indexOf(e)+1}</span>
       </div>
     `;
-    card.addEventListener("click", () => showPanel(domain, e.url));
+    card.addEventListener("click", () => showPanel(e));
     frag.appendChild(card);
   });
   out.innerHTML = "";
   out.appendChild(frag);
 
-  // Pagination
   paginationEl.innerHTML = "";
   if (pages > 1) {
     for (let p = 1; p <= pages; p++) {
@@ -587,7 +673,7 @@ function runSearch() {
   if (q.toLowerCase() === "nox314") {
     document.body.style.background = "#000";
     document.body.style.color = "#0f0";
-    setTimeout(() => { document.body.style.background=""; document.body.style.color=""; }, 5000);
+    setTimeout(() => { document.body.style.background=""; document.body.style.color=""; }, 3000);
     out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Deep Mode!</p>";
     return;
   }
@@ -600,7 +686,7 @@ function runSearch() {
     return;
   }
 
-  const { results, ms, matchedTerms } = doSearch(q);
+  const { results, ms, matchedTerms } = doSearch(q, currentTab);
   lastResults = results;
   lastMatchedTerms = matchedTerms;
   currentPage = 1;
@@ -617,13 +703,13 @@ input.addEventListener("input", () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(() => {
     renderSuggestions();
-  }, 60);
+  }, 80);
 });
 
 document.getElementById("btn-search").onclick = () => runSearch();
 document.getElementById("btn-lucky").onclick = () => {
   const q = input.value.trim();
-  const { results } = doSearch(q || "");
+  const { results } = doSearch(q || "", currentTab);
   if (results.length) window.open("https://" + results[0].e.url, "_blank");
 };
 
@@ -631,6 +717,15 @@ pageSizeInput.onchange = () => {
   currentPage = 1;
   renderResults();
 };
+
+filterbar.querySelectorAll("span").forEach(span => {
+  span.onclick = () => {
+    filterbar.querySelectorAll("span").forEach(s => s.classList.remove("active"));
+    span.classList.add("active");
+    currentTab = span.dataset.tab;
+    runSearch();
+  };
+});
 
 // Keyboard shortcuts
 document.addEventListener("keydown", (e) => {
@@ -645,18 +740,30 @@ document.addEventListener("keydown", (e) => {
     statsEl.innerHTML = "";
     countEl.textContent = "";
   }
-  if (e.key === "Enter" && document.activeElement === input) {
+  if (e.key === "Enter" && document.activeElement === input && !e.ctrlKey) {
     runSearch();
+  }
+  if (e.key === "Enter" && e.ctrlKey) {
+    const q = input.value.trim();
+    const { results } = doSearch(q || "", currentTab);
+    if (results.length) window.open("https://" + results[0].e.url, "_blank");
   }
 });
 
-// Daten laden
+// Daten laden (nur GitHub)
 fetch(`https://raw.githubusercontent.com/${githubuser}/${githubrepo}/main/${githubfile}`)
   .then(r => r.text())
   .then(text => {
     text.split("\n").forEach(line => {
-      const url = line.trim();
-      if (url.length > 0) entries.push({ url });
+      const raw = line.trim();
+      if (!raw) return;
+      const parts = raw.split("|");
+      const url = parts[0].trim();
+      const title = (parts[1] || url).trim();
+      const description = (parts[2] || "Keine Beschreibung.").trim();
+      const tags = (parts[3] || "").split(",").map(t => t.trim()).filter(Boolean);
+      const category = (parts[4] || "web").trim();
+      entries.push({ url, title, description, tags, category, popularity: 1 });
     });
     buildIndex();
     statsEl.innerHTML = `Index bereit: <b>${entries.length}</b> Seiten · <b>${index.size}</b> eindeutige Begriffe · aufgebaut in ${(builtAt - 0).toFixed(0)}ms`;

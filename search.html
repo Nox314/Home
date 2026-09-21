@@ -135,9 +135,12 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
   background:#f0f2ff; color:#555;
 }
 
-/* Image result */
+/* Image & video result */
 .result-image {
   max-width:100%; max-height:200px; margin-top:8px; border-radius:8px;
+}
+.result-video {
+  max-width:100%; margin-top:8px; border-radius:8px;
 }
 
 /* Pagination */
@@ -189,8 +192,10 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
   <div class="nav-links">
     <a href="#">Web</a>
     <a href="#">Images</a>
+    <a href="#">Videos</a>
     <a href="#">News</a>
     <a href="#">Code</a>
+    <a href="#">Docs</a>
     <span class="user-pill">nox!314</span>
   </div>
 </div>
@@ -214,6 +219,7 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
     <div class="filterbar" id="filterbar">
       <span data-tab="web" class="active">Web</span>
       <span data-tab="images">Bilder</span>
+      <span data-tab="videos">Videos</span>
       <span data-tab="news">News</span>
       <span data-tab="code">Code</span>
       <span data-tab="docs">Docs</span>
@@ -228,7 +234,7 @@ body { margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe U
 
   <div class="sidepanel" id="sidepanel">
     <h2>x!search Info</h2>
-    <p>Nur URLs, der Rest wird automatisch erkannt: Titel, Kategorie, Bilder, News, Code, Docs.</p>
+    <p>Nur URLs, der Rest wird automatisch erkannt: Titel, Kategorie, Bilder, Videos, News, Code, Docs.</p>
     <p><b>Shortcuts:</b> <code>/</code> Fokus · <code>Esc</code> leeren · <code>Enter</code> suchen · <code>Ctrl+Enter</code> lucky.</p>
     <div class="meta" id="meta-info"></div>
 
@@ -267,7 +273,8 @@ const synonyms = {
   "blog": ["artikel","post"],
   "code": ["programmierung","dev","entwicklung"],
   "news": ["artikel","post","press"],
-  "image": ["bild","foto","pic"]
+  "image": ["bild","foto","pic"],
+  "video": ["clip","film","vid"]
 };
 
 function tokenize(text) {
@@ -298,7 +305,7 @@ function analyze(text) {
   return [...new Set(tokenize(normalize(text)).map(stem))];
 }
 
-// URL-Analyse: Titel, Beschreibung, Kategorie, Tags
+// URL-Analyse: Titel, Beschreibung, Kategorie, Tags, Typ
 function analyzeUrl(url) {
   const clean = url.replace(/^https?:\/\//, "");
   const parts = clean.split("/");
@@ -309,16 +316,25 @@ function analyzeUrl(url) {
   const extMatch = last.match(/\.(\w+)$/);
   const ext = extMatch ? extMatch[1].toLowerCase() : "";
 
-  // Kategorie
+  // Kategorie / Typ
   let category = "web";
+  let type = "web";
+
   if (/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(last) || clean.includes("/img/") || clean.includes("/image")) {
     category = "images";
+    type = "image";
+  } else if (/\.(mp4|mov|webm|mkv)$/i.test(last) || /youtube\.com|youtu\.be|vimeo\.com/i.test(clean)) {
+    category = "videos";
+    type = "video";
   } else if (/news|blog|article|post|press/i.test(clean)) {
     category = "news";
+    type = "news";
   } else if (/github|gitlab|bitbucket|src|api|code/i.test(clean) || /\.(js|ts|py|java|c|cpp|html|css)$/i.test(last)) {
     category = "code";
+    type = "code";
   } else if (/docs|documentation|guide|manual|wiki/i.test(clean)) {
     category = "docs";
+    type = "docs";
   }
 
   // Titel
@@ -334,10 +350,11 @@ function analyzeUrl(url) {
   let title = domain;
   if (pathParts.length) {
     const main = humanizeSegment(last || pathParts[pathParts.length - 1]);
-    if (category === "images") title = "Bild: " + main;
-    else if (category === "news") title = "News: " + main;
-    else if (category === "code") title = "Code: " + main;
-    else if (category === "docs") title = "Dokument: " + main;
+    if (type === "image") title = "Bild: " + main;
+    else if (type === "video") title = "Video: " + main;
+    else if (type === "news") title = "News: " + main;
+    else if (type === "code") title = "Code: " + main;
+    else if (type === "docs") title = "Dokument: " + main;
     else title = main || domain;
   }
 
@@ -361,7 +378,7 @@ function analyzeUrl(url) {
   });
   if (category !== "web") tags.push(category);
 
-  return { domain, title, description, category, tags, ext };
+  return { domain, title, description, category, tags, ext, type };
 }
 
 const entries = [];
@@ -512,6 +529,7 @@ function doSearch(rawQuery, tab) {
 
     // Tab-Filter
     if (tab === "images" && e.category !== "images") score *= 0.01;
+    if (tab === "videos" && e.category !== "videos") score *= 0.01;
     if (tab === "news" && e.category !== "news") score *= 0.3;
     if (tab === "code" && e.category !== "code") score *= 0.3;
     if (tab === "docs" && e.category !== "docs") score *= 0.3;
@@ -648,6 +666,7 @@ function showPanel(entry) {
     <p>${escapeHtml(entry.description || "Keine Beschreibung verfügbar.")}</p>
     <p><b>Tags:</b> ${escapeHtml(entry.tags.join(", ") || "–")}</p>
     <p><b>Kategorie:</b> ${escapeHtml(entry.category || "–")}</p>
+    <p><b>Typ:</b> ${escapeHtml(entry.type || "web")}</p>
     <p><b>URL:</b> ${escapeHtml(entry.url)}</p>
     <div class="meta">
       Index: ${entries.length} Seiten · Begriffe: ${index.size} · aufgebaut in ${builtAt.toFixed(0)}ms
@@ -709,9 +728,23 @@ function renderResults() {
     const card = document.createElement("div");
     card.className = "result-card";
 
-    let imageHtml = "";
-    if (e.category === "images") {
-      imageHtml = `<img src="https://${escapeHtml(e.url)}" alt="${escapeHtml(e.title)}" class="result-image">`;
+    let mediaHtml = "";
+    if (e.type === "image") {
+      mediaHtml = `<img src="https://${escapeHtml(e.url)}" alt="${escapeHtml(e.title)}" class="result-image">`;
+    } else if (e.type === "video") {
+      if (/youtube\.com|youtu\.be/i.test(e.url)) {
+        // einfache YouTube-Einbettung
+        let id = "";
+        const m = e.url.match(/v=([^&]+)/);
+        const s = e.url.match(/youtu\.be\/([^?]+)/);
+        if (m) id = m[1];
+        else if (s) id = s[1];
+        if (id) {
+          mediaHtml = `<iframe class="result-video" src="https://www.youtube.com/embed/${escapeHtml(id)}" frameborder="0" allowfullscreen></iframe>`;
+        }
+      } else {
+        mediaHtml = `<video class="result-video" controls src="https://${escapeHtml(e.url)}"></video>`;
+      }
     }
 
     card.innerHTML = `
@@ -722,10 +755,11 @@ function renderResults() {
         </div>
       </div>
       <div class="snippet">${highlight(snippet, lastMatchedTerms)}</div>
-      ${imageHtml}
+      ${mediaHtml}
       <div class="badges">
         <span class="badge">${e.url.length < 40 ? "Kurze URL" : "Lange URL"}</span>
         <span class="badge">${e.category || "Kategorie unbekannt"}</span>
+        <span class="badge">Typ: ${e.type || "web"}</span>
         <span class="badge">Index #${entries.indexOf(e)+1}</span>
       </div>
     `;
@@ -845,6 +879,7 @@ fetch(`https://raw.githubusercontent.com/${githubuser}/${githubrepo}/main/${gith
         description: info.description,
         tags: info.tags,
         category: info.category,
+        type: info.type,
         popularity: 1
       });
     });

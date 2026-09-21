@@ -6,168 +6,164 @@
 <title>x!search – nox!314</title>
 <style>
 :root {
-  --blue: #624aff;
-  --blue-hover: #4f37e0;
-  --accent: #ff6b6b;
-  --bg: #f3f4f7;
-  --border: #dde1ea;
-  --text: #222;
-  --radius: 12px;
-  --shadow-soft: 0 4px 16px rgba(0,0,0,0.06);
+  --blue:#624aff;
+  --blue-hover:#4f37e0;
+  --bg:#f5f7fa;
+  --border:#e0e4eb;
+  --text:#222;
+  --radius:14px;
+  --shadow:0 6px 20px rgba(0,0,0,0.08);
 }
-* { box-sizing: border-box; }
-body {
+*{box-sizing:border-box}
+body{
   margin:0;
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:var(--bg);
   color:var(--text);
 }
-
-/* Topbar */
-.topbar {
+.topbar{
   position:sticky;
   top:0;
   z-index:50;
   backdrop-filter:blur(10px);
-  background:rgba(255,255,255,0.9);
+  background:rgba(255,255,255,0.95);
   border-bottom:1px solid var(--border);
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:8px 18px;
 }
-.topbar-left {
+.topbar-left{
   display:flex;
   align-items:center;
   gap:10px;
 }
-.topbar .logo {
+.logo{
   font-size:22px;
   font-weight:700;
-  letter-spacing:0.02em;
 }
-.topbar .logo span { color:var(--blue); }
-.topbar .nav-links {
+.logo span{color:var(--blue)}
+.topbar-left small{
+  font-size:11px;
+  color:#777;
+}
+.nav-links{
   display:flex;
   align-items:center;
   gap:10px;
   font-size:13px;
 }
-.topbar .nav-links a {
+.nav-links a{
   text-decoration:none;
   color:#555;
   padding:4px 8px;
   border-radius:999px;
 }
-.topbar .nav-links a:hover { background:#ecefff; color:var(--blue); }
-.topbar .user-pill {
+.nav-links a:hover{
+  background:#ecefff;
+  color:var(--blue);
+}
+.user-pill{
   padding:5px 10px;
   border-radius:999px;
   background:#ecefff;
-  font-size:12px;
+  font-size:11px;
 }
-
-/* Layout */
-.main {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 14px 12px 24px;
+.main{
+  max-width:960px;
+  margin:0 auto;
+  padding:16px 14px 24px;
   display:grid;
-  grid-template-columns: minmax(0, 2.3fr) minmax(260px, 1fr);
+  grid-template-columns:minmax(0,2.4fr) minmax(260px,1fr);
   gap:18px;
 }
-@media (max-width: 800px) {
-  .main {
-    grid-template-columns: minmax(0, 1fr);
+@media(max-width:800px){
+  .main{
+    grid-template-columns:minmax(0,1fr);
   }
-  .sidepanel {
-    order:-1;
+  .sidepanel{
+    display:none;
   }
 }
-
-/* Search area */
-.search-area-header {
+.search-area-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:8px;
 }
-.search-area-header h1 {
+.search-area-header h1{
   font-size:26px;
   font-weight:700;
   margin:0;
 }
-.search-area-header h1 span { color:var(--blue); }
-.search-area-header small {
+.search-area-header h1 span{color:var(--blue)}
+.search-area-header small{
   font-size:11px;
   color:#777;
 }
-
-.search-box {
+.search-box{
   margin:4px 0 6px;
   width:100%;
   position:relative;
   display:flex;
   gap:8px;
 }
-.search-box-inner {
+.search-box-inner{
   position:relative;
   flex:1;
 }
-.search-box input {
+.search-box input{
   width:100%;
-  padding:9px 36px 9px 12px;
+  padding:10px 40px 10px 14px;
   border-radius:999px;
   border:1px solid var(--border);
   font-size:14px;
-  background:white;
+  background:#fff;
   transition:0.18s;
 }
-.search-box input:focus {
+.search-box input:focus{
   border-color:var(--blue);
   box-shadow:0 0 0 2px rgba(98,74,255,0.18);
   outline:none;
 }
-.search-box .count {
+.count{
   position:absolute;
-  right:12px;
+  right:14px;
   top:50%;
   transform:translateY(-50%);
   font-size:11px;
   color:#999;
 }
-.search-buttons {
+.search-buttons{
   display:flex;
   flex-direction:column;
   gap:4px;
 }
-.search-buttons button {
+.search-buttons button{
   border:none;
   border-radius:999px;
   padding:7px 12px;
   font-size:12px;
   cursor:pointer;
-  background:white;
-  box-shadow:var(--shadow-soft);
+  background:#fff;
+  box-shadow:var(--shadow);
   white-space:nowrap;
 }
-.search-buttons button:hover { background:#ecefff; }
-
-/* Suggestions */
-.suggestions {
+.search-buttons button:hover{background:#ecefff}
+.suggestions{
   list-style:none;
   margin:0;
   padding:4px 0;
-  background:white;
+  background:#fff;
   border-radius:10px;
-  box-shadow:var(--shadow-soft);
+  box-shadow:var(--shadow);
   position:absolute;
   width:100%;
-  top:32px;
+  top:34px;
   left:0;
   z-index:20;
 }
-.suggestions li {
+.suggestions li{
   padding:6px 12px;
   cursor:pointer;
   border-bottom:1px solid #f0f0f0;
@@ -175,86 +171,84 @@ body {
   display:flex;
   justify-content:space-between;
 }
-.suggestions li:last-child { border-bottom:none; }
-.suggestions li span.hint { color:#999; font-size:11px; margin-left:6px; }
-.suggestions li:hover { background:#f5f7ff; }
-
-/* Filterbar */
-.filterbar {
+.suggestions li:last-child{border-bottom:none}
+.suggestions li span.hint{
+  color:#999;
+  font-size:11px;
+  margin-left:6px;
+}
+.suggestions li:hover{background:#f5f7ff}
+.filterbar{
   display:flex;
   gap:14px;
-  margin:4px 0 4px;
+  margin:6px 0 6px;
   color:#666;
   font-size:13px;
   overflow-x:auto;
 }
-.filterbar span {
+.filterbar span{
   cursor:pointer;
   padding-bottom:4px;
   white-space:nowrap;
 }
-.filterbar .active {
+.filterbar .active{
   border-bottom:2px solid var(--blue);
   color:var(--blue);
 }
-
-/* Stats & trending */
-.stats {
+.stats{
   color:#888;
   font-size:12px;
   min-height:18px;
   margin:4px 0 2px;
 }
-.trending {
+.trending{
   margin-top:2px;
   font-size:12px;
   color:#666;
 }
-.trending span.tag {
+.trending span.tag{
   display:inline-block;
   margin:2px 4px 0 0;
   padding:3px 9px;
   border-radius:999px;
-  background:white;
+  background:#fff;
   box-shadow:0 2px 6px rgba(0,0,0,0.04);
   cursor:pointer;
 }
-
-/* Results */
-#results { margin-top:6px; }
-.result-card {
-  background:white;
+#results{margin-top:6px}
+.result-card{
+  background:#fff;
   border-radius:var(--radius);
   padding:10px 12px;
   margin:6px 0;
-  box-shadow:var(--shadow-soft);
+  box-shadow:var(--shadow);
   transition:0.12s;
   cursor:pointer;
 }
-.result-card:hover, .result-card.active {
+.result-card:hover{
   transform:translateY(-1px);
   border:1px solid var(--blue);
 }
-.result-header {
+.result-header{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
   gap:8px;
 }
-.result-card h3 {
+.result-card h3{
   margin:0;
   font-size:15px;
   font-weight:600;
   color:#111;
   overflow-wrap:anywhere;
 }
-.result-card h3 mark, .result-card .snippet mark {
+.result-card h3 mark,.result-card .snippet mark{
   background:rgba(98,74,255,0.15);
   color:var(--blue);
   border-radius:3px;
   padding:0 2px;
 }
-.result-card a {
+.result-card a{
   color:#0b57d0;
   font-weight:500;
   text-decoration:none;
@@ -263,113 +257,64 @@ body {
   margin-top:1px;
   overflow-wrap:anywhere;
 }
-.result-card .snippet {
+.result-card .snippet{
   margin-top:4px;
   color:#555;
   line-height:1.5;
   font-size:12px;
 }
-
-/* Badges */
-.badges {
-  display:flex;
-  flex-wrap:wrap;
-  gap:4px;
-  margin-top:4px;
-}
-.badge {
-  font-size:10px;
-  padding:2px 6px;
-  border-radius:999px;
-  background:#f0f2ff;
-  color:#555;
-}
-
-/* Media */
-.result-image {
+.result-image{
   max-width:100%;
   max-height:180px;
   margin-top:6px;
   border-radius:8px;
 }
-.result-video {
+.result-video{
   max-width:100%;
   margin-top:6px;
   border-radius:8px;
 }
-
-/* Pagination */
-.pagination {
+.pagination{
   display:flex;
   flex-wrap:wrap;
   gap:4px;
   margin-top:8px;
   font-size:12px;
 }
-.pagination button {
+.pagination button{
   border:none;
-  background:white;
+  background:#fff;
   padding:4px 8px;
   border-radius:999px;
   cursor:pointer;
-  box-shadow:var(--shadow-soft);
+  box-shadow:var(--shadow);
 }
-.pagination button.active { background:var(--blue); color:white; }
-
-/* Sidepanel */
-.sidepanel {
-  background:white;
+.pagination button.active{
+  background:var(--blue);
+  color:#fff;
+}
+.sidepanel{
+  background:#fff;
   padding:10px 12px;
   border-radius:var(--radius);
-  box-shadow:var(--shadow-soft);
+  box-shadow:var(--shadow);
   min-height:120px;
 }
-.sidepanel h2 {
+.sidepanel h2{
   margin:0 0 4px;
   font-size:15px;
 }
-.sidepanel p {
+.sidepanel p{
   font-size:12px;
   color:#555;
   margin:3px 0;
 }
-.sidepanel .meta {
+.sidepanel .kp-meta{
   font-size:11px;
   color:#888;
   margin-top:6px;
 }
-.sidepanel .history-title {
-  margin-top:8px;
-  font-size:12px;
-  font-weight:600;
-}
-.sidepanel ul {
-  list-style:none;
-  padding-left:0;
-  margin:3px 0;
-}
-.sidepanel li {
-  font-size:11px;
-  color:#555;
-  cursor:pointer;
-  padding:2px 0;
-}
-.sidepanel li:hover { color:var(--blue); }
-
-/* Settings */
-.settings {
-  margin-top:8px;
-  font-size:11px;
-  color:#666;
-}
-.settings label { display:block; margin-bottom:3px; }
-.settings input[type="number"] {
-  font-size:11px;
-  padding:2px 4px;
-}
-
-/* Footer */
-.footer {
+.footer{
   margin-top:10px;
   padding:10px 14px;
   text-align:center;
@@ -377,15 +322,14 @@ body {
   font-size:11px;
   border-top:1px solid var(--border);
 }
-.footer .links a {
+.footer .links a{
   margin:0 6px;
   color:#555;
   text-decoration:none;
   font-size:11px;
 }
-.footer .links a:hover { color:var(--blue); }
-
-.loading {
+.footer .links a:hover{color:var(--blue)}
+.loading{
   text-align:center;
   color:var(--blue);
   font-weight:600;
@@ -395,11 +339,10 @@ body {
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="topbar-left">
     <div class="logo">x!<span>search</span></div>
-    <small>minimal, aber vollwertige Suchmaschine</small>
+    <small>HTML-Snapshots, echte Inhalte, ohne KI.</small>
   </div>
   <div class="nav-links">
     <a href="#">Web</a>
@@ -411,17 +354,15 @@ body {
     <span class="user-pill">nox!314</span>
   </div>
 </div>
-
 <div class="main">
   <div class="search-area">
     <div class="search-area-header">
       <h1>x!<span>search</span></h1>
-      <small>Nur URLs, alles andere wird geraten.</small>
+      <small>wie Google, nur ohne KI.</small>
     </div>
-
     <div class="search-box">
       <div class="search-box-inner">
-        <input id="query" placeholder="Suchbegriff, Operatoren, \"exakte Phrasen\"…" autofocus autocomplete="off">
+        <input id="query" placeholder="Suchbegriff, \"Phrase\", site:domain.com, filetype:pdf …" autofocus autocomplete="off">
         <span class="count" id="count"></span>
         <ul id="suggestions" class="suggestions"></ul>
       </div>
@@ -430,43 +371,27 @@ body {
         <button id="btn-lucky">Lucky</button>
       </div>
     </div>
-
     <div class="filterbar" id="filterbar">
-      <span data-tab="web" class="active">Web</span>
-      <span data-tab="images">Bilder</span>
-      <span data-tab="videos">Videos</span>
+      <span data-tab="all" class="active">Alle</span>
+      <span data-tab="web">Web</span>
+      <span data-tab="image">Bilder</span>
+      <span data-tab="video">Videos</span>
       <span data-tab="news">News</span>
       <span data-tab="code">Code</span>
-      <span data-tab="docs">Docs</span>
+      <span data-tab="doc">Docs</span>
     </div>
-
     <div class="stats" id="stats"></div>
     <div class="trending" id="trending"></div>
-
     <div id="results"></div>
     <div class="pagination" id="pagination"></div>
   </div>
-
-  <div class="sidepanel" id="sidepanel">
-    <h2>x!search Info</h2>
-    <p>Tabs: Web, Bilder, Videos, News, Code, Docs – alles nur aus der URL erkannt.</p>
-    <p><b>Shortcuts:</b> <code>/</code> Fokus · <code>Esc</code> leeren · <code>Enter</code> suchen · <code>Ctrl+Enter</code> Lucky.</p>
-    <div class="meta" id="meta-info"></div>
-
-    <div class="settings">
-      <label>
-        Ergebnisse pro Seite:
-        <input type="number" id="pageSize" min="5" max="50" value="10">
-      </label>
-    </div>
-
-    <div class="history">
-      <div class="history-title">Letzte Suchen</div>
-      <ul id="history-list"></ul>
-    </div>
-  </div>
+  <aside class="sidepanel" id="sidepanel">
+    <h2>x!search</h2>
+    <p>Zeigt dir Web, Bilder, Videos, News, Code und Docs aus einem eigenen Index.</p>
+    <p>Alles basiert auf HTML-Snapshots, die du im Repo ablegst.</p>
+    <div class="kp-meta" id="kp-meta"></div>
+  </aside>
 </div>
-
 <footer class="footer">
   <div>Deutschland</div>
   <div class="links">
@@ -476,630 +401,6 @@ body {
     <a href="#">Feedback</a>
   </div>
 </footer>
-
-<script>
-const githubuser = "nox314";
-const githubrepo = "home";
-const githubfile = "websites.txt";
-
-const synonyms = {
-  "auto": ["fahrzeug","wagen","kfz"],
-  "haus": ["gebäude","wohnung"],
-  "blog": ["artikel","post"],
-  "code": ["programmierung","dev","entwicklung"],
-  "news": ["artikel","post","press"],
-  "image": ["bild","foto","pic"],
-  "video": ["clip","film","vid"]
-};
-
-function tokenize(text) {
-  return text
-    .toLowerCase()
-    .replace(/https?:\/\//g, "")
-    .split(/[\/\.\-\_\?\&\=\#\+\~\:\|\s]+/)
-    .flatMap(t => t.split(/(?=[A-Z])/))
-    .filter(t => t.length > 1 && !/^\d+$/.test(t));
-}
-
-function normalize(word) {
-  return word
-    .replace(/ä/g, "a").replace(/ö/g, "o")
-    .replace(/ü/g, "u").replace(/ß/g, "ss");
-}
-
-function stem(w) {
-  const endings = ["ungen","eren","isch","lich","heit","keit","ung","ern","em",
-                   "en","er","es","st","e","n","s"];
-  for (const end of endings) {
-    if (w.length > end.length + 3 && w.endsWith(end)) return w.slice(0, -end.length);
-  }
-  return w;
-}
-
-function analyze(text) {
-  return [...new Set(tokenize(normalize(text)).map(stem))];
-}
-
-// URL-Analyse: Titel, Beschreibung, Kategorie, Tags, Typ
-function analyzeUrl(url) {
-  const clean = url.replace(/^https?:\/\//, "");
-  const parts = clean.split("/");
-  const domain = parts[0];
-  const pathParts = parts.slice(1).filter(Boolean);
-
-  const last = pathParts[pathParts.length - 1] || "";
-  const extMatch = last.match(/\.(\w+)$/);
-  const ext = extMatch ? extMatch[1].toLowerCase() : "";
-
-  let category = "web";
-  let type = "web";
-
-  if (/\.(png|jpg|jpeg|gif|webp|svg)$/i.test(last) || clean.includes("/img/") || clean.includes("/image")) {
-    category = "images";
-    type = "image";
-  } else if (/\.(mp4|mov|webm|mkv)$/i.test(last) || /youtube\.com|youtu\.be|vimeo\.com/i.test(clean)) {
-    category = "videos";
-    type = "video";
-  } else if (/news|blog|article|post|press/i.test(clean)) {
-    category = "news";
-    type = "news";
-  } else if (/github|gitlab|bitbucket|src|api|code/i.test(clean) || /\.(js|ts|py|java|c|cpp|html|css)$/i.test(last)) {
-    category = "code";
-    type = "code";
-  } else if (/docs|documentation|guide|manual|wiki/i.test(clean)) {
-    category = "docs";
-    type = "docs";
-  }
-
-  function humanizeSegment(seg) {
-    return seg
-      .replace(/\.(\w+)$/, "")
-      .replace(/[-_]+/g, " ")
-      .replace(/\d+/g, m => " " + m)
-      .trim()
-      .replace(/\s+/g, " ");
-  }
-
-  let title = domain;
-  if (pathParts.length) {
-    const main = humanizeSegment(last || pathParts[pathParts.length - 1]);
-    if (type === "image") title = "Bild: " + main;
-    else if (type === "video") title = "Video: " + main;
-    else if (type === "news") title = "News: " + main;
-    else if (type === "code") title = "Code: " + main;
-    else if (type === "docs") title = "Dokument: " + main;
-    else title = main || domain;
-  }
-
-  let description = "";
-  if (pathParts.length) {
-    description = pathParts
-      .map(humanizeSegment)
-      .filter(Boolean)
-      .join(" › ");
-  } else {
-    description = "Startseite von " + domain;
-  }
-
-  const tags = [];
-  pathParts.forEach(p => {
-    humanizeSegment(p).split(" ").forEach(w => {
-      if (w.length > 2) tags.push(w.toLowerCase());
-    });
-  });
-  if (category !== "web") tags.push(category);
-
-  return { domain, title, description, category, tags, ext, type };
-}
-
-const entries = [];
-const index = new Map();
-const df = new Map();
-let builtAt = 0;
-
-function buildIndex() {
-  index.clear(); df.clear();
-  entries.forEach((e, i) => {
-    const text = [e.url, e.title, e.description, e.tags.join(" "), e.category].join(" ");
-    const terms = analyze(text);
-    e._terms = terms;
-    const freq = new Map();
-    terms.forEach(t => freq.set(t, (freq.get(t) || 0) + 1));
-    freq.forEach((tf, term) => {
-      if (!index.has(term)) index.set(term, new Map());
-      index.get(term).set(i, tf);
-      df.set(term, (df.get(term) || 0) + 1);
-    });
-  });
-  builtAt = performance.now();
-  renderTrending();
-}
-
-function levenshtein(a, b) {
-  const dp = Array.from({length: a.length + 1}, (_, i) => [i, ...Array(b.length).fill(0)]);
-  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
-  for (let i = 1; i <= a.length; i++)
-    for (let j = 1; j <= b.length; j++)
-      dp[i][j] = Math.min(
-        dp[i-1][j] + 1,
-        dp[i][j-1] + 1,
-        dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1)
-      );
-  return dp[a.length][b.length];
-}
-
-function expandTerm(term, tolerance = 2) {
-  const variants = [term, ...(synonyms[term] || [])];
-  if (index.has(term)) return variants;
-  const candidates = [];
-  for (const t of index.keys()) {
-    if (Math.abs(t.length - term.length) <= tolerance && levenshtein(term, t) <= tolerance) {
-      candidates.push(t);
-    }
-  }
-  return [...new Set([...variants, ...candidates])];
-}
-
-function parseQuery(raw) {
-  const q = raw.trim();
-  const phrases = [];
-  const phraseRegex = /"([^"]+)"/g;
-  let m;
-  while ((m = phraseRegex.exec(q)) !== null) {
-    phrases.push(m[1].toLowerCase());
-  }
-  const cleaned = q.replace(/"[^"]+"/g, "").trim();
-
-  const tokens = cleaned.split(/\s+/);
-  const operators = { site:[], inurl:[], intitle:[], tag:[], category:[] };
-  const normalTerms = [];
-
-  tokens.forEach(t => {
-    if (t.startsWith("site:")) operators.site.push(t.slice(5).toLowerCase());
-    else if (t.startsWith("inurl:")) operators.inurl.push(t.slice(6).toLowerCase());
-    else if (t.startsWith("intitle:")) operators.intitle.push(t.slice(8).toLowerCase());
-    else if (t.startsWith("tag:")) operators.tag.push(t.slice(4).toLowerCase());
-    else if (t.startsWith("category:")) operators.category.push(t.slice(9).toLowerCase());
-    else if (t) normalTerms.push(t.toLowerCase());
-  });
-
-  const analyzed = analyze(normalTerms.join(" "));
-  return { phrases, operators, terms: analyzed };
-}
-
-function makeSnippet(entry, queryTerms) {
-  const text = entry.description || entry.url;
-  if (!text) return "";
-  const lower = text.toLowerCase();
-  for (const term of queryTerms) {
-    const idx = lower.indexOf(term);
-    if (idx !== -1) {
-      const start = Math.max(0, idx - 40);
-      const end = Math.min(text.length, idx + 80);
-      return (start > 0 ? "…" : "") + text.slice(start, end) + (end < text.length ? "…" : "");
-    }
-  }
-  return text.slice(0, 140) + (text.length > 140 ? "…" : "");
-}
-
-function doSearch(rawQuery, tab) {
-  const t0 = performance.now();
-  const parsed = parseQuery(rawQuery);
-  const queryTerms = parsed.terms;
-  const phrases = parsed.phrases;
-  const ops = parsed.operators;
-
-  if (!queryTerms.length && !phrases.length && !Object.values(ops).some(a => a.length)) {
-    return { results: [], ms: 0, matchedTerms: [] };
-  }
-
-  const scores = new Map();
-  const matchedTerms = [];
-
-  const allQueryTerms = queryTerms.length ? queryTerms : [];
-
-  for (const qt of allQueryTerms) {
-    const variants = expandTerm(qt, qt.length > 5 ? 2 : 1);
-    for (const v of variants) {
-      const postings = index.get(v);
-      if (!postings) continue;
-      matchedTerms.push(v);
-
-      const idf = Math.log(1 + entries.length / postings.size);
-      const isFuzzy = (v !== qt) ? 0.5 : 1;
-
-      postings.forEach((tf, i) => {
-        const e = entries[i];
-        let score = idf * (1 + Math.log(tf)) * isFuzzy;
-
-        if (e.title.toLowerCase().includes(v)) score *= 1.6;
-        if (e.tags.some(tag => tag.toLowerCase().includes(v))) score *= 1.3;
-
-        scores.set(i, (scores.get(i) || 0) + score);
-      });
-    }
-  }
-
-  entries.forEach((e, i) => {
-    let score = scores.get(i) || 0;
-
-    if (ops.site.length && !ops.site.some(s => e.url.toLowerCase().includes(s))) score *= 0.01;
-    if (ops.inurl.length && !ops.inurl.some(s => e.url.toLowerCase().includes(s))) score *= 0.01;
-    if (ops.intitle.length && !ops.intitle.some(s => e.title.toLowerCase().includes(s))) score *= 0.01;
-    if (ops.tag.length && !ops.tag.some(s => e.tags.map(t=>t.toLowerCase()).includes(s))) score *= 0.01;
-    if (ops.category.length && !ops.category.some(s => e.category.toLowerCase().includes(s))) score *= 0.01;
-
-    phrases.forEach(ph => {
-      const phLower = ph.toLowerCase();
-      if (e.description.toLowerCase().includes(phLower) || e.title.toLowerCase().includes(phLower)) {
-        score *= 2.0;
-      }
-    });
-
-    if (tab === "images" && e.category !== "images") score *= 0.01;
-    if (tab === "videos" && e.category !== "videos") score *= 0.01;
-    if (tab === "news" && e.category !== "news") score *= 0.3;
-    if (tab === "code" && e.category !== "code") score *= 0.3;
-    if (tab === "docs" && e.category !== "docs") score *= 0.3;
-
-    score *= 1 / (1 + e.url.length / 200);
-    if (e.popularity) score *= (1 + e.popularity / 10);
-
-    if (score > 0) scores.set(i, score);
-  });
-
-  const final = [...scores.entries()].map(([i, score]) => {
-    const e = entries[i];
-    return { e, score };
-  });
-
-  final.sort((a, b) => b.score - a.score);
-  return { results: final, ms: (performance.now() - t0), matchedTerms };
-}
-
-const input = document.getElementById("query");
-const out = document.getElementById("results");
-const statsEl = document.getElementById("stats");
-const countEl = document.getElementById("count");
-const suggestionsEl = document.getElementById("suggestions");
-const trendingEl = document.getElementById("trending");
-const sidepanel = document.getElementById("sidepanel");
-const historyList = document.getElementById("history-list");
-const paginationEl = document.getElementById("pagination");
-const pageSizeInput = document.getElementById("pageSize");
-const filterbar = document.getElementById("filterbar");
-
-let debounceTimer;
-let lastResults = [];
-let lastMatchedTerms = [];
-let currentPage = 1;
-let currentTab = "web";
-
-function escapeHtml(s) {
-  const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
-}
-
-function highlight(text, terms) {
-  let html = escapeHtml(text);
-  terms.forEach(t => {
-    const frag = t.slice(0, Math.max(3, t.length - 1));
-    const re = new RegExp("(" + frag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[a-zäöüß0-9]*)", "gi");
-    html = html.replace(re, "<mark>$1</mark>");
-  });
-  return html;
-}
-
-function renderTrending() {
-  if (!entries.length) return;
-  const termCounts = [];
-  index.forEach((map, term) => {
-    termCounts.push({ term, count: map.size });
-  });
-  termCounts.sort((a,b) => b.count - a.count);
-  const top = termCounts.slice(0, 8);
-  if (!top.length) return;
-  trendingEl.innerHTML = "Trending: " + top.map(t =>
-    `<span class="tag" data-term="${escapeHtml(t.term)}">${escapeHtml(t.term)}</span>`
-  ).join("");
-  trendingEl.querySelectorAll(".tag").forEach(tag => {
-    tag.onclick = () => {
-      input.value = tag.dataset.term;
-      runSearch();
-    };
-  });
-}
-
-function saveHistory(q) {
-  if (!q) return;
-  const key = "xsearch_history";
-  const raw = localStorage.getItem(key);
-  let arr = raw ? JSON.parse(raw) : [];
-  arr = arr.filter(x => x !== q);
-  arr.unshift(q);
-  if (arr.length > 10) arr = arr.slice(0,10);
-  localStorage.setItem(key, JSON.stringify(arr));
-  renderHistory();
-}
-
-function renderHistory() {
-  const key = "xsearch_history";
-  const raw = localStorage.getItem(key);
-  let arr = raw ? JSON.parse(raw) : [];
-  historyList.innerHTML = arr.map(q => `<li>${escapeHtml(q)}</li>`).join("");
-  historyList.querySelectorAll("li").forEach(li => {
-    li.onclick = () => {
-      input.value = li.textContent;
-      runSearch();
-    };
-  });
-}
-
-function renderSuggestions() {
-  const q = input.value.trim().toLowerCase();
-  if (!q) { suggestionsEl.innerHTML = ""; return; }
-
-  const fromEntries = entries
-    .map(e => e.title || e.url)
-    .filter(u => u.toLowerCase().includes(q))
-    .slice(0, 6);
-
-  const key = "xsearch_history";
-  const raw = localStorage.getItem(key);
-  let hist = raw ? JSON.parse(raw) : [];
-  hist = hist.filter(h => h.toLowerCase().includes(q)).slice(0,4);
-
-  const items = [];
-  fromEntries.forEach(u => items.push({ text: u, hint: "Treffer" }));
-  hist.forEach(h => items.push({ text: h, hint: "Verlauf" }));
-
-  if (!items.length) { suggestionsEl.innerHTML = ""; return; }
-
-  suggestionsEl.innerHTML = items.map(it =>
-    `<li><span>${escapeHtml(it.text)}</span><span class="hint">${escapeHtml(it.hint)}</span></li>`
-  ).join("");
-
-  suggestionsEl.querySelectorAll("li").forEach(li => {
-    li.onclick = () => {
-      input.value = li.querySelector("span").textContent;
-      suggestionsEl.innerHTML = "";
-      runSearch();
-    };
-  });
-}
-
-function showPanel(entry) {
-  sidepanel.innerHTML = `
-    <h2>${escapeHtml(entry.title || entry.url)}</h2>
-    <p>${escapeHtml(entry.description || "Keine Beschreibung verfügbar.")}</p>
-    <p><b>Tags:</b> ${escapeHtml(entry.tags.join(", ") || "–")}</p>
-    <p><b>Kategorie:</b> ${escapeHtml(entry.category || "–")}</p>
-    <p><b>Typ:</b> ${escapeHtml(entry.type || "web")}</p>
-    <p><b>URL:</b> ${escapeHtml(entry.url)}</p>
-    <div class="meta">
-      Index: ${entries.length} Seiten · Begriffe: ${index.size} · aufgebaut in ${builtAt.toFixed(0)}ms
-    </div>
-    <div class="settings">
-      <label>
-        Ergebnisse pro Seite:
-        <input type="number" id="pageSize" min="5" max="50" value="${pageSizeInput.value}">
-      </label>
-    </div>
-    <div class="history">
-      <div class="history-title">Letzte Suchen</div>
-      <ul id="history-list"></ul>
-    </div>
-  `;
-  const newPageSizeInput = document.getElementById("pageSize");
-  newPageSizeInput.onchange = () => {
-    pageSizeInput.value = newPageSizeInput.value;
-    renderResults();
-  };
-  const newHistoryList = document.getElementById("history-list");
-  const key = "xsearch_history";
-  const raw = localStorage.getItem(key);
-  let arr = raw ? JSON.parse(raw) : [];
-  newHistoryList.innerHTML = arr.map(q => `<li>${escapeHtml(q)}</li>`).join("");
-  newHistoryList.querySelectorAll("li").forEach(li => {
-    li.onclick = () => {
-      input.value = li.textContent;
-      runSearch();
-    };
-  });
-}
-
-function renderResults() {
-  const pageSize = parseInt(pageSizeInput.value || "10", 10);
-  const total = lastResults.length;
-  const pages = Math.max(1, Math.ceil(total / pageSize));
-  if (currentPage > pages) currentPage = pages;
-
-  const start = (currentPage - 1) * pageSize;
-  const slice = lastResults.slice(start, start + pageSize);
-
-  countEl.textContent = total || "";
-  if (total) {
-    statsEl.innerHTML = `Ungefähr <b>${total}</b> Ergebnisse (Seite ${currentPage}/${pages})`;
-  } else {
-    statsEl.innerHTML = "";
-  }
-
-  if (!slice.length) {
-    out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Keine Ergebnisse gefunden.</p>";
-    paginationEl.innerHTML = "";
-    return;
-  }
-
-  const frag = document.createDocumentFragment();
-  slice.forEach(({ e }, idx) => {
-    const snippet = makeSnippet(e, lastMatchedTerms.length ? lastMatchedTerms : parseQuery(input.value).terms);
-    const card = document.createElement("div");
-    card.className = "result-card";
-
-    let mediaHtml = "";
-    if (e.type === "image") {
-      mediaHtml = `<img src="https://${escapeHtml(e.url)}" alt="${escapeHtml(e.title)}" class="result-image">`;
-    } else if (e.type === "video") {
-      if (/youtube\.com|youtu\.be/i.test(e.url)) {
-        let id = "";
-        const m = e.url.match(/v=([^&]+)/);
-        const s = e.url.match(/youtu\.be\/([^?]+)/);
-        if (m) id = m[1];
-        else if (s) id = s[1];
-        if (id) {
-          mediaHtml = `<iframe class="result-video" src="https://www.youtube.com/embed/${escapeHtml(id)}" frameborder="0" allowfullscreen></iframe>`;
-        }
-      } else {
-        mediaHtml = `<video class="result-video" controls src="https://${escapeHtml(e.url)}"></video>`;
-      }
-    }
-
-    card.innerHTML = `
-      <div class="result-header">
-        <div>
-          <h3>${highlight(e.title || e.url, lastMatchedTerms)}</h3>
-          <a href="https://${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(e.url)}</a>
-        </div>
-      </div>
-      <div class="snippet">${highlight(snippet, lastMatchedTerms)}</div>
-      ${mediaHtml}
-      <div class="badges">
-        <span class="badge">${e.url.length < 40 ? "Kurze URL" : "Lange URL"}</span>
-        <span class="badge">${e.category || "Kategorie unbekannt"}</span>
-        <span class="badge">Typ: ${e.type || "web"}</span>
-        <span class="badge">Index #${entries.indexOf(e)+1}</span>
-      </div>
-    `;
-    card.addEventListener("click", () => showPanel(e));
-    frag.appendChild(card);
-  });
-  out.innerHTML = "";
-  out.appendChild(frag);
-
-  paginationEl.innerHTML = "";
-  if (pages > 1) {
-    for (let p = 1; p <= pages; p++) {
-      const btn = document.createElement("button");
-      btn.textContent = p;
-      if (p === currentPage) btn.classList.add("active");
-      btn.onclick = () => { currentPage = p; renderResults(); };
-      paginationEl.appendChild(btn);
-    }
-  }
-}
-
-function runSearch() {
-  const q = input.value.trim();
-
-  if (q.toLowerCase() === "nox314") {
-    document.body.style.background = "#000";
-    document.body.style.color = "#0f0";
-    setTimeout(() => { document.body.style.background=""; document.body.style.color=""; }, 3000);
-    out.innerHTML = "<p style='text-align:center;color:#624aff;font-weight:600;'>Deep Mode!</p>";
-    suggestionsEl.innerHTML = "";
-    return;
-  }
-
-  if (!q) {
-    out.innerHTML = "";
-    statsEl.innerHTML = "";
-    countEl.textContent = "";
-    suggestionsEl.innerHTML = "";
-    return;
-  }
-
-  const { results, ms, matchedTerms } = doSearch(q, currentTab);
-  lastResults = results;
-  lastMatchedTerms = matchedTerms;
-  currentPage = 1;
-
-  statsEl.innerHTML = results.length
-    ? `Ungefähr <b>${results.length}</b> Ergebnisse (<b>${ms.toFixed(1)}</b> ms)`
-    : "";
-
-  saveHistory(q);
-  suggestionsEl.innerHTML = ""; // Vorschlagszeile weg nach Suche
-  renderResults();
-}
-
-input.addEventListener("input", () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    renderSuggestions();
-  }, 80);
-});
-
-document.getElementById("btn-search").onclick = () => runSearch();
-document.getElementById("btn-lucky").onclick = () => {
-  const q = input.value.trim();
-  const { results } = doSearch(q || "", currentTab);
-  suggestionsEl.innerHTML = "";
-  if (results.length) window.open("https://" + results[0].e.url, "_blank");
-};
-
-pageSizeInput.onchange = () => {
-  currentPage = 1;
-  renderResults();
-};
-
-filterbar.querySelectorAll("span").forEach(span => {
-  span.onclick = () => {
-    filterbar.querySelectorAll("span").forEach(s => s.classList.remove("active"));
-    span.classList.add("active");
-    currentTab = span.dataset.tab;
-    runSearch();
-  };
-});
-
-// Keyboard shortcuts
-document.addEventListener("keydown", (e) => {
-  if (e.key === "/") {
-    e.preventDefault();
-    input.focus();
-  }
-  if (e.key === "Escape") {
-    input.value = "";
-    suggestionsEl.innerHTML = "";
-    out.innerHTML = "";
-    statsEl.innerHTML = "";
-    countEl.textContent = "";
-  }
-  if (e.key === "Enter" && document.activeElement === input && !e.ctrlKey) {
-    runSearch();
-  }
-  if (e.key === "Enter" && e.ctrlKey) {
-    const q = input.value.trim();
-    const { results } = doSearch(q || "", currentTab);
-    suggestionsEl.innerHTML = "";
-    if (results.length) window.open("https://" + results[0].e.url, "_blank");
-  }
-});
-
-// Daten laden (nur GitHub)
-fetch(`https://raw.githubusercontent.com/${githubuser}/${githubrepo}/main/${githubfile}`)
-  .then(r => r.text())
-  .then(text => {
-    text.split("\n").forEach(line => {
-      const raw = line.trim();
-      if (!raw) return;
-      const url = raw;
-      const info = analyzeUrl(url);
-      entries.push({
-        url,
-        title: info.title,
-        description: info.description,
-        tags: info.tags,
-        category: info.category,
-        type: info.type,
-        popularity: 1
-      });
-    });
-    buildIndex();
-    statsEl.innerHTML = `Index bereit: <b>${entries.length}</b> Seiten · <b>${index.size}</b> eindeutige Begriffe · aufgebaut in ${(builtAt - 0).toFixed(0)}ms`;
-    renderHistory();
-  })
-  .catch(() => {
-    statsEl.innerHTML = "Daten konnten nicht geladen werden.";
-  });
-</script>
+<script src="search.js"></script>
 </body>
 </html>

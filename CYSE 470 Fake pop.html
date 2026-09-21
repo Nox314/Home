@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virus Warning</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #C21807;
+            font-family: Arial, sans-serif;
+        }
+        .warning-container {
+            text-align: center;
+            border: 2px solid #f00;
+            background-color: #fff;
+            padding: 20px;
+        }
+        .warning-container h1 {
+            margin: 0 0 10px;
+        }
+        .warning-container p {
+            margin: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: 1px solid #f00;
+            border-radius: 5px;
+            background-color: #fff;
+            text-decoration: none;
+            color: #f00;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #f00;
+            color: #fff;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            display: flex;
+        }
+        .image-container {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-container">
+        <h1>CPU VIRUS ALERT</h1>
+        <img src="trojanfakepic.png" alt="Virus warning image" width="700%" height="auto" style="max-width: 700px;">
+        <p>WARNING!</p>
+        <p>YOUR COMPUTER MAY BE INFECTED:</p>
+        <p>System Detected (2) Potentially Malicious Viruses: Rootkit.Sirefef.Spy and Trojan.FakeAV</p>
+        <p>Download Your Personal & Financial Information MAY NOT BE SAFE.</p>
+        <button class="button" onclick="openModal()">DOWNLOAD ANTIVIRUS SOFTWARE NOW</button>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" class="close">&times;</span>
+            <div class="image-container">
+                <img id="modal-image" alt="New image" style="width: 55%;">
+            </div>
+        </div>
+    </div>
+    <script>
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+            document.getElementById('modal-image').src = 'antivirusload.png';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

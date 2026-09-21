@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>X!Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      text-align: center;
+      padding-top: 80px;
+    }
+    input {
+      width: 60%;
+      padding: 12px;
+      border-radius: 30px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      padding: 12px 20px;
+      border-radius: 30px;
+      border: none;
+      background: #38bdf8;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .engines {
+      margin-top: 20px;
+    }
+    .engines button {
+      margin: 5px;
+      background: #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>X!Search</h1>
+  <p>Die Meta‑Suchmaschine ohne API</p>
+
+  <input id="query" placeholder="Suchbegriff eingeben...">
+  <button onclick="search()">Suchen</button>
+
+  <div class="engines">
+    <button onclick="engine('ecosia')">Ecosia</button>
+    <button onclick="engine('bing')">Bing</button>
+    <button onclick="engine('duck')">DuckDuckGo</button>
+    <button onclick="engine('youtube')">YouTube</button>
+    <button onclick="engine('wiki')">Wikipedia</button>
+  </div>
+
+  <script>
+    function search() {
+      const q = document.getElementById("query").value;
+      if (!q) return;
+      window.location.href = "https://ecosia.org/?q=" + encodeURIComponent(q);
+    }
+
+    function engine(type) {
+      const q = document.getElementById("query").value;
+      if (!q) return;
+
+      const urls = {
+        ecosia: "https://ecosia.org/?q=",
+        duck: "https://duckduckgo.com/?q=",
+        youtube: "https://www.youtube.com/results?search_query=",
+        wiki: "https://de.wikipedia.org/wiki/Special:Search?search="
+      };
+
+      window.location.href = urls[type] + encodeURIComponent(q);
+    }
+  </script>
+
+</body>
+</html>

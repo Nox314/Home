@@ -1,33 +1,349 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X!Studio - Speech to Text</title>
+    
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
 
-    <!-- Style CSS -->
-    <link rel="stylesheet" href="./style.css">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
+
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Speech to Text Styles */
+        .speech-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .speech-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .speech-header h2 {
+            font-size: 28px;
+            color: var(--proton-dark);
+            margin-bottom: 10px;
+        }
+
+        .speech-header p {
+            color: #666;
+        }
+
+        .language-select {
+            margin-bottom: 30px;
+        }
+
+        .language-select label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--proton-text);
+        }
+
+        .language-dropdown {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .language-dropdown:hover {
+            border-color: var(--proton-blue);
+        }
+
+        .recording-area {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        #startButton {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: var(--proton-blue);
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.3);
+        }
+
+        #startButton:hover {
+            background-color: var(--proton-blue-hover);
+            transform: scale(1.05);
+        }
+
+        #startButton.recording {
+            background-color: #e74c3c;
+            animation: pulse-recording 1.5s infinite;
+        }
+
+        @keyframes pulse-recording {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        #startButton img {
+            width: 50px;
+            height: 50px;
+            filter: brightness(0) invert(1);
+        }
+
+        .status-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .status-text.recording {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            min-height: 120px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--proton-text);
+            background-color: #fafafa;
+            text-align: left;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-copy {
+            background-color: var(--proton-success-text);
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background-color: #00a383;
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background-color: #af4c4c;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #ac3434;
+            transform: translateY(-1px);
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .speech-container { padding: 20px; }
+            .control-buttons { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="main">
-        <div class="container">
-            <h1>X!Studio - Speech to Text</h1>
-            <div class="button">
-                <button id="startButton"><img src="https://cdn-icons-png.flaticon.com/512/25/25682.png" alt="" width="50" height="50"></button>
-                <small>Tap to Record</small>
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="index (2).html" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="index (2).html">Start</a>
+                <a href="date.html">Weltuhr</a>
+                <a href="iss.html">Iss</a>
+                <a href="info.html">Info</a>
+                <a href="login.html">Login</a>
+                <a href="register.html" class="btn-register">Registrieren</a>
             </div>
-            <div id="output"></div>
-            <div class="buttons">
-                <button id="copyButton">Copy Text</button>
-                <button id="clearButton">Clear Text</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="wrap">
+            <div class="speech-container">
+                <div class="speech-header">
+                    <h2>🎤 Sprach-zu-Text Converter</h2>
+                    <p>Sprache auswählen und aufnehmen für präzise Texterkennung in mehreren Sprachen</p>
+                </div>
+
+                <div class="language-select">
+                    <label for="languageSelect">Sprache wählen:</label>
+                    <select id="languageSelect" class="language-dropdown">
+                        <option value="de-DE">Deutsch</option>
+                        <option value="en-US">English (US)</option>
+                        <option value="en-GB">English (UK)</option>
+                        <option value="zh-CN">中文 (简体中文)</option>
+                        <option value="zh-TW">繁體中文 (Türkisch)</option>
+                        <option value="ja-JP">日本語</option>
+                        <option value="ko-KR">한국어</option>
+                        <option value="es-ES">Español</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="it-IT">Italiano</option>
+                        <option value="pt-BR">Português (Brasil)</option>
+                        <option value="ru-RU">Русский</option>
+                        <option value="ar-SA">العربية</option>
+                        <option value="hi-IN">हिन्दी</option>
+                        <option value="tr-TR">Türkçe</option>
+                        <option value="nl-NL">Nederlands</option>
+                        <option value="sv-SE">Svenska</option>
+                        <option value="pl-PL">Polski</option>
+                    </select>
+                </div>
+
+                <div class="recording-area">
+                    <button id="startButton">
+                        <img src="https://cdn-icons-png.flaticon.com/512/25/25682.png" alt="Mikrofon">
+                    </button>
+                    <p class="status-text" id="statusText">Tippe zum Aufnehmen</p>
+                </div>
+
+                <div id="output">Deine transkribierte Sprache erscheint hier...</div>
+
+                <div class="control-buttons">
+                    <button id="copyButton" class="btn btn-copy">📋 Kopieren</button>
+                    <button id="clearButton" class="btn btn-clear">🗑️ Löschen</button>
+                </div>
             </div>
-        
-            <div id="convert_text"></div>
         </div>
     </div>
 
-    <!-- Script jS -->
+    <footer>
+        <div class="wrap">
+            <div>&copy; 2026 nox!314</div>
+        </div>
+    </footer>
+
     <script src="./script.js"></script>
 </body>
 </html>

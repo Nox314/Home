@@ -1,91 +1,265 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+:root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
 
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-body {
-    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
-    background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-}
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
 
-#output {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    min-height: 100px;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
 
-}
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
 
-.container {
-    background-color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    padding: 20px;            
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 20px;
-    width: 400px;
-}
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
 
-#startButton {
-    margin-top: 20px;
-    padding: 20px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    cursor: pointer;
-    background-color: rgb(159, 159, 252);
-}
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
 
-#startButton:hover {
-    background-color: rgb(50, 50, 200);
-}
+        .btn-register {
+            background-color: var(--proton-blue);
+            color: white !important;
+            padding: 10px 20px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+        }
 
-#copyButton {
-    margin-top: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
 
-#copyButton:hover {
-    background-color: #45a049;
-}
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
 
-#clearButton {
-    margin-top: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-    background-color: #af4c4c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-}
+        /* Speech to Text Styles */
+        .speech-container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-#clearButton:hover {
-    background-color: #ac3434;
-}
+        .speech-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .speech-header h2 {
+            font-size: 28px;
+            color: var(--proton-dark);
+            margin-bottom: 10px;
+        }
+
+        .speech-header p {
+            color: #666;
+        }
+
+        .language-select {
+            margin-bottom: 30px;
+        }
+
+        .language-select label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--proton-text);
+        }
+
+        .language-dropdown {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .language-dropdown:hover {
+            border-color: var(--proton-blue);
+        }
+
+        .recording-area {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        #startButton {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: var(--proton-blue);
+            border: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.3);
+        }
+
+        #startButton:hover {
+            background-color: var(--proton-blue-hover);
+            transform: scale(1.05);
+        }
+
+        #startButton.recording {
+            background-color: #e74c3c;
+            animation: pulse-recording 1.5s infinite;
+        }
+
+        @keyframes pulse-recording {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        #startButton img {
+            width: 50px;
+            height: 50px;
+            filter: brightness(0) invert(1);
+        }
+
+        .status-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .status-text.recording {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            min-height: 120px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--proton-text);
+            background-color: #fafafa;
+            text-align: left;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-copy {
+            background-color: var(--proton-success-text);
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background-color: #00a383;
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            background-color: #af4c4c;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background-color: #ac3434;
+            transform: translateY(-1px);
+        }
+
+        footer {
+            background-color: white;
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .speech-container { padding: 20px; }
+            .control-buttons { flex-direction: column; }
+            .btn { width: 100%; }
+        }

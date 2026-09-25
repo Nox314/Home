@@ -13,8 +13,8 @@
     <div class="main">
         <div class="container">
             <h1>X!Studio - Text to Speech</h1>
-
-            <div class="controls">
+            
+            <div class="tts-controls">
                 <div class="control-group">
                     <label for="language">Sprache:</label>
                     <select id="language"></select>
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="sliders">
+            <div class="tts-sliders">
                 <div class="slider-group">
                     <label for="rate">Tempo: <span id="rateValue">1.0</span></label>
                     <input type="range" id="rate" min="0.5" max="2" step="0.1" value="1">
@@ -40,24 +40,24 @@
                 </div>
             </div>
 
-            <textarea id="textInput" placeholder="Schreibe deinen Text hier..."></textarea>
-
             <div class="button">
                 <button id="speakButton"><img src="https://cdn-icons-png.flaticon.com/512/744/744974.png" alt="" width="50" height="50"></button>
                 <small>Klicken zum Vorlesen</small>
             </div>
-
+            
+            <div id="output"></div>
+            
             <div class="buttons">
                 <button id="pauseButton">Pause</button>
                 <button id="stopButton">Stop</button>
-                <button id="clearButton">Text löschen</button>
+                <button id="clearButton">Clear Text</button>
             </div>
 
             <div id="status"></div>
         </div>
     </div>
 
-    <!-- Script jS -->
+    <!-- Script JS -->
     <script src="./script.js"></script>
 </body>
 </html>

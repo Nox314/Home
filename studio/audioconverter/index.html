@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Audio - Professioneller Audio Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="index.html" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="index.html">Start</a>
+                <a href="date.html">Weltuhr</a>
+                <a href="iss.html">Iss</a>
+                <a href="info.html">Info</a>
+                <a href="login.html">Login</a>
+                <a href="register.html" class="btn-register">Registrieren</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-wave-square"></i> X!Audio - Professioneller Audio Converter</h1>
+            <p class="subtitle">Konvertiere zwischen über 30 Audio-Formaten schnell und sicher</p>
+        </header>
+
+        <main>
+            <div class="upload-area" id="dropArea">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Ziehe deine Audiodateien hierher</h3>
+                    <p>oder</p>
+                    <button id="browseBtn" class="btn-primary"><i class="fas fa-folder-open"></i> Dateien auswählen</button>
+                    <input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.flac,.aac,.ogg,.m4a,.wma,.opus,.aiff,.alac" multiple style="display: none;">
+                    <p class="file-types">Unterstützt: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, OPUS, AIFF, ALAC, AMR, APE, CAF, DSD, DSF, MKA, MPC, OTT, TTA, WV, WVC, AAX, AC3, DTS, TAK, OFR, MAC, SPX, GSM, VOC, AU</p>
+                </div>
+            </div>
+
+            <div class="file-list-panel" id="fileListPanel" style="display: none;">
+                <div class="panel-header">
+                    <h3><i class="fas fa-list"></i> Ausgewählte Dateien (<span id="fileCount">0</span>)</h3>
+                    <button id="clearAllBtn" class="btn-secondary-small"><i class="fas fa-trash"></i> Alle entfernen</button>
+                </div>
+                <div id="fileListContainer"></div>
+            </div>
+
+            <div class="settings-panel" id="settingsPanel">
+                <div class="settings-header">
+                    <h3><i class="fas fa-sliders-h"></i> Konvertierungseinstellungen</h3>
+                </div>
+                
+                <div class="conversion-settings">
+                    <div class="setting-group full-width">
+                        <label for="outputFormat"><i class="fas fa-file-audio"></i> Ausgabeformat:</label>
+                        <select id="outputFormat" class="form-control">
+                            <option value="mp3">MP3 (MPEG Layer 3) - Universell kompatibel</option>
+                            <option value="wav">WAV (Waveform) - Unkomprimierte Qualität</option>
+                            <option value="flac">FLAC - Verlustfrei komprimiert</option>
+                            <option value="aac">AAC - Effiziente Kompression</option>
+                            <option value="ogg">OGG Vorbis - Open Source</option>
+                            <option value="m4a">M4A - Apple Kompatibel</option>
+                            <option value="wma">WMA - Windows Media</option>
+                            <option value="opus">Opus - Modernes Low-Latency</option>
+                            <option value="aiff">AIFF - Apple Unkomprimiert</option>
+                            <option value="alac">ALAC - Apple Verlustfrei</option>
+                            <option value="amr">AMR - Sprachaufnahmen</option>
+                            <option value="ape">APE - Hohe Kompression</option>
+                            <option value="caf">CAF - Apple Universal</option>
+                            <option value="dsf">DSF - High-Resolution DSD</option>
+                            <option value="mka">MKA - Matroska Container</option>
+                            <option value="mpc">MPC - MusePack Qualität</option>
+                            <option value="tta">TTA - True Audio</option>
+                            <option value="wv">WavPack - Hybrid Modus</option>
+                            <option value="wvc">WavPack Correction</option>
+                            <option value="aax">AAX - Audible Hörbücher</option>
+                            <option value="ac3">AC3 - Dolby Digital</option>
+                            <option value="dts">DTS - Surround Audio</option>
+                            <option value="tak">TAK - Tom's Lossless</option>
+                            <option value="ofr">OFR - OptimFrog</option>
+                            <option value="mac">MAC - Monkey Audio</option>
+                            <option value="spx">Speex - Sprache optimiert</option>
+                            <option value="gsm">GSM - Mobilfunk Standard</option>
+                            <option value="voc">VOC - Creative Voice</option>
+                            <option value="au">AU - Sun/Unix Audio</option>
+                            <option value="ra">RA - RealAudio Streaming</option>
+                        </select>
+                        <p class="format-info" id="formatInfo">Wähle ein Format basierend auf deiner Nutzung</p>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="bitrate"><i class="fas fa-tachometer-alt"></i> Bitrate:</label>
+                        <select id="bitrate" class="form-control">
+                            <option value="320">320 kbps - Höchste Qualität</option>
+                            <option value="256">256 kbps - Sehr gute Qualität</option>
+                            <option value="192" selected>192 kbps - Gute Qualität</option>
+                            <option value="128">128 kbps - Standard</option>
+                            <option value="96">96 kbps - Niedrige Qualität</option>
+                            <option value="64">64 kbps - Sprache optimiert</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="sampleRate"><i class="fas fa-music"></i> Sample Rate:</label>
+                        <select id="sampleRate" class="form-control">
+                            <option value="48000">48 kHz - Professional</option>
+                            <option value="44100" selected>44.1 kHz - CD Qualität</option>
+                            <option value="22050">22.05 kHz - Halb CD</option>
+                            <option value="16000">16 kHz - Telefonqualität</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="channels"><i class="fas fa-volume-up"></i> Kanäle:</label>
+                        <select id="channels" class="form-control">
+                            <option value="auto">Automatisch (Original behalten)</option>
+                            <option value="2">Stereo (2 Kanäle)</option>
+                            <option value="1">Mono (1 Kanal)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group checkbox-group">
+                        <input type="checkbox" id="normalizeAudio" class="form-checkbox">
+                        <label for="normalizeAudio">Audio normalisieren</label>
+                    </div>
+
+                    <div class="setting-group checkbox-group">
+                        <input type="checkbox" id="deleteOriginal" class="form-checkbox">
+                        <label for="deleteOriginal">Original nach Konvertierung löschen</label>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="convertBtn" class="btn-primary" disabled>
+                        <i class="fas fa-cog"></i> Konvertieren (<span id="batchCount">0</span> Dateien)
+                    </button>
+                    <button id="cancelBtn" class="btn-secondary" disabled>
+                        <i class="fas fa-times"></i> Abbrechen
+                    </button>
+                </div>
+            </div>
+
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-info">
+                    <span id="progressStatus">Konvertiere Audio...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressBar" class="progress-fill"></div>
+                </div>
+                <div class="time-remaining">
+                    <span id="timeRemaining">Geschätzte verbleibende Zeit: --</span>
+                </div>
+            </div>
+
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <div class="result-content">
+                    <i class="fas fa-check-circle success-icon"></i>
+                    <h3>Konvertierung abgeschlossen!</h3>
+                    <p id="resultInfo">Deine Audiodateien wurden erfolgreich konvertiert.</p>
+                    <div class="result-actions">
+                        <a id="downloadBtn" class="btn-primary" href="#" download>
+                            <i class="fas fa-download"></i> Dateien herunterladen
+                        </a>
+                        <button id="newConversionBtn" class="btn-secondary">
+                            <i class="fas fa-redo"></i> Neue Konvertierung
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Schnelle Konvertierung</h4>
+                    <p>Optimierte Algorithmen für schnelle Verarbeitung</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Sicher</h4>
+                    <p>Dateien werden lokal im Browser verarbeitet</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-code"></i>
+                    <h4>Open Source</h4>
+                    <p>Transparenter Code auf GitHub verfügbar</p>
+                </div>
+            </div>
+            <p class="copyright">© 2026 nox!314. Alle Rechte vorbehalten.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

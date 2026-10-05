@@ -335,7 +335,7 @@ p {
   const urlParams = new URLSearchParams(window.location.search);
   
   // Sucht nach ?redirect=... oder ?to=... (Wenn nix ist, dann ist es "nox314.github.io/Home")
-  const targetUrl = urlParams.get('redirect') || urlParams.get('to') || 'nox314.github.io/Home'
+  const targetUrl = urlParams.get('redirect') || urlParams.get('to') || 'https://nox314.github.io/Home'
 
   document.getElementById('redirectBtn').addEventListener('click', function() {
     window.location.href = targetUrl;

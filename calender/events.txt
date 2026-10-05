@@ -1,0 +1,3 @@
+# nox!314 events.txt
+2026-06-15 | Release X!Secure | Beta-Launch des neuen Passwort-Managers
+2026-06-28 | Server Wartung | Kurzer Downtime-Check

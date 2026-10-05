@@ -4,8 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Nicht verfügbar - nox!314</title>
+
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
 <style>
   :root {
     --proton-blue: #624aff;
@@ -36,7 +38,7 @@
     max-width: 500px;
   }
 
-  /* Abgespaceter 3D-Roboter-Kopf Animation */
+  /* Roboter */
   .robot-head-wrapper {
     perspective: 800px;
     margin-bottom: 30px;
@@ -49,13 +51,15 @@
     margin: 0 auto;
     border-radius: 24px;
     position: relative;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.2),
+      inset 0 2px 5px rgba(255, 255, 255, 0.1);
     border: 2px solid #444;
     animation: headShake 4s ease-in-out infinite;
     transform-origin: center bottom;
   }
 
-  /* Ohren / Antennen */
+  /* Ohren */
   .robot-head::before {
     content: '';
     position: absolute;
@@ -80,7 +84,7 @@
     box-shadow: 0 0 10px var(--proton-blue);
   }
 
-  /* Antenne oben */
+  /* Antenne */
   .antenna {
     position: absolute;
     top: -25px;
@@ -102,6 +106,46 @@
     border-radius: 50%;
     box-shadow: 0 0 12px #ff3366;
     animation: pulse 1.5s infinite alternate;
+  }
+
+  /* ========================================
+     nox!314 BRANDING
+     ======================================== */
+
+  .robot-brand {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+
+    padding: 3px 8px;
+    border-radius: 5px;
+
+    background: linear-gradient(
+      180deg,
+      rgba(98, 74, 255, 0.18),
+      rgba(98, 74, 255, 0.05)
+    );
+
+    border: 1px solid rgba(98, 74, 255, 0.45);
+
+    text-shadow:
+      0 0 4px #624aff,
+      0 0 8px rgba(98, 74, 255, 0.8);
+
+    box-shadow:
+      inset 0 0 8px rgba(98, 74, 255, 0.15),
+      0 0 8px rgba(98, 74, 255, 0.25);
+
+    z-index: 5;
+
+    animation: brandGlow 2.5s ease-in-out infinite alternate;
   }
 
   /* Augenbereich / Visier */
@@ -130,7 +174,7 @@
     animation: blink 3s infinite;
   }
 
-  /* Mund-LEDs */
+  /* Mund */
   .robot-mouth {
     position: absolute;
     bottom: 20px;
@@ -153,26 +197,74 @@
     box-shadow: 0 0 5px #ff3366;
   }
 
-  /* Keyframe Animationen */
+  /* ========================================
+     ANIMATIONEN
+     ======================================== */
+
   @keyframes headShake {
-    0%, 100% { transform: rotate(0deg); }
-    20% { transform: rotate(-8deg); }
-    40% { transform: rotate(8deg); }
-    60% { transform: rotate(-5deg); }
-    80% { transform: rotate(5deg); }
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+
+    20% {
+      transform: rotate(-8deg);
+    }
+
+    40% {
+      transform: rotate(8deg);
+    }
+
+    60% {
+      transform: rotate(-5deg);
+    }
+
+    80% {
+      transform: rotate(5deg);
+    }
   }
 
   @keyframes pulse {
-    0% { transform: translateX(-50%) scale(0.9); opacity: 0.7; }
-    100% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+    0% {
+      transform: translateX(-50%) scale(0.9);
+      opacity: 0.7;
+    }
+
+    100% {
+      transform: translateX(-50%) scale(1.2);
+      opacity: 1;
+    }
   }
 
   @keyframes blink {
-    0%, 90%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
+    0%, 90%, 100% {
+      transform: scaleY(1);
+    }
+
+    95% {
+      transform: scaleY(0.1);
+    }
   }
 
-  /* Typografie & Button */
+  @keyframes brandGlow {
+    0% {
+      opacity: 0.75;
+      box-shadow:
+        inset 0 0 8px rgba(98, 74, 255, 0.1),
+        0 0 5px rgba(98, 74, 255, 0.15);
+    }
+
+    100% {
+      opacity: 1;
+      box-shadow:
+        inset 0 0 8px rgba(98, 74, 255, 0.25),
+        0 0 12px rgba(98, 74, 255, 0.4);
+    }
+  }
+
+  /* ========================================
+     TYPOGRAFIE & BUTTON
+     ======================================== */
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -195,7 +287,10 @@
     border-radius: var(--border-radius);
     font-weight: 600;
     text-decoration: none;
-    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition:
+      background-color 0.2s,
+      transform 0.2s,
+      box-shadow 0.2s;
     box-shadow: 0 4px 14px rgba(98, 74, 255, 0.3);
   }
 
@@ -206,30 +301,52 @@
   }
 </style>
 </head>
+
 <body>
 
   <div class="error-container">
-    <!-- Abgespaceter 3D Roboter Kopf -->
+
+    <!-- 3D Roboter Kopf -->
     <div class="robot-head-wrapper">
+
       <div class="robot-head">
+
+        <!-- Antenne -->
         <div class="antenna"></div>
         <div class="antenna-ball"></div>
+
+        <!-- nox!314 Branding -->
+        <div class="robot-brand">
+          nox!314
+        </div>
+
+        <!-- Augen / Visier -->
         <div class="robot-visor">
           <div class="robot-eye"></div>
           <div class="robot-eye"></div>
         </div>
+
+        <!-- Mund -->
         <div class="robot-mouth">
           <div class="mouth-line"></div>
           <div class="mouth-line"></div>
           <div class="mouth-line"></div>
         </div>
+
       </div>
     </div>
 
     <h1>Hoppla!</h1>
-    <p>Diese Funktion ist leider noch nicht verfügbar oder wurde gelöscht.</p>
-    
-    <a href="index.html" class="btn-home">Zurück zur Startseite</a>
+
+    <p>
+      Diese Funktion ist leider noch nicht verfügbar
+      oder wurde gelöscht.
+    </p>
+
+    <a href="index.html" class="btn-home">
+      Zurück zur Startseite
+    </a>
+
   </div>
 
 </body>

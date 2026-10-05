@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Planer - nox!314</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --proton-success: #00b894;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #topMenu {
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
+        }
+
+        #topMenu .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--proton-blue); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--proton-text);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 40px 0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calendar-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--proton-dark);
+        }
+
+        .calendar-nav-btns, .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: var(--proton-blue);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--proton-blue-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--proton-text);
+            border: 1px solid var(--proton-border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f2f5;
+            color: var(--proton-dark);
+        }
+
+        .calendar-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 30px;
+        }
+
+        @media(max-width: 900px) {
+            .calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            background: #fafbfc;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .day-cell:hover {
+            border-color: var(--proton-blue);
+            background: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .day-cell.other-month {
+            opacity: 0.3;
+            background: #f0f2f5;
+        }
+
+        .day-cell.today {
+            border-color: var(--proton-blue);
+            font-weight: bold;
+            background: rgba(98, 74, 255, 0.03);
+        }
+
+        .day-number {
+            font-size: 14px;
+            color: var(--proton-dark);
+        }
+
+        .day-events-indicator {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--proton-blue);
+            border-radius: 50%;
+        }
+
+        /* Sidebar / Event Manager */
+        .sidebar-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sidebar-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .form-group input, .form-group textarea {
+            padding: 10px;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--proton-blue);
+        }
+
+        .events-list {
+            max-height: 250px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .event-item {
+            background: #f89fa;
+            background: var(--proton-light);
+            padding: 10px 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--proton-blue);
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .event-info h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: var(--proton-dark);
+        }
+
+        .event-info p {
+            margin: 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        footer {
+            background-color: white;
+            padding: 25px 0;
+            margin-top: auto;
+            border-top: 1px solid var(--proton-border);
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="topMenu">
+        <div class="wrap">
+            <a href="index.html" class="logo">nox<span>!</span>314</a>
+            <div class="nav-links">
+                <a href="index.html">Start</a>
+                <a href="date.html" class="active">X!Planer</a>
+                <a href="iss.html">Iss</a>
+                <a href="info.html">Info</a>
+                <a href="login.html">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="wrap">
+            
+            <div class="calendar-header">
+                <h1 id="monthYearDisplay">Monat Jahr</h1>
+                <div class="calendar-nav-btns">
+                    <button class="btn btn-secondary" onclick="changeMonth(-1)">← Zurück</button>
+                    <button class="btn btn-secondary" onclick="goToToday()">Heute</button>
+                    <button class="btn btn-secondary" onclick="changeMonth(1)">Weiter →</button>
+                </div>
+                <div class="action-btns">
+                    <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import (.txt/.ics)</button>
+                    <input type="file" id="fileInput" style="display:none" accept=".txt,.ics" onchange="importEvents(event)">
+                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export events.txt</button>
+                </div>
+            </div>
+
+            <div class="calendar-layout">
+                <!-- Kalender Grid -->
+                <div class="calendar-card">
+                    <div class="weekdays">
+                        <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+                    </div>
+                    <div class="days-grid" id="daysGrid">
+                        <!-- Wird per JS generiert -->
+                    </div>
+                </div>
+
+                <!-- Sidebar / Event Ersteller & Liste -->
+                <div class="sidebar-card">
+                    <h3>Termin hinzufügen</h3>
+                    <form id="eventForm" onsubmit="addEvent(event)">
+                        <div class="form-group">
+                            <label for="eventDate">Datum</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventTitle">Titel</label>
+                            <input type="text" id="eventTitle" placeholder="z.B. Projekt-Meeting" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDesc">Beschreibung</label>
+                            <textarea id="eventDesc" rows="2" placeholder="Details..."></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern</button>
+                    </form>
+
+                    <hr style="border:0; border-top:1px solid var(--proton-border);">
+
+                    <h3>Anstehende Events</h3>
+                    <div class="events-list" id="eventsList">
+                        <!-- Dynamische Liste -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">&copy; 2026 nox!314 &bull; Advanced X!Planer</div>
+    </footer>
+
+    <script>
+        let currentDate = new Date();
+        // Lokaler Speicher simuliert die events.txt Struktur
+        let events = JSON.parse(localStorage.getItem('nox_events')) || [
+            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers' },
+            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check' }
+        ];
+
+        function initCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+            document.getElementById('monthYearDisplay').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; // Montag als Start
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+
+            let gridHTML = '';
+
+            // Vorheriger Monat Fülltage
+            for (let i = firstDayIndex; i > 0; i--) {
+                const dayNum = prevTotalDays - i + 1;
+                gridHTML += `<div class="day-cell other-month"><div class="day-number">${dayNum}</div></div>`;
+            }
+
+            // Aktueller Monat Tage
+            const todayStr = new Date().toISOString().split('T')[0];
+            for (let i = 1; i <= totalDays; i++) {
+                const formattedMonth = String(month + 1).padStart(2, '0');
+                const formattedDay = String(i).padStart(2, '0');
+                const dateStr = `${year}-${formattedMonth}-${formattedDay}`;
+                
+                const isToday = dateStr === todayStr ? 'today' : '';
+                const dayEvents = events.filter(e => e.date === dateStr);
+                
+                let dotsHTML = '<div class="day-events-indicator">';
+                dayEvents.forEach(() => {
+                    dotsHTML += '<div class="event-dot"></div>';
+                });
+                dotsHTML += '</div>';
+
+                gridHTML += `
+                    <div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')">
+                        <div class="day-number">${i}</div>
+                        ${dotsHTML}
+                    </div>
+                `;
+            }
+
+            document.getElementById('daysGrid').innerHTML = gridHTML;
+            renderEventsList();
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            initCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            initCalendar();
+        }
+
+        function selectDate(dateStr) {
+            document.getElementById('eventDate').value = dateStr;
+            document.getElementById('eventTitle').focus();
+        }
+
+        function addEvent(e) {
+            e.preventDefault();
+            const date = document.getElementById('eventDate').value;
+            const title = document.getElementById('eventTitle').value;
+            const desc = document.getElementById('eventDesc').value;
+
+            events.push({ date, title, desc });
+            saveAndRefresh();
+            document.getElementById('eventForm').reset();
+        }
+
+        function deleteEvent(index) {
+            events.splice(index, 1);
+            saveAndRefresh();
+        }
+
+        function saveAndRefresh() {
+            localStorage.setItem('nox_events', JSON.stringify(events));
+            initCalendar();
+        }
+
+        function renderEventsList() {
+            const listContainer = document.getElementById('eventsList');
+            if (events.length === 0) {
+                listContainer.innerHTML = '<p style="color:#888; font-size:13px;">Keine Events vorhanden.</p>';
+                return;
+            }
+
+            // Sortiere nach Datum
+            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let html = '';
+            sorted.forEach((ev, idx) => {
+                html += `
+                    <div class="event-item">
+                        <div class="event-info">
+                            <h4>${ev.title} (${ev.date})</h4>
+                            <p>${ev.desc || 'Keine Beschreibung'}</p>
+                        </div>
+                        <button class="delete-btn" onclick="deleteEvent(${idx})">&times;</button>
+                    </div>
+                `;
+            });
+            listContainer.innerHTML = html;
+        }
+
+        // Exportiert Events als strukturierte events.txt Datei
+        function exportEvents() {
+            let fileContent = "# nox!314 events.txt format\n";
+            events.forEach(e => {
+                fileContent += `${e.date} | ${e.title} | ${e.desc}\n`;
+            });
+
+            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'events.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Importiert Events aus einer Textdatei (.txt oder .ics)
+        function importEvents(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                
+                let importedCount = 0;
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line || line.startsWith('#')) return;
+
+                    // Support für unser Pipe-Format: YYYY-MM-DD | Titel | Beschreibung
+                    const parts = line.split('|');
+                    if (parts.length >= 2) {
+                        const date = parts[0].trim();
+                        const title = parts[1].trim();
+                        const desc = parts[2] ? parts[2].trim() : '';
+                        
+                        // Validierung ob Datum grob stimmt
+                        if (!events.some(ev => ev.date === date && ev.title === title)) {
+                            events.append ? null : events.push({ date, title, desc });
+                            importedCount++;
+                        }
+                    }
+                });
+
+                saveAndRefresh();
+                alert(`${importedCount} Events erfolgreich importiert!`);
+            };
+            reader.readAsText(file);
+        }
+
+        // Init beim Laden
+        window.onload = initCalendar;
+    </script>
+</body>
+</html>

@@ -76,6 +76,7 @@ body {
   height: 125px;
   left: 50%;
   top: 55px;
+  transform-origin: bottom center;
   transform: translateX(-50%);
   background:
     linear-gradient(
@@ -90,7 +91,7 @@ body {
     inset 0 2px 4px rgba(255,255,255,0.12),
     inset 0 -8px 20px rgba(0,0,0,0.35),
     0 20px 40px rgba(0,0,0,0.20);
-  animation: robotFloat 4s ease-in-out infinite;
+  animation: robotTilt 4s ease-in-out infinite;
 }
 
 .robot-logo {
@@ -158,6 +159,22 @@ body {
     0 0 8px var(--pink),
     0 0 20px rgba(255,51,102,0.7);
   animation: antennaPulse 1.4s ease-in-out infinite alternate;
+}
+
+/* FRAGEZEICHEN */
+.question-mark {
+  position: absolute;
+  top: 25px;
+  right: 15px;
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--blue-light);
+  text-shadow: 0 0 10px rgba(98,74,255,0.8);
+  opacity: 0;
+  transform: scale(0.5) translateY(10px);
+  animation: popQuestion 4s ease-in-out infinite;
+  z-index: 20;
 }
 
 .robot-visor {
@@ -266,11 +283,15 @@ p {
   font-size: 18px;
 }
 
-@keyframes robotFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-  25% { transform: translateX(-50%) translateY(-5px) rotate(-5deg); }
-  50% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-  75% { transform: translateX(-50%) translateY(-4px) rotate(5deg); }
+/* ANIMATIONEN */
+@keyframes robotTilt {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  35%, 65% { transform: translateX(-50%) rotate(12deg); }
+}
+
+@keyframes popQuestion {
+  0%, 30%, 75%, 100% { opacity: 0; transform: scale(0.5) translateY(10px); }
+  40%, 60% { opacity: 1; transform: scale(1.1) translateY(0); }
 }
 
 @keyframes antennaPulse {
@@ -305,6 +326,7 @@ p {
       <div class="robot-logo">nox!314</div>
       <div class="side-module left"></div>
       <div class="side-module right"></div>
+      <div class="question-mark">?</div>
       <div class="robot-visor">
         <div class="robot-eye"></div>
         <div class="robot-eye"></div>
@@ -331,11 +353,8 @@ p {
 </div>
 
 <script>
-  // Holt die URL-Parameter (z. B. ?redirect=ziel.html)
   const urlParams = new URLSearchParams(window.location.search);
-  
-  // Sucht nach ?redirect=... oder ?to=... (Wenn nix ist, dann ist es "nox314.github.io/Home")
-  const targetUrl = urlParams.get('redirect') || urlParams.get('to') || 'https://nox314.github.io/Home'
+  const targetUrl = urlParams.get('redirect') || urlParams.get('to') || 'https://nox314.github.io/Home';
 
   document.getElementById('redirectBtn').addEventListener('click', function() {
     window.location.href = targetUrl;

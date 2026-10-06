@@ -1,0 +1,58 @@
+/* Register page additional styles */
+
+/* Password strength indicator */
+.password-strength {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  height: 4px;
+}
+
+.password-strength span {
+  flex: 1;
+  height: 100%;
+  background: #e0e4eb;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.password-strength.weak span:nth-child(1) {
+  background: #ef4444;
+}
+
+.password-strength.fair span:nth-child(1),
+.password-strength.fair span:nth-child(2) {
+  background: #f59e0b;
+}
+
+.password-strength.good span:nth-child(1),
+.password-strength.good span:nth-child(2),
+.password-strength.good span:nth-child(3) {
+  background: #10b981;
+}
+
+.password-strength.strong span {
+  background: #624aff;
+}
+
+/* Terms and conditions link styling */
+.register-form a {
+  color: #624aff;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.register-form a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .checkbox-group {
+    font-size: 13px;
+  }
+}

@@ -733,7 +733,6 @@
                             <div class="mouth-line"></div>
                         </div>
                     </div>
-                    <div class="robot-tag">SYSTEM READY</div>
                 </div>
             </div>
         </div>
@@ -768,13 +767,6 @@
                 hamburger.setAttribute('aria-expanded', 'false');
                 navLinks.classList.remove('active');
             });
-        });
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            alert(`Anmeldung erfolgreich! E-Mail: ${email}\n\nHinweis: Dies ist ein Demo-Formular.`);
-            loginForm.reset();
         });
     </script>
 

@@ -51,6 +51,7 @@
             justify-content: space-between;
             align-items: center;
             height: 70px;
+            flex-wrap: nowrap; /* Verhindert das Quetschen im Header */
         }
 
         .logo {
@@ -132,7 +133,7 @@
             border: none;
             cursor: pointer;
             padding: 8px;
-            margin: -8px 0;
+            z-index: 101;
         }
 
         .hamburger span {
@@ -261,20 +262,6 @@
             text-decoration: underline;
         }
 
-        .premium-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1c1c1c;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         .plus-section {
             background: linear-gradient(135deg, #624aff 0%, #4f37e0 100%);
             border-radius: var(--radius);
@@ -285,42 +272,6 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(98, 74, 255, 0.3);
-        }
-
-        .plus-section::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: pulse 10s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .plus-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .plus-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .plus-subtitle {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .plus-features {
@@ -406,21 +357,15 @@
 
         @media (max-width: 768px) {
             .hero-title { font-size: 36px; }
-            .plus-title { font-size: 28px; }
             .plus-features { flex-direction: column; gap: 15px; }
             
             .hamburger {
                 display: flex;
             }
 
-            #topMenu .wrap {
-                height: auto;
-                flex-wrap: wrap;
-            }
-
             .nav-links {
                 display: none;
-                position: absolute;
+                position: fixed; /* Geändert zu fixed, damit es sauber über dem Content sitzt */
                 top: 70px;
                 left: 0;
                 right: 0;
@@ -431,6 +376,8 @@
                 padding: 20px;
                 width: 100%;
                 box-sizing: border-box;
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
                 animation: slideDown 0.3s ease-out;
             }
 
@@ -450,14 +397,15 @@
             }
 
             .nav-links a {
-                padding: 12px 0;
-                border-radius: 0;
-                transition: all 0.2s;
+                padding: 12px 15px;
+                border-radius: 6px;
+                width: 100%;
+                box-sizing: border-box;
             }
 
             .nav-links a:hover, .nav-links a.active {
                 background-color: rgba(98, 74, 255, 0.1);
-                padding-left: 12px;
+                padding-left: 15px;
             }
 
             .btn-register, .btn-profile {
@@ -466,6 +414,7 @@
                 box-sizing: border-box;
                 padding: 12px 20px !important;
                 justify-content: center;
+                margin-top: 5px;
             }
         }
     </style>
@@ -560,8 +509,8 @@
 
             <div class="plus-section">
                 <div class="plus-content">
-                    <h2 class="plus-title">Upgrade auf X!Apps+</h2>
-                    <p class="plus-subtitle">Erhalte Zugriff auf alle Premium-Funktionen, unbegrenzte Nutzung und exklusive Tools.</p>
+                    <h2 class="plus-title" style="font-size: 36px; font-weight: 700; margin-bottom: 15px;">Upgrade auf X!Apps+</h2>
+                    <p class="plus-subtitle" style="font-size: 18px; opacity: 0.9; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Erhalte Zugriff auf alle Premium-Funktionen, unbegrenzte Nutzung und exklusive Tools.</p>
                     
                     <div class="plus-features">
                         <div class="feature-item"><span class="check-icon">✓</span> Alle X!Apps inklusive</div>
@@ -595,7 +544,6 @@
         const registerLink = document.getElementById('registerLink');
         const profileLink = document.getElementById('profileLink');
 
-        // Check URL for loggedin parameter
         function checkLoginStatus() {
             const params = new URLSearchParams(window.location.search);
             const loggedInId = params.get('loggedin');
@@ -607,10 +555,8 @@
             }
         }
 
-        // Check login status on page load
         checkLoginStatus();
 
-        // Hamburger menu toggle
         hamburger.addEventListener('click', () => {
             const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
             hamburger.setAttribute('aria-expanded', String(!isExpanded));
@@ -618,7 +564,6 @@
             navLinks.classList.toggle('active');
         });
 
-        // Close menu when a link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');

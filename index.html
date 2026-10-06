@@ -60,6 +60,7 @@
             color: var(--proton-dark);
             text-decoration: none;
             letter-spacing: -0.5px;
+            flex-shrink: 0;
         }
         .logo span { color: var(--proton-blue); }
 
@@ -90,12 +91,37 @@
             border-radius: 8px !important;
             font-weight: 600 !important;
             box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+            transition: all 0.3s !important;
         }
 
         .btn-register:hover {
             background-color: var(--proton-blue-hover) !important;
-            transform: translateY(-1px);
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3) !important;
+        }
+
+        .btn-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .btn-profile:hover {
+            transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
+        }
+
+        .btn-profile::before {
+            content: '👤';
+            font-size: 16px;
         }
 
         .hamburger {
@@ -105,7 +131,8 @@
             background: none;
             border: none;
             cursor: pointer;
-            padding: 0;
+            padding: 8px;
+            margin: -8px 0;
         }
 
         .hamburger span {
@@ -113,19 +140,21 @@
             height: 3px;
             background-color: var(--proton-dark);
             border-radius: 2px;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: center;
         }
 
         .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
+            transform: rotate(45deg) translateY(11px);
         }
 
         .hamburger.active span:nth-child(2) {
             opacity: 0;
+            transform: translateX(-10px);
         }
 
         .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(8px, -8px);
+            transform: rotate(-45deg) translateY(-11px);
         }
 
         .main-container {
@@ -398,10 +427,22 @@
                 flex-direction: column;
                 gap: 0;
                 background-color: white;
-                box-shadow: var(--shadow-sm);
+                box-shadow: var(--shadow-md);
                 padding: 20px;
                 width: 100%;
                 box-sizing: border-box;
+                animation: slideDown 0.3s ease-out;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .nav-links.active {
@@ -411,6 +452,7 @@
             .nav-links a {
                 padding: 12px 0;
                 border-radius: 0;
+                transition: all 0.2s;
             }
 
             .nav-links a:hover, .nav-links a.active {
@@ -418,11 +460,12 @@
                 padding-left: 12px;
             }
 
-            .btn-register {
+            .btn-register, .btn-profile {
                 width: 100%;
-                text-align: center;
+                text-align: center !important;
                 box-sizing: border-box;
                 padding: 12px 20px !important;
+                justify-content: center;
             }
         }
     </style>
@@ -442,8 +485,9 @@
                 <a href="date.html">Weltuhr</a>
                 <a href="iss.html">Iss</a>
                 <a href="info.html">Info</a>
-                <a href="login.html">Login</a>
-                <a href="register.html" class="btn-register">Registrieren</a>
+                <a href="login.html" id="loginLink">Login</a>
+                <a href="register.html" class="btn-register" id="registerLink">Registrieren</a>
+                <a href="profile.html" class="btn-profile" id="profileLink" style="display: none;">Profil</a>
             </div>
         </div>
     </nav>
@@ -547,7 +591,26 @@
     <script>
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const profileLink = document.getElementById('profileLink');
 
+        // Check URL for loggedin parameter
+        function checkLoginStatus() {
+            const params = new URLSearchParams(window.location.search);
+            const loggedInId = params.get('loggedin');
+            
+            if (loggedInId === '1312343') {
+                loginLink.style.display = 'none';
+                registerLink.style.display = 'none';
+                profileLink.style.display = 'flex';
+            }
+        }
+
+        // Check login status on page load
+        checkLoginStatus();
+
+        // Hamburger menu toggle
         hamburger.addEventListener('click', () => {
             const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
             hamburger.setAttribute('aria-expanded', String(!isExpanded));
@@ -555,6 +618,7 @@
             navLinks.classList.toggle('active');
         });
 
+        // Close menu when a link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');

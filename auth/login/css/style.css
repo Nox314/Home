@@ -1,11 +1,4 @@
-/* login-page-01 - Colorlib
- * Every style this snippet uses, and nothing else. No framework, no build step.
- */
-
-/* Keeps a host page's framework base styles (Bootstrap's reboot) off this
-   snippet: every element starts from the browser default, then this sheet
-   styles it. On its own page it changes nothing. */
-:where(html) :is(html,body,div,span,p,a,h1,h2,h3,h4,h5,h6,label,input,select,option,optgroup,textarea,button,form,fieldset,legend,ul,ol,li,dl,dt,dd,figure,figcaption,section,article,header,footer,nav,main,aside,strong,b,em,i,small,sub,sup,blockquote,pre,code,picture,progress,output,summary,details,address,abbr,mark), :is(html, body) {
+where(html) :is(html,body,div,span,p,a,h1,h2,h3,h4,h5,h6,label,input,select,option,optgroup,textarea,button,form,fieldset,legend,ul,ol,li,dl,dt,dd,figure,figcaption,section,article,header,footer,nav,main,aside,strong,b,em,i,small,sub,sup,blockquote,pre,code,picture,progress,output,summary,details,address,abbr,mark), :is(html, body) {
   all: revert;
 }
 :where(html) input::-webkit-datetime-edit,
@@ -16,10 +9,7 @@
 :where(html) input::-webkit-datetime-edit-year-field {
   all: revert;
 }
-/* Chrome maps the hidden attribute to display:none below author styles, so the
-   revert above would show every hidden element. Put it back at the weight of
-   one class: the snippet's own class rules can still override it, as they
-   could the browser default. */
+
 :where(html) [hidden]:where(:not([hidden="until-found" i])) {
   display: none;
 }
@@ -677,7 +667,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #fde68a;
+  background: #624aff;
   color: #422006;
   font-size: 14px;
   font-weight: 800;

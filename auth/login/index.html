@@ -1,547 +1,373 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X!Welcome - nox!314</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --proton-blue: #624aff;
-            --proton-blue-hover: #4f37e0;
-            --proton-dark: #1c1c1c;
-            --proton-light: #f5f7fa;
-            --proton-border: #e0e4eb;
-            --proton-text: #333333;
-            --proton-success-bg: #e6fffa;
-            --proton-success-text: #00b894;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --radius: 12px;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--proton-light);
-            color: var(--proton-text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #topMenu {
-            background-color: white;
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .wrap {
-            margin: 0 auto;
-            padding: 0 20px;
-            max-width: 1200px;
-        }
-
-        #topMenu .wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-            flex-wrap: nowrap;
-        }
-
-        .logo {
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 24px;
-            color: var(--proton-dark);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            flex-shrink: 0;
-        }
-        .logo span { color: var(--proton-blue); }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--proton-text);
-            font-weight: 500;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            background-color: rgba(98, 74, 255, 0.1);
-            color: var(--proton-blue);
-        }
-
-        .btn-register {
-            background-color: var(--proton-blue);
-            color: white !important;
-            padding: 10px 20px !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
-            transition: all 0.3s !important;
-        }
-
-        .btn-register:hover {
-            background-color: var(--proton-blue-hover) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3) !important;
-        }
-
-        .btn-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
-            color: white !important;
-            padding: 8px 16px !important;
-            border-radius: 20px !important;
-            font-weight: 600 !important;
-            text-decoration: none !important;
-            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
-            transition: all 0.3s;
-        }
-
-        .btn-profile:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
-        }
-
-        .btn-profile::before {
-            content: '👤';
-            font-size: 16px;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            z-index: 101;
-        }
-
-        .hamburger span {
-            width: 24px;
-            height: 3px;
-            background-color: var(--proton-dark);
-            border-radius: 2px;
-            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-            transform-origin: center;
-        }
-
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(11px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-11px); }
-
-        .main-container {
-            flex: 1;
-            padding: 60px 0;
-        }
-
-        .hero-section {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 60px;
-        }
-
-        .hero-title {
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--proton-dark);
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .hero-title span { color: var(--proton-blue); }
-
-        .hero-subtitle {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .section-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--proton-dark);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 80px;
-        }
-
-        .app-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-            text-align: left;
-            border: 1px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-            border-color: rgba(98, 74, 255, 0.2);
-        }
-
-        .app-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .app-card h3 {
-            font-size: 20px;
-            color: var(--proton-dark);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .app-card p {
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .app-link {
-            display: inline-block;
-            color: var(--proton-blue);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .app-link:hover { text-decoration: underline; }
-
-        .plus-section {
-            background: linear-gradient(135deg, #624aff 0%, #4f37e0 100%);
-            border-radius: var(--radius);
-            padding: 50px;
-            color: white;
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(98, 74, 255, 0.3);
-        }
-
-        .plus-features {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-
-        .check-icon {
-            color: #00b894;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .btn-plus {
-            background-color: white;
-            color: var(--proton-blue);
-            padding: 14px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 16px;
-            display: inline-block;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn-plus:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .github-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #24292e;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-            margin-top: 20px;
-        }
-
-        .github-btn:hover {
-            background-color: #1b1f23;
-            transform: translateY(-2px);
-        }
-
-        footer {
-            background-color: white;
-            padding: 30px 0;
-            margin-top: auto;
-            border-top: 1px solid var(--proton-border);
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .footer-links {
-            margin-top: 15px;
-        }
-
-        .footer-links a {
-            color: var(--proton-blue);
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: 500;
-        }
-
-        .footer-links a:hover { text-decoration: underline; }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 36px; }
-            .plus-features { flex-direction: column; gap: 15px; }
-
-            .hamburger { display: flex; }
-
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                flex-direction: column;
-                gap: 0;
-                background-color: white;
-                box-shadow: var(--shadow-md);
-                padding: 20px;
-                width: 100%;
-                box-sizing: border-box;
-                max-height: calc(100vh - 70px);
-                overflow-y: auto;
-                animation: slideDown 0.3s ease-out;
-            }
-
-            @keyframes slideDown {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .nav-links.active { display: flex; }
-
-            .nav-links a {
-                padding: 12px 15px;
-                border-radius: 6px;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .nav-links a:hover, .nav-links a.active {
-                background-color: rgba(98, 74, 255, 0.1);
-                padding-left: 15px;
-            }
-
-            .btn-register, .btn-profile {
-                width: 100%;
-                text-align: center !important;
-                box-sizing: border-box;
-                padding: 12px 20px !important;
-                justify-content: center;
-                margin-top: 5px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X!Welcome - nox!314</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #624aff;
+      --blue-dark: #4f37e0;
+      --dark: #1c1c1c;
+      --light: #f5f7fa;
+      --line: #e0e4eb;
+      --text: #333333;
+      --green: #00b894;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { text-decoration: none; }
+    #topMenu {
+      background: white;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    #topMenu .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .logo span { color: var(--blue); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .nav-links a {
+      color: var(--text);
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: 0.2s ease;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--blue);
+      background: rgba(98, 74, 255, 0.08);
+    }
+    .btn-register {
+      background: var(--blue);
+      color: white !important;
+      border-radius: 8px;
+      padding: 10px 20px !important;
+      box-shadow: 0 4px 12px rgba(98,74,255,0.2);
+    }
+    .btn-register:hover {
+      background: var(--blue-dark) !important;
+      transform: translateY(-1px);
+    }
+    .btn-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--blue), #8a7bff);
+      color: white !important;
+      border-radius: 999px;
+      padding: 9px 16px !important;
+      font-weight: 600;
+    }
+    .main-container {
+      flex: 1;
+      padding: 60px 0;
+    }
+    .hero {
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto 60px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      margin: 0 0 18px;
+      line-height: 1.1;
+      color: var(--dark);
+    }
+    .hero h1 span {
+      color: var(--blue);
+    }
+    .hero p {
+      font-size: 1.25rem;
+      color: #666;
+      margin: 0 auto 30px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .primary-btn, .secondary-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+    .primary-btn {
+      background: var(--blue);
+      color: white;
+      box-shadow: 0 8px 20px rgba(98,74,255,0.2);
+    }
+    .secondary-btn {
+      background: white;
+      color: var(--dark);
+      border: 1px solid var(--line);
+    }
+    .primary-btn:hover, .secondary-btn:hover {
+      transform: translateY(-1px);
+    }
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 26px;
+      margin-top: 30px;
+    }
+    .app-card {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(98,74,255,0.08);
+    }
+    .app-card h3 {
+      margin: 12px 0 8px;
+      font-size: 1.2rem;
+    }
+    .app-card p {
+      line-height: 1.5;
+      color: #666;
+      margin: 0 0 18px;
+    }
+    .app-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--blue), #8a7bff);
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .app-link {
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .feature-banner {
+      margin-top: 80px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+      color: white;
+      border-radius: 18px;
+      padding: 38px 24px;
+      text-align: center;
+      box-shadow: 0 14px 28px rgba(98,74,255,0.18);
+    }
+    .feature-banner h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+    .feature-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: 20px 0 26px;
+      font-weight: 600;
+    }
+    footer {
+      background: white;
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      text-align: center;
+      color: #666;
+    }
+    .footer-links {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--blue);
+      font-weight: 500;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 24px;
+        height: 3px;
+        background: var(--dark);
+        border-radius: 2px;
+      }
+      .nav-links.mobile-open {
+        display: flex;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: white;
+        padding: 16px 20px 24px;
+        box-shadow: var(--shadow-md);
+        border-top: 1px solid var(--line);
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav id="topMenu">
-        <div class="wrap">
-            <a href="/Home/index.html" class="logo">nox<span>!</span>314</a>
-            <button class="hamburger" id="hamburger" aria-label="Menü öffnen" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="/Home/index.html" class="active">Start</a>
-                <a href="/Home/date.html">Weltuhr</a>
-                <a href="/Home/iss.html">Iss</a>
-                <a href="/Home/info.html">Info</a>
-                <a href="/Home/auth/login/index.html" id="loginLink">Login</a>
-                <a href="/Home/auth/register/index.html" class="btn-register" id="registerLink">Registrieren</a>
-                <a href="/Home/profile.html" class="btn-profile" id="profileLink" style="display: none;">Profil</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="main-container">
-        <div class="wrap">
-            <div class="hero-section">
-                <h1 class="hero-title">Willkommen bei <span>nox!314</span></h1>
-                <p class="hero-subtitle">Eine experimentelle Plattform, die ständig weiterentwickelt wird. Entdecke unsere Suite von Tools für den Alltag.</p>
-
-                <div style="margin-top: 30px;">
-                    <a href="https://github.com/nox314" class="github-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.44-.015-2.235 0-.53-.195-1.005-.42-1.2.81-.09 1.665-.3 2.355-1.02.75-.765 1.2-1.95 1.2-3.405 0-1.65-.585-2.925-1.755-3.765.375-.975.3-2.055-.18-3.255-.825.09-1.47.45-2.025 1.08-.645-.165-1.35-.255-2.085-.255s-1.44.09-2.085.255c-.555-.63-1.2-.99-2.025-1.08-.48 1.2-.555 2.28-.18 3.255-1.17.84-1.755 2.115-1.755 3.765 0 1.455.45 2.64 1.2 3.405.69.72 1.545.93 2.355 1.02-.225.195-.42.67-.42 1.2 0 .795.015 1.71.015 2.235 0 .315.225.675.825.57A12.06 12.06 0 0 0 24 12c0-6.63-5.37-12-12-12z"></path></svg>
-                        nox314 auf GitHub
-                    </a>
-                </div>
-            </div>
-
-            <h2 class="section-title">Unsere X!Apps</h2>
-            <div class="apps-grid">
-                <div class="app-card">
-                    <div class="app-icon">⏰</div>
-                    <h3>X!Time</h3>
-                    <p>Die ultimative Weltuhr mit Echtzeit-Updates, Suchfunktion und Statusanzeige für Tag und Nacht.</p>
-                    <a href="/Home/date.html" class="app-link">Jetzt öffnen →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">🚀</div>
-                    <h3>X!Iss</h3>
-                    <p>Alle frei verfügbaren Informationen zur Iss, der International Space Station.</p>
-                    <a href="/Home/iss.html" class="app-link">Jetzt öffnen →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">🔐</div>
-                    <h3>X!Secure</h3>
-                    <p>Verschlüsseltes Notizbuch und Passwort-Manager für deine sensibelsten Daten.</p>
-                    <a href="#" class="app-link">Demnächst verfügbar →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">📅</div>
-                    <h3>X!Planer</h3>
-                    <p>Intelligenter Kalender für all deine Termine.</p>
-                    <a href="#" class="app-link">Beta testen →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">💬</div>
-                    <h3>X!Chat</h3>
-                    <p>Sichere Messaging-Plattform mit End-to-End-Verschlüsselung.</p>
-                    <a href="#" class="app-link">Registrieren →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">📁</div>
-                    <h3>X!Drive</h3>
-                    <p>Cloud-Speicher für deine Dateien mit automatischer Synchronisation über alle Geräte.</p>
-                    <a href="#" class="app-link">Mehr erfahren →</a>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">🎨</div>
-                    <h3>X!Studio</h3>
-                    <p>Kreatives Werkzeug für Design und Medienbearbeitung direkt im Browser.</p>
-                    <a href="#" class="app-link">In Arbeit →</a>
-                </div>
-            </div>
-
-            <div class="plus-section">
-                <div class="plus-content">
-                    <h2 class="plus-title" style="font-size: 36px; font-weight: 700; margin-bottom: 15px;">Upgrade auf X!Apps+</h2>
-                    <p class="plus-subtitle" style="font-size: 18px; opacity: 0.9; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Erhalte Zugriff auf alle Premium-Funktionen, Prioritäts-Support und coole Erweiterungen.</p>
-                    <div class="plus-features">
-                        <div class="feature-item"><span class="check-icon">✓</span> Alle X!Apps inklusive</div>
-                        <div class="feature-item"><span class="check-icon">✓</span> Keine Werbung</div>
-                        <div class="feature-item"><span class="check-icon">✓</span> Prioritäts-Support</div>
-                        <div class="feature-item"><span class="check-icon">✓</span> Erweiterte Funktionen</div>
-                    </div>
-                    <a href="/Home/auth/register/index.html" class="btn-plus">Jetzt kostenlos starten</a>
-                </div>
-            </div>
-        </div>
+  <nav id="topMenu">
+    <div class="wrap">
+      <a href="/Home/index.html" class="logo">nox<span>!</span>314</a>
+      <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
+        <a href="/Home/index.html" class="active">Start</a>
+        <a href="/Home/date.html">Weltuhr</a>
+        <a href="/Home/iss.html">Iss</a>
+        <a href="/Home/info.html">Info</a>
+        <a href="/Home/auth/login/index.html" id="loginLink">Login</a>
+        <a href="/Home/auth/register/index.html" id="registerLink" class="btn-register">Registrieren</a>
+        <a href="/Home/profile.html" id="profileLink" class="btn-profile" style="display:none;">Profil</a>
+      </div>
     </div>
+  </nav>
 
-    <footer>
-        <div class="wrap">
-            <div>&copy; 2026 nox!314</div>
-            <div class="footer-links">
-                <a href="/Home/sourcecodes.html">Quellcode</a>
-                <a href="/Home/news.html">News</a>
-                <a href="/Home/sitemap.html">Sitemap</a>
-            </div>
+  <main class="main-container">
+    <div class="wrap">
+      <section class="hero">
+        <h1>Willkommen bei <span>nox!314</span></h1>
+        <p>Eine experimentelle Plattform mit Werkzeugen, Apps und Services. Melde dich an, um mit deinem echten Konto auf alle Funktionen zuzugreifen.</p>
+        <div class="hero-actions">
+          <a href="/Home/auth/register/index.html" class="primary-btn">Kostenlos registrieren</a>
+          <a href="/Home/auth/login/index.html" class="secondary-btn">Ich habe schon ein Konto</a>
         </div>
-    </footer>
+      </section>
 
-    <script src="/Home/auth/auth.js"></script>
-    <script>
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        const loginLink = document.getElementById('loginLink');
-        const registerLink = document.getElementById('registerLink');
-        const profileLink = document.getElementById('profileLink');
+      <section class="apps-grid">
+        <article class="app-card">
+          <div class="app-icon">⏰</div>
+          <h3>X!Time</h3>
+          <p>Weltuhr mit Echtzeit-Anzeige und Uhrzeit für alle Zeitzonen.</p>
+          <a href="/Home/date.html" class="app-link">Öffnen →</a>
+        </article>
 
-        function updateAuthUI() {
-            const session = window.auth ? window.auth.getSession() : null;
-            if (session && session.fullname) {
-                loginLink.style.display = 'none';
-                registerLink.style.display = 'none';
-                profileLink.style.display = 'flex';
-                profileLink.textContent = session.fullname;
-            } else {
-                loginLink.style.display = 'inline-block';
-                registerLink.style.display = 'inline-block';
-                profileLink.style.display = 'none';
-                profileLink.textContent = 'Profil';
-            }
-        }
+        <article class="app-card">
+          <div class="app-icon">🚀</div>
+          <h3>X!ISS</h3>
+          <p>Alle Infos zur Internationalen Raumstation direkt im Browser.</p>
+          <a href="/Home/iss.html" class="app-link">Öffnen →</a>
+        </article>
 
-        updateAuthUI();
+        <article class="app-card">
+          <div class="app-icon">🔐</div>
+          <h3>X!Secure</h3>
+          <p>Dein Konto und deine persönlichen Daten per echter Session-API.</p>
+          <a href="/Home/profile.html" class="app-link">Zum Profil →</a>
+        </article>
 
-        hamburger.addEventListener('click', () => {
-            const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', String(!isExpanded));
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
+        <article class="app-card">
+          <div class="app-icon">📁</div>
+          <h3>X!Drive</h3>
+          <p>Persönlicher Bereich für Dateien und Projekte – später mit echten Daten.</p>
+          <a href="#" class="app-link">Demo →</a>
+        </article>
+      </section>
 
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-                navLinks.classList.remove('active');
-            });
-        });
-    </script>
+      <section class="feature-banner">
+        <h2>Mit echtem Login und Session-API</h2>
+        <div class="feature-row">
+          <span>✓ Echte Registrierung</span>
+          <span>✓ Session Token</span>
+          <span>✓ Sichere Login-API</span>
+          <span>✓ Profilbereich</span>
+        </div>
+        <a href="/Home/auth/register/index.html" class="primary-btn" style="background:white;color:var(--blue);">Jetzt starten</a>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>© 2026 nox!314</div>
+      <div class="footer-links">
+        <a href="/Home/sourcecodes.html">Quellcode</a>
+        <a href="/Home/news.html">News</a>
+        <a href="/Home/sitemap.html">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/Home/auth/auth.js"></script>
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const loginLink = document.getElementById('loginLink');
+    const registerLink = document.getElementById('registerLink');
+    const profileLink = document.getElementById('profileLink');
+
+    async function updateAuthUI() {
+      const user = await window.auth.getCurrentUser();
+      if (user) {
+        loginLink.style.display = 'none';
+        registerLink.style.display = 'none';
+        profileLink.style.display = 'inline-flex';
+        profileLink.textContent = user.fullname || 'Profil';
+      } else {
+        loginLink.style.display = 'inline-block';
+        registerLink.style.display = 'inline-block';
+        profileLink.style.display = 'none';
+      }
+    }
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('mobile-open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('mobile-open'));
+    });
+
+    updateAuthUI();
+  </script>
 </body>
 </html>

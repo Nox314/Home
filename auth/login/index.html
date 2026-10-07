@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X!Login - nox!314</title>
+    <title>X!Welcome - nox!314</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,27 +13,18 @@
             --proton-light: #f5f7fa;
             --proton-border: #e0e4eb;
             --proton-text: #333333;
+            --proton-success-bg: #e6fffa;
+            --proton-success-text: #00b894;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
             --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
             --radius: 12px;
-            --robot-dark: #171b22;
-            --robot-mid: #2a313c;
-            --robot-light: #e7edff;
-            --robot-accent: #7c6cff;
-            --robot-pink: #ff4d7d;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #f5f7fa 0%, #eef1ff 100%);
+            background-color: var(--proton-light);
             color: var(--proton-text);
             min-height: 100vh;
             display: flex;
@@ -52,7 +43,6 @@
             margin: 0 auto;
             padding: 0 20px;
             max-width: 1200px;
-            width: 100%;
         }
 
         #topMenu .wrap {
@@ -72,10 +62,7 @@
             letter-spacing: -0.5px;
             flex-shrink: 0;
         }
-
-        .logo span {
-            color: var(--proton-blue);
-        }
+        .logo span { color: var(--proton-blue); }
 
         .nav-links {
             display: flex;
@@ -113,380 +100,232 @@
             box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3) !important;
         }
 
-        .hamburger {
-            display: none;
-        }
-
-        .main-container {
-            flex: 1;
-            padding: 60px 20px;
+        .btn-profile {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .login-shell {
-            display: grid;
-            grid-template-columns: minmax(320px, 1.1fr) minmax(240px, 0.9fr);
-            gap: 28px;
-            align-items: center;
-            width: min(980px, 100%);
-        }
-
-        .login-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 60px;
-            box-shadow: var(--shadow-md);
-            width: 100%;
-            border: 1px solid var(--proton-border);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .login-header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--proton-dark);
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: var(--proton-dark);
-            font-size: 14px;
-        }
-
-        .form-group input {
-            padding: 12px 16px;
-            border: 1px solid var(--proton-border);
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            transition: all 0.2s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--proton-blue);
-            box-shadow: 0 0 0 3px rgba(98, 74, 255, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: #999;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .form-row a {
-            color: var(--proton-blue);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .form-row a:hover {
-            color: var(--proton-blue-hover);
-            text-decoration: underline;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .login-btn {
+            gap: 10px;
             background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
             box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
+            transition: all 0.3s;
         }
 
-        .login-btn:hover {
+        .btn-profile:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(98, 74, 255, 0.3);
         }
 
-        .login-divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 10px 0;
-            color: #999;
-            font-size: 13px;
+        .btn-profile::before {
+            content: '👤';
+            font-size: 16px;
         }
 
-        .login-divider::before,
-        .login-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--proton-border);
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 4px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--proton-border);
-            background: white;
-            border-radius: 8px;
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--proton-text);
-            transition: all 0.2s;
+            padding: 8px;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 3px;
+            background-color: var(--proton-dark);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translateY(11px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translateY(-11px); }
+
+        .main-container {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-title span { color: var(--proton-blue); }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 80px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            text-align: left;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(98, 74, 255, 0.2);
+        }
+
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--proton-blue), #8a7bff);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
 
-        .social-btn:hover {
-            background-color: var(--proton-light);
-            border-color: var(--proton-blue);
-            color: var(--proton-blue);
+        .app-card h3 {
+            font-size: 20px;
+            color: var(--proton-dark);
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-        .social-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
+        .app-card p {
             color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
-        .login-footer a {
+        .app-link {
+            display: inline-block;
             color: var(--proton-blue);
             text-decoration: none;
             font-weight: 600;
+            font-size: 14px;
             transition: all 0.2s;
         }
 
-        .login-footer a:hover {
-            color: var(--proton-blue-hover);
-            text-decoration: underline;
-        }
+        .app-link:hover { text-decoration: underline; }
 
-        .robot-panel {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 420px;
-        }
-
-        .robot-scene {
+        .plus-section {
+            background: linear-gradient(135deg, #624aff 0%, #4f37e0 100%);
+            border-radius: var(--radius);
+            padding: 50px;
+            color: white;
+            text-align: center;
+            margin-bottom: 60px;
             position: relative;
-            width: 290px;
-            height: 330px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(98, 74, 255, 0.3);
+        }
+
+        .plus-features {
             display: flex;
-            align-items: center;
             justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
-        .robot-shadow {
-            position: absolute;
-            bottom: 22px;
-            left: 50%;
-            width: 190px;
-            height: 22px;
-            transform: translateX(-50%);
-            background: rgba(70, 59, 145, 0.18);
-            filter: blur(10px);
-            border-radius: 50%;
-        }
-
-        .robot-head {
-            position: relative;
-            width: 220px;
-            height: 180px;
-            border-radius: 36px;
-            background: linear-gradient(145deg, #3b4048 0%, #252a33 45%, #11151b 100%);
-            border: 2px solid #4a5364;
-            box-shadow: inset 0 2px 8px rgba(255,255,255,0.12), inset 0 -10px 20px rgba(0,0,0,0.38), 0 18px 40px rgba(42, 45, 65, 0.2);
-            animation: bob 4.8s ease-in-out infinite;
-        }
-
-        .robot-head::before,
-        .robot-head::after {
-            content: '';
-            position: absolute;
-            top: 36px;
-            width: 14px;
-            height: 54px;
-            background: linear-gradient(180deg, #8e7dff, #624aff);
-            box-shadow: 0 0 10px rgba(98, 74, 255, 0.7);
-        }
-
-        .robot-head::before {
-            left: -12px;
-            border-radius: 8px 0 0 8px;
-        }
-
-        .robot-head::after {
-            right: -12px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .antenna {
-            position: absolute;
-            left: 50%;
-            top: -38px;
-            width: 4px;
-            height: 34px;
-            transform: translateX(-50%);
-            background: #646b7a;
-            border-radius: 999px;
-        }
-
-        .antenna-light {
-            position: absolute;
-            left: 50%;
-            top: -52px;
-            width: 16px;
-            height: 16px;
-            transform: translateX(-50%);
-            border-radius: 50%;
-            background: var(--robot-pink);
-            box-shadow: 0 0 10px rgba(255, 77, 125, 0.9), 0 0 25px rgba(255, 77, 125, 0.65);
-            animation: pulse 1.5s ease-in-out infinite alternate;
-        }
-
-        .robot-logo {
-            position: absolute;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #ededff;
-            text-shadow: 0 0 6px rgba(98, 74, 255, 0.85), 0 0 12px rgba(98, 74, 255, 0.5);
-        }
-
-        .robot-visor {
-            position: absolute;
-            left: 18px;
-            right: 18px;
-            top: 46px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(180deg, #0d1118 0%, #070a10 100%);
-            border: 1px solid #3d4652;
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.4);
+        .feature-item {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            padding: 0 18px;
+            gap: 8px;
+            font-weight: 500;
         }
 
-        .robot-eye {
-            width: 18px;
-            height: 6px;
-            border-radius: 6px;
-            background: var(--proton-blue);
-            box-shadow: 0 0 7px rgba(98, 74, 255, 0.85), 0 0 16px rgba(98, 74, 255, 0.7);
-            animation: eye 3.8s ease-in-out infinite;
+        .check-icon {
+            color: #00b894;
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        .robot-mouth {
-            position: absolute;
-            left: 50%;
-            bottom: 22px;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 8px;
-            background: #0a0d12;
-            border-radius: 10px;
-            border: 1px solid #292f39;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 6px;
-            animation: smile 2.2s ease-in-out infinite alternate;
-        }
-
-        .mouth-line {
-            width: 6px;
-            height: 2px;
-            border-radius: 99px;
-            background: var(--robot-pink);
-            box-shadow: 0 0 5px rgba(255, 77, 125, 0.8);
-        }
-
-        .robot-tag {
-            position: absolute;
-            left: 50%;
-            bottom: -20px;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.9);
-            color: var(--proton-dark);
-            border: 1px solid var(--proton-border);
-            border-radius: 999px;
-            padding: 8px 16px;
-            font-size: 12px;
+        .btn-plus {
+            background-color: white;
+            color: var(--proton-blue);
+            padding: 14px 30px;
+            border-radius: 8px;
+            text-decoration: none;
             font-weight: 700;
-            letter-spacing: 0.12em;
-            box-shadow: 0 8px 20px rgba(98, 74, 255, 0.08);
+            font-size: 16px;
+            display: inline-block;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-plus:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #24292e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .github-btn:hover {
+            background-color: #1b1f23;
+            transform: translateY(-2px);
         }
 
         footer {
             background-color: white;
             padding: 30px 0;
+            margin-top: auto;
             border-top: 1px solid var(--proton-border);
             text-align: center;
             color: #666;
             font-size: 14px;
-            margin-top: auto;
         }
 
         .footer-links {
@@ -500,74 +339,13 @@
             font-weight: 500;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        @keyframes bob {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            20% { transform: translateY(-6px) rotate(-2deg); }
-            45% { transform: translateY(-10px) rotate(2deg); }
-            70% { transform: translateY(-4px) rotate(-1deg); }
-        }
-
-        @keyframes pulse {
-            from { transform: translateX(-50%) scale(0.85); opacity: 0.7; }
-            to { transform: translateX(-50%) scale(1.2); opacity: 1; }
-        }
-
-        @keyframes eye {
-            0%, 100% { transform: scaleY(1) translateX(0); }
-            20% { transform: scaleY(1.1) translateX(-2px); }
-            45% { transform: scaleY(0.9) translateX(2px); }
-            70% { transform: scaleY(1.15) translateX(-2px); }
-        }
-
-        @keyframes smile {
-            0% { transform: translateX(-50%) scaleY(1) scaleX(1); }
-            50% { transform: translateX(-50%) scaleY(1.3) scaleX(1.08); }
-            100% { transform: translateX(-50%) scaleY(0.9) scaleX(1.12); }
-        }
+        .footer-links a:hover { text-decoration: underline; }
 
         @media (max-width: 768px) {
-            #topMenu .wrap {
-                flex-direction: column;
-                height: auto;
-                padding: 15px 0;
-            }
+            .hero-title { font-size: 36px; }
+            .plus-features { flex-direction: column; gap: 15px; }
 
-            .hamburger {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 8px;
-                z-index: 101;
-            }
-
-            .hamburger span {
-                width: 24px;
-                height: 3px;
-                background-color: var(--proton-dark);
-                border-radius: 2px;
-                transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-                transform-origin: center;
-            }
-
-            .hamburger.active span:nth-child(1) {
-                transform: rotate(45deg) translateY(11px);
-            }
-
-            .hamburger.active span:nth-child(2) {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-
-            .hamburger.active span:nth-child(3) {
-                transform: rotate(-45deg) translateY(-11px);
-            }
+            .hamburger { display: flex; }
 
             .nav-links {
                 display: none;
@@ -581,25 +359,18 @@
                 box-shadow: var(--shadow-md);
                 padding: 20px;
                 width: 100%;
+                box-sizing: border-box;
                 max-height: calc(100vh - 70px);
                 overflow-y: auto;
                 animation: slideDown 0.3s ease-out;
             }
 
             @keyframes slideDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
             }
 
-            .nav-links.active {
-                display: flex;
-            }
+            .nav-links.active { display: flex; }
 
             .nav-links a {
                 padding: 12px 15px;
@@ -608,40 +379,23 @@
                 box-sizing: border-box;
             }
 
-            .btn-register {
+            .nav-links a:hover, .nav-links a.active {
+                background-color: rgba(98, 74, 255, 0.1);
+                padding-left: 15px;
+            }
+
+            .btn-register, .btn-profile {
                 width: 100%;
                 text-align: center !important;
-                box-sizing: border-box !important;
-            }
-
-            .main-container {
-                padding: 40px 20px;
-            }
-
-            .login-shell {
-                grid-template-columns: 1fr;
-            }
-
-            .login-card {
-                padding: 40px 25px;
-            }
-
-            .login-header h1 {
-                font-size: 28px;
-            }
-
-            .social-buttons {
-                flex-direction: column;
-            }
-
-            .robot-panel {
-                min-height: 260px;
+                box-sizing: border-box;
+                padding: 12px 20px !important;
+                justify-content: center;
+                margin-top: 5px;
             }
         }
     </style>
 </head>
 <body>
-
     <nav id="topMenu">
         <div class="wrap">
             <a href="/Home/index.html" class="logo">nox<span>!</span>314</a>
@@ -651,88 +405,88 @@
                 <span></span>
             </button>
             <div class="nav-links" id="navLinks">
-                <a href="/Home/index.html">Start</a>
+                <a href="/Home/index.html" class="active">Start</a>
                 <a href="/Home/date.html">Weltuhr</a>
                 <a href="/Home/iss.html">Iss</a>
                 <a href="/Home/info.html">Info</a>
-                <a href="/Home/auth/login/index.html" class="active">Login</a>
-                <a href="/Home/register.html" class="btn-register">Registrieren</a>
+                <a href="/Home/auth/login/index.html" id="loginLink">Login</a>
+                <a href="/Home/auth/register/index.html" class="btn-register" id="registerLink">Registrieren</a>
+                <a href="/Home/profile.html" class="btn-profile" id="profileLink" style="display: none;">Profil</a>
             </div>
         </div>
     </nav>
 
     <div class="main-container">
-        <div class="login-shell">
-            <div class="login-card">
-                <div class="login-header">
-                    <h1>Willkommen zurück</h1>
-                    <p>Melden Sie sich an, um auf all Ihre X!Apps zuzugreifen.</p>
+        <div class="wrap">
+            <div class="hero-section">
+                <h1 class="hero-title">Willkommen bei <span>nox!314</span></h1>
+                <p class="hero-subtitle">Eine experimentelle Plattform, die ständig weiterentwickelt wird. Entdecke unsere Suite von Tools für den Alltag.</p>
+
+                <div style="margin-top: 30px;">
+                    <a href="https://github.com/nox314" class="github-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.44-.015-2.235 0-.53-.195-1.005-.42-1.2.81-.09 1.665-.3 2.355-1.02.75-.765 1.2-1.95 1.2-3.405 0-1.65-.585-2.925-1.755-3.765.375-.975.3-2.055-.18-3.255-.825.09-1.47.45-2.025 1.08-.645-.165-1.35-.255-2.085-.255s-1.44.09-2.085.255c-.555-.63-1.2-.99-2.025-1.08-.48 1.2-.555 2.28-.18 3.255-1.17.84-1.755 2.115-1.755 3.765 0 1.455.45 2.64 1.2 3.405.69.72 1.545.93 2.355 1.02-.225.195-.42.67-.42 1.2 0 .795.015 1.71.015 2.235 0 .315.225.675.825.57A12.06 12.06 0 0 0 24 12c0-6.63-5.37-12-12-12z"></path></svg>
+                        nox314 auf GitHub
+                    </a>
                 </div>
-
-                <form class="login-form" id="loginForm">
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn" onclick="alert('Google Sign-In ist derzeit nicht verfügbar')">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                            </svg>
-                            Google
-                        </button>
-                        <button type="button" class="social-btn" onclick="alert('Apple Sign-In ist derzeit nicht verfügbar')">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.05 13.5c-.91 2.06-.39 3.81 1.02 4.84 1.01.71 2.56.26 3.38-1 .82-1.27.78-3.18 0-4.56-.32-.57-1.05-.97-1.76-.97-.6 0-1.23.26-1.64.69M12.5 5.5c1.31 0 2.37 1.06 2.37 2.37 0 1.31-1.06 2.37-2.37 2.37S10.13 9.18 10.13 7.87c0-1.31 1.06-2.37 2.37-2.37M3.5 12c0-1.32.8-2.45 1.95-2.96-.23-.7-.35-1.48-.35-2.28C5.1 5.3 6.4 4 8 4c.68 0 1.31.23 1.84.62.82-.77 1.93-1.25 3.16-1.25 2.76 0 5 2.24 5 5 0 .8-.19 1.56-.53 2.24C19.2 10.49 20 11.7 20 13c0 2.21-1.79 4-4 4-1.15 0-2.19-.49-2.93-1.28-.65.24-1.35.37-2.07.37-1.6 0-3-1.34-3-3v-.5c-1.15-.51-1.95-1.64-1.95-2.96"/>
-                            </svg>
-                            Apple
-                        </button>
-                    </div>
-
-                    <div class="login-divider">oder mit E-Mail anmelden</div>
-
-                    <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input type="email" id="email" name="email" placeholder="ihre@email.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="form-row">
-                            <label for="password">Passwort</label>
-                            <a href="#forgot">Passwort vergessen?</a>
-                        </div>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    </div>
-
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="remember" name="remember" checked>
-                        <label for="remember" style="margin: 0; cursor: pointer;">Anmeldung auf diesem Gerät speichern</label>
-                    </div>
-
-                    <button type="submit" class="login-btn">Anmelden</button>
-
-                    <div class="login-footer">
-                        Noch kein Konto? <a href="/Home/auth/register/index.html">Jetzt kostenlos registrieren</a>
-                    </div>
-                </form>
             </div>
 
-            <div class="robot-panel">
-                <div class="robot-scene">
-                    <div class="robot-shadow"></div>
-                    <div class="robot-head">
-                        <div class="antenna"></div>
-                        <div class="antenna-light"></div>
-                        <div class="robot-logo">nox!314</div>
-                        <div class="robot-visor">
-                            <div class="robot-eye"></div>
-                            <div class="robot-eye"></div>
-                        </div>
-                        <div class="robot-mouth">
-                            <div class="mouth-line"></div>
-                            <div class="mouth-line"></div>
-                            <div class="mouth-line"></div>
-                        </div>
+            <h2 class="section-title">Unsere X!Apps</h2>
+            <div class="apps-grid">
+                <div class="app-card">
+                    <div class="app-icon">⏰</div>
+                    <h3>X!Time</h3>
+                    <p>Die ultimative Weltuhr mit Echtzeit-Updates, Suchfunktion und Statusanzeige für Tag und Nacht.</p>
+                    <a href="/Home/date.html" class="app-link">Jetzt öffnen →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🚀</div>
+                    <h3>X!Iss</h3>
+                    <p>Alle frei verfügbaren Informationen zur Iss, der International Space Station.</p>
+                    <a href="/Home/iss.html" class="app-link">Jetzt öffnen →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🔐</div>
+                    <h3>X!Secure</h3>
+                    <p>Verschlüsseltes Notizbuch und Passwort-Manager für deine sensibelsten Daten.</p>
+                    <a href="#" class="app-link">Demnächst verfügbar →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">📅</div>
+                    <h3>X!Planer</h3>
+                    <p>Intelligenter Kalender für all deine Termine.</p>
+                    <a href="#" class="app-link">Beta testen →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">💬</div>
+                    <h3>X!Chat</h3>
+                    <p>Sichere Messaging-Plattform mit End-to-End-Verschlüsselung.</p>
+                    <a href="#" class="app-link">Registrieren →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">📁</div>
+                    <h3>X!Drive</h3>
+                    <p>Cloud-Speicher für deine Dateien mit automatischer Synchronisation über alle Geräte.</p>
+                    <a href="#" class="app-link">Mehr erfahren →</a>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🎨</div>
+                    <h3>X!Studio</h3>
+                    <p>Kreatives Werkzeug für Design und Medienbearbeitung direkt im Browser.</p>
+                    <a href="#" class="app-link">In Arbeit →</a>
+                </div>
+            </div>
+
+            <div class="plus-section">
+                <div class="plus-content">
+                    <h2 class="plus-title" style="font-size: 36px; font-weight: 700; margin-bottom: 15px;">Upgrade auf X!Apps+</h2>
+                    <p class="plus-subtitle" style="font-size: 18px; opacity: 0.9; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">Erhalte Zugriff auf alle Premium-Funktionen, Prioritäts-Support und coole Erweiterungen.</p>
+                    <div class="plus-features">
+                        <div class="feature-item"><span class="check-icon">✓</span> Alle X!Apps inklusive</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Keine Werbung</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Prioritäts-Support</div>
+                        <div class="feature-item"><span class="check-icon">✓</span> Erweiterte Funktionen</div>
                     </div>
+                    <a href="/Home/auth/register/index.html" class="btn-plus">Jetzt kostenlos starten</a>
                 </div>
             </div>
         </div>
@@ -749,10 +503,30 @@
         </div>
     </footer>
 
+    <script src="/Home/auth/auth.js"></script>
     <script>
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
-        const loginForm = document.getElementById('loginForm');
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+        const profileLink = document.getElementById('profileLink');
+
+        function updateAuthUI() {
+            const session = window.auth ? window.auth.getSession() : null;
+            if (session && session.fullname) {
+                loginLink.style.display = 'none';
+                registerLink.style.display = 'none';
+                profileLink.style.display = 'flex';
+                profileLink.textContent = session.fullname;
+            } else {
+                loginLink.style.display = 'inline-block';
+                registerLink.style.display = 'inline-block';
+                profileLink.style.display = 'none';
+                profileLink.textContent = 'Profil';
+            }
+        }
+
+        updateAuthUI();
 
         hamburger.addEventListener('click', () => {
             const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
@@ -769,6 +543,5 @@
             });
         });
     </script>
-
 </body>
 </html>

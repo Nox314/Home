@@ -11,46 +11,50 @@ class AuthSystem {
   }
 
   init() {
-    // Initialize users database if it doesn't exist
     if (!localStorage.getItem(this.storageKey)) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
     }
   }
 
-  // Get all registered users
   getAllUsers() {
-    return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+    try {
+      return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+    } catch (error) {
+      return [];
+    }
   }
 
-  // Save users to storage
   saveUsers(users) {
     localStorage.setItem(this.storageKey, JSON.stringify(users));
   }
 
-  // Register a new user
   register(fullname, email, password) {
+    const cleanName = (fullname || '').trim();
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = password || '';
+
+    if (!cleanName || !cleanEmail || !cleanPassword) {
+      return { success: false, message: 'Bitte fülle alle Felder aus.' };
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      return { success: false, message: 'Bitte gib eine gültige E-Mail-Adresse ein.' };
+    }
+
+    if (cleanPassword.length < 8) {
+      return { success: false, message: 'Das Passwort muss mindestens 8 Zeichen lang sein.' };
+    }
+
     const users = this.getAllUsers();
-    
-    // Check if email already exists
-    if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-      return { success: false, message: 'E-Mail bereits registriert!' };
+    if (users.some(user => user.email.toLowerCase() === cleanEmail)) {
+      return { success: false, message: 'Diese E-Mail ist bereits registriert.' };
     }
 
-    // Validate inputs
-    if (!fullname || !email || !password) {
-      return { success: false, message: 'Alle Felder sind erforderlich!' };
-    }
-
-    if (password.length < 8) {
-      return { success: false, message: 'Passwort muss mindestens 8 Zeichen lang sein!' };
-    }
-
-    // Create new user with unique ID
     const newUser = {
       id: Date.now(),
-      fullname: fullname.trim(),
-      email: email.toLowerCase().trim(),
-      password: this.hashPassword(password),
+      fullname: cleanName,
+      email: cleanEmail,
+      password: this.hashPassword(cleanPassword),
       createdAt: new Date().toISOString(),
       lastLogin: null
     };
@@ -58,27 +62,31 @@ class AuthSystem {
     users.push(newUser);
     this.saveUsers(users);
 
-    return { success: true, message: 'Registrierung erfolgreich!', user: newUser };
+    return { success: true, message: 'Registrierung erfolgreich.', user: newUser };
   }
 
-  // Login a user
   login(email, password) {
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = password || '';
+
+    if (!cleanEmail || !cleanPassword) {
+      return { success: false, message: 'E-Mail und Passwort sind erforderlich.' };
+    }
+
     const users = this.getAllUsers();
-    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const user = users.find(item => item.email.toLowerCase() === cleanEmail);
 
     if (!user) {
-      return { success: false, message: 'E-Mail nicht gefunden!' };
+      return { success: false, message: 'Dieser Benutzer existiert nicht.' };
     }
 
-    if (!this.verifyPassword(password, user.password)) {
-      return { success: false, message: 'Passwort falsch!' };
+    if (!this.verifyPassword(cleanPassword, user.password)) {
+      return { success: false, message: 'Das Passwort ist falsch.' };
     }
 
-    // Update last login
     user.lastLogin = new Date().toISOString();
     this.saveUsers(users);
 
-    // Create session
     const session = {
       userId: user.id,
       email: user.email,
@@ -88,62 +96,51 @@ class AuthSystem {
 
     localStorage.setItem(this.sessionKey, JSON.stringify(session));
 
-    return { 
-      success: true, 
-      message: 'Anmeldung erfolgreich!', 
-      user: user,
-      session: session
-    };
+    return { success: true, message: 'Anmeldung erfolgreich.', user, session };
   }
 
-  // Logout
   logout() {
     localStorage.removeItem(this.sessionKey);
-    return { success: true, message: 'Abgemeldet!' };
+    return { success: true, message: 'Erfolgreich abgemeldet.' };
   }
 
-  // Check if user is logged in
   isLoggedIn() {
-    return localStorage.getItem(this.sessionKey) !== null;
+    return !!this.getSession();
   }
 
-  // Get current user session
   getSession() {
-    const session = localStorage.getItem(this.sessionKey);
-    return session ? JSON.parse(session) : null;
+    try {
+      const raw = localStorage.getItem(this.sessionKey);
+      return raw ? JSON.parse(raw) : null;
+    } catch (error) {
+      return null;
+    }
   }
 
-  // Get current user data
   getCurrentUser() {
     const session = this.getSession();
     if (!session) return null;
-    
     const users = this.getAllUsers();
-    return users.find(u => u.id === session.userId) || null;
+    return users.find(user => user.id === session.userId) || null;
   }
 
-  // Simple password hashing (for demo - use proper hashing in production)
   hashPassword(password) {
     let hash = 0;
     for (let i = 0; i < password.length; i++) {
       const char = password.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32bit integer
+      hash = hash & hash;
     }
     return Math.abs(hash).toString(16);
   }
 
-  // Verify password
   verifyPassword(password, hash) {
     return this.hashPassword(password) === hash;
   }
 
-  // Get user by ID
   getUserById(userId) {
-    const users = this.getAllUsers();
-    return users.find(u => u.id === userId) || null;
+    return this.getAllUsers().find(user => user.id === userId) || null;
   }
 }
 
-// Initialize auth system
-const auth = new AuthSystem();
+window.auth = new AuthSystem();

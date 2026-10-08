@@ -94,6 +94,8 @@
             padding: 20px 30px;
             border-radius: var(--radius);
             box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .calendar-header h1 {
@@ -105,6 +107,7 @@
         .calendar-nav-btns, .action-btns {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -236,7 +239,7 @@
         }
 
         .sidebar-card h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 5px 0;
             font-size: 18px;
         }
 
@@ -267,15 +270,15 @@
         }
 
         .events-list {
-            max-height: 250px;
+            max-height: 280px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            padding-right: 4px;
         }
 
         .event-item {
-            background: #f89fa;
             background: var(--proton-light);
             padding: 10px 12px;
             border-radius: 8px;
@@ -296,6 +299,7 @@
             margin: 0;
             color: #666;
             font-size: 12px;
+            word-break: break-word;
         }
 
         .delete-btn {
@@ -303,7 +307,11 @@
             border: none;
             color: #ff5252;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
+            padding: 0 4px;
+        }
+        .delete-btn:hover {
+            color: #ff0000;
         }
 
         footer {
@@ -343,9 +351,9 @@
                     <button class="btn btn-secondary" onclick="changeMonth(1)">Weiter →</button>
                 </div>
                 <div class="action-btns">
-                    <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import (.txt/.ics)</button>
+                    <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import</button>
                     <input type="file" id="fileInput" style="display:none" accept=".txt,.ics" onchange="importEvents(event)">
-                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export events.txt</button>
+                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export</button>
                 </div>
             </div>
 
@@ -356,7 +364,7 @@
                         <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
                     </div>
                     <div class="days-grid" id="daysGrid">
-                        <!-- Wird per JS generiert -->
+                        <!-- Generiert via JS -->
                     </div>
                 </div>
 
@@ -379,7 +387,7 @@
                         <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern</button>
                     </form>
 
-                    <hr style="border:0; border-top:1px solid var(--proton-border);">
+                    <hr style="border:0; border-top:1px solid var(--proton-border); margin: 5px 0;">
 
                     <h3>Anstehende Events</h3>
                     <div class="events-list" id="eventsList">
@@ -397,7 +405,6 @@
 
     <script>
         let currentDate = new Date();
-        // Lokaler Speicher simuliert die events.txt Struktur
         let events = JSON.parse(localStorage.getItem('nox_events')) || [
             { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers' },
             { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check' }
@@ -477,7 +484,11 @@
         }
 
         function deleteEvent(index) {
-            events.splice(index, 1);
+            // Sortierung beachten beim Löschen aus der gefilterten/sortierten Ansicht
+            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const target = sorted[index];
+            
+            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title && ev.desc === target.desc));
             saveAndRefresh();
         }
 
@@ -493,28 +504,30 @@
                 return;
             }
 
-            // Sortiere nach Datum
             let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
             let html = '';
             sorted.forEach((ev, idx) => {
                 html += `
                     <div class="event-item">
                         <div class="event-info">
-                            <h4>${ev.title} (${ev.date})</h4>
-                            <p>${ev.desc || 'Keine Beschreibung'}</p>
+                            <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                            <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
                         </div>
-                        <button class="delete-btn" onclick="deleteEvent(${idx})">&times;</button>
+                        <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
                     </div>
                 `;
             });
             listContainer.innerHTML = html;
         }
 
-        // Exportiert Events als strukturierte events.txt Datei
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
         function exportEvents() {
             let fileContent = "# nox!314 events.txt format\n";
             events.forEach(e => {
-                fileContent += `${e.date} | ${e.title} | ${e.desc}\n`;
+                fileContent += `${e.date} | ${e.title} | ${e.desc || ''}\n`;
             });
 
             const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
@@ -526,7 +539,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Importiert Events aus einer Textdatei (.txt oder .ics)
         function importEvents(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -534,35 +546,56 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result;
-                const lines = content.split('\n');
-                
                 let importedCount = 0;
-                lines.forEach(line => {
-                    line = line.trim();
-                    if (!line || line.startsWith('#')) return;
 
-                    // Support für unser Pipe-Format: YYYY-MM-DD | Titel | Beschreibung
-                    const parts = line.split('|');
-                    if (parts.length >= 2) {
-                        const date = parts[0].trim();
-                        const title = parts[1].trim();
-                        const desc = parts[2] ? parts[2].trim() : '';
-                        
-                        // Validierung ob Datum grob stimmt
-                        if (!events.some(ev => ev.date === date && ev.title === title)) {
-                            events.append ? null : events.push({ date, title, desc });
-                            importedCount++;
+                if (file.name.endsWith('.ics')) {
+                    // Einfacher ICS Parser
+                    const eventsRaw = content.split('BEGIN:VEVENT');
+                    eventsRaw.shift();
+                    eventsRaw.forEach(evBlock => {
+                        const summaryMatch = evBlock.match(/SUMMARY:(.*)/);
+                        const descMatch = evBlock.match(/DESCRIPTION:(.*)/);
+                        const dtStartMatch = evBlock.match(/DTSTART(?:;[^:]*)?:(\d{4})(\d{2})(\d{2})/);
+
+                        if (summaryMatch && dtStartMatch) {
+                            const date = `${dtStartMatch[1]}-${dtStartMatch[2]}-${dtStartMatch[3]}`;
+                            const title = summaryMatch[1].trim();
+                            const desc = descMatch ? descMatch[1].trim() : '';
+
+                            if (!events.some(ev => ev.date === date && ev.title === title)) {
+                                events.push({ date, title, desc });
+                                importedCount++;
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    // Standard Pipe-Format (.txt)
+                    const lines = content.split('\n');
+                    lines.forEach(line => {
+                        line = line.trim();
+                        if (!line || line.startsWith('#')) return;
+
+                        const parts = line.split('|');
+                        if (parts.length >= 2) {
+                            const date = parts[0].trim();
+                            const title = parts[1].trim();
+                            const desc = parts[2] ? parts[2].trim() : '';
+                            
+                            if (!events.some(ev => ev.date === date && ev.title === title)) {
+                                events.push({ date, title, desc });
+                                importedCount++;
+                            }
+                        }
+                    });
+                }
 
                 saveAndRefresh();
-                alert(`${importedCount} Events erfolgreich importiert!`);
+                alert(`${importedCount} Event(s) erfolgreich importiert!`);
+                event.target.value = ''; // Reset file input
             };
             reader.readAsText(file);
         }
 
-        // Init beim Laden
         window.onload = initCalendar;
     </script>
 </body>

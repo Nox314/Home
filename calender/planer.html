@@ -3359,7 +3359,11 @@ document.getElementById( "search" ).focus(); } } );
 
 /* ========================================================= UPDATE CURRENT TIME ========================================================= */
 
-setInterval(() => {
+/*
+
+Die "Jetzt"-Linie wird automatisch aktualisiert,
+solange die Seite geöffnet bleibt.
+*/ setInterval(() => {
 
 if ( currentView === "day" || currentView === "week" ) {
 

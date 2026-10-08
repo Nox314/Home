@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X!Planer - nox!314</title>
+    <title>X!Planer Pro - nox!314</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,10 +13,11 @@
             --proton-light: #f5f7fa;
             --proton-border: #e0e4eb;
             --proton-text: #333333;
-            --proton-success: #00b894;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --radius: 12px;
+            --card-bg: #ffffff;
+            --cell-bg: #fafbfc;
+            --shadow-sm: 0 4px 12px rgba(98, 74, 255, 0.06);
+            --shadow-md: 0 12px 32px rgba(0,0,0,0.08);
+            --radius: 14px;
         }
 
         body {
@@ -31,11 +32,12 @@
         }
 
         #topMenu {
-            background-color: white;
+            background-color: var(--card-bg);
             box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid var(--proton-border);
         }
 
         .wrap {
@@ -71,7 +73,7 @@
             color: var(--proton-text);
             font-weight: 500;
             padding: 8px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             transition: all 0.2s;
         }
 
@@ -90,10 +92,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            background: white;
+            background: var(--card-bg);
             padding: 20px 30px;
             border-radius: var(--radius);
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -108,15 +111,16 @@
             display: flex;
             background: var(--proton-light);
             padding: 4px;
-            border-radius: 8px;
+            border-radius: 10px;
             gap: 4px;
+            border: 1px solid var(--proton-border);
         }
 
         .view-btn {
             background: transparent;
             border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -125,7 +129,7 @@
         }
 
         .view-btn.active {
-            background: white;
+            background: var(--card-bg);
             color: var(--proton-blue);
             box-shadow: var(--shadow-sm);
         }
@@ -134,6 +138,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
@@ -141,7 +146,7 @@
             color: white;
             border: none;
             padding: 10px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -150,6 +155,7 @@
             align-items: center;
             gap: 6px;
             text-decoration: none;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
         }
 
         .btn:hover {
@@ -158,19 +164,21 @@
         }
 
         .btn-secondary {
-            background-color: white;
+            background-color: var(--card-bg);
             color: var(--proton-text);
             border: 1px solid var(--proton-border);
+            box-shadow: none;
         }
 
         .btn-secondary:hover {
-            background-color: #f0f2f5;
-            color: var(--proton-dark);
+            background-color: rgba(98, 74, 255, 0.05);
+            color: var(--proton-blue);
+            border-color: var(--proton-blue);
         }
 
         .calendar-layout {
             display: grid;
-            grid-template-columns: 1fr 340px;
+            grid-template-columns: 1fr 380px;
             gap: 30px;
         }
 
@@ -181,10 +189,11 @@
         }
 
         .calendar-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             padding: 25px;
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
         }
 
         /* Month View */
@@ -206,10 +215,10 @@
         }
 
         .day-cell {
-            min-height: 85px;
-            background: #fafbfc;
+            min-height: 105px;
+            background: var(--cell-bg);
             border: 1px solid var(--proton-border);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 8px;
             display: flex;
             flex-direction: column;
@@ -222,91 +231,57 @@
 
         .day-cell:hover {
             border-color: var(--proton-blue);
-            background: #fff;
+            background: var(--card-bg);
             box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
         }
 
         .day-cell.other-month {
             opacity: 0.3;
-            background: #f0f2f5;
         }
 
         .day-cell.today {
             border-color: var(--proton-blue);
-            background: rgba(98, 74, 255, 0.03);
+            background: rgba(98, 74, 255, 0.04);
         }
 
         .day-number {
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--proton-dark);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .day-events-preview {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
             font-size: 11px;
         }
 
         .preview-badge {
-            background: rgba(98, 74, 255, 0.1);
-            color: var(--proton-blue);
-            padding: 2px 4px;
-            border-radius: 4px;
+            padding: 2px 6px;
+            border-radius: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             font-weight: 500;
+            color: white;
         }
 
-        /* Week View Styles */
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-        }
-
-        .week-column {
-            background: #fafbfc;
-            border: 1px solid var(--proton-border);
-            border-radius: 8px;
-            padding: 10px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .week-column.today {
-            border-color: var(--proton-blue);
-            background: rgba(98, 74, 255, 0.03);
-        }
-
-        .week-col-header {
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--proton-border);
-            color: var(--proton-dark);
-        }
-
-        /* Agenda View Styles */
-        .agenda-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            min-height: 350px;
-        }
+        /* Kategorien Farben */
+        .cat-work { background-color: #624aff; }
+        .cat-personal { background-color: #00b894; }
+        .cat-sport { background-color: #ff9f43; }
+        .cat-important { background-color: #ff5252; }
 
         /* Sidebar / Event Manager */
         .sidebar-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             padding: 25px;
             box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -316,6 +291,7 @@
         .sidebar-card h3 {
             margin: 0 0 5px 0;
             font-size: 18px;
+            color: var(--proton-dark);
         }
 
         .form-group {
@@ -338,16 +314,20 @@
         }
 
         .form-group input, .form-group textarea, .form-group select {
-            padding: 9px;
+            padding: 10px;
             border: 1px solid var(--proton-border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-family: 'Inter', sans-serif;
             font-size: 13px;
+            background: var(--cell-bg);
+            color: var(--proton-text);
+            transition: border-color 0.2s;
         }
 
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: var(--proton-blue);
+            background: var(--card-bg);
         }
 
         .checkbox-group {
@@ -368,7 +348,7 @@
         }
 
         .events-list {
-            max-height: 250px;
+            max-height: 220px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -377,14 +357,18 @@
         }
 
         .event-item {
-            background: var(--proton-light);
-            padding: 10px 12px;
-            border-radius: 8px;
-            border-left: 4px solid var(--proton-blue);
+            background: var(--cell-bg);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--proton-border);
             font-size: 13px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            transition: border-color 0.2s;
+        }
+        .event-item:hover {
+            border-color: var(--proton-blue);
         }
 
         .event-info h4 {
@@ -413,20 +397,31 @@
             border: none;
             color: #ff5252;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             padding: 0 4px;
+            font-weight: 700;
         }
-        .delete-btn:hover {
-            color: #ff0000;
+        .delete-btn:hover { color: #ff0000; }
+
+        .stats-badge-box {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            background: var(--cell-bg);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--proton-border);
+            font-size: 12px;
+            font-weight: 500;
         }
 
         footer {
-            background-color: white;
+            background-color: var(--card-bg);
             padding: 25px 0;
             margin-top: auto;
             border-top: 1px solid var(--proton-border);
             text-align: center;
-            color: #666;
+            color: #888;
             font-size: 14px;
         }
     </style>
@@ -438,10 +433,9 @@
             <a href="index.html" class="logo">nox<span>!</span>314</a>
             <div class="nav-links">
                 <a href="index.html">Start</a>
-                <a href="date.html" class="active">X!Planer</a>
+                <a href="date.html" class="active">X!Planer Pro</a>
                 <a href="iss.html">Iss</a>
                 <a href="info.html">Info</a>
-                <a href="login.html">Login</a>
             </div>
         </div>
     </nav>
@@ -455,6 +449,7 @@
                 <div class="view-switchers">
                     <button class="view-btn active" id="btnMonthView" onclick="switchView('month')">Monat</button>
                     <button class="view-btn" id="btnWeekView" onclick="switchView('week')">Woche</button>
+                    <button class="view-btn" id="btnDayView" onclick="switchView('day')">Tag</button>
                     <button class="view-btn" id="btnAgendaView" onclick="switchView('agenda')">Agenda</button>
                 </div>
 
@@ -465,19 +460,27 @@
                 </div>
                 
                 <div class="action-btns">
+                    <input type="text" id="searchInput" placeholder="Suche..." oninput="renderView()" style="padding: 9px 12px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px; width:130px;">
+                    
+                    <select id="categoryFilter" onchange="renderView()" style="padding: 9px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px;">
+                        <option value="all">Alle Kategorien</option>
+                        <option value="work">Arbeit</option>
+                        <option value="personal">Privat</option>
+                        <option value="sport">Sport</option>
+                        <option value="important">Wichtig</option>
+                    </select>
+
                     <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import</button>
-                    <input type="file" id="fileInput" style="display:none" accept=".txt,.ics" onchange="importEvents(event)">
-                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export</button>
+                    <input type="file" id="fileInput" style="display:none" accept=".ics,.txt" onchange="importEvents(event)">
+                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export iCal</button>
                 </div>
             </div>
 
             <div class="calendar-layout">
-                <!-- Kalender Content -->
                 <div class="calendar-card" id="calendarCard">
-                    <!-- Dynamic View Render Target -->
+                    <!-- Dynamischer Content -->
                 </div>
 
-                <!-- Sidebar / Event Ersteller & Liste -->
                 <div class="sidebar-card">
                     <h3>Termin hinzufügen</h3>
                     <form id="eventForm" onsubmit="addEvent(event)">
@@ -492,9 +495,19 @@
                                 <input type="date" id="eventDate" required>
                             </div>
                             <div class="form-group">
-                                <label for="eventLocation">Ort (optional)</label>
-                                <input type="text" id="eventLocation" placeholder="z.B. Büro / Zoom">
+                                <label for="eventCategory">Kategorie</label>
+                                <select id="eventCategory">
+                                    <option value="work">Arbeit</option>
+                                    <option value="personal">Privat</option>
+                                    <option value="sport">Sport</option>
+                                    <option value="important">Wichtig</option>
+                                </select>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventLocation">Ort (optional)</label>
+                            <input type="text" id="eventLocation" placeholder="z.B. Büro / Zoom">
                         </div>
 
                         <label class="checkbox-group">
@@ -513,29 +526,25 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="eventReminder">Benachrichtigung</label>
-                            <select id="eventReminder">
-                                <option value="none">Keine</option>
-                                <option value="0">Zum Termin</option>
-                                <option value="10">10 Minuten vorher</option>
-                                <option value="60">1 Stunde vorher</option>
-                                <option value="1440">1 Tag vorher</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <label for="eventDesc">Beschreibung</label>
                             <textarea id="eventDesc" rows="2" placeholder="Details..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern</button>
+                        <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern ✨</button>
                     </form>
 
                     <hr style="border:0; border-top:1px solid var(--proton-border); margin: 5px 0;">
 
-                    <h3>Gespeicherte Events</h3>
-                    <div class="events-list" id="eventsList">
-                        <!-- Dynamische Liste -->
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Gespeicherte Events</h3>
+                        <span id="eventCountBadge" style="font-size: 11px; background: rgba(98, 74, 255, 0.1); color: var(--proton-blue); padding: 2px 8px; border-radius: 20px; font-weight: 600;">0 Events</span>
+                    </div>
+
+                    <div class="events-list" id="eventsList"></div>
+
+                    <div class="stats-badge-box" id="statsBox">
+                        <div>📊 Gesamt: <span id="statTotal">0</span></div>
+                        <div>⚡ Wichtig: <span id="statImportant">0</span></div>
                     </div>
                 </div>
             </div>
@@ -544,22 +553,21 @@
     </div>
 
     <footer>
-        <div class="wrap">&copy; 2026 nox!314 &bull; Advanced X!Planer</div>
+        <div class="wrap">&copy; 2026 nox!314 &bull; Advanced X!Planer Pro (Clean Light Edition)</div>
     </footer>
 
     <script>
         let currentDate = new Date();
-        let currentView = 'month'; // 'month', 'week', 'agenda'
+        let currentView = 'month'; 
         
-        let events = JSON.parse(localStorage.getItem('nox_events')) || [
-            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true, startTime: '', endTime: '', location: 'Online', reminder: '60' },
-            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check', isAllDay: false, startTime: '14:00', endTime: '15:30', location: 'Serverraum', reminder: '10' }
+        let events = JSON.parse(localStorage.getItem('nox_events_clean_pro')) || [
+            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true, startTime: '', endTime: '', location: 'Online', category: 'work' },
+            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check', isAllDay: false, startTime: '14:00', endTime: '15:30', location: 'Serverraum', category: 'important' }
         ];
 
         function initApp() {
             renderView();
             renderEventsList();
-            // Set default date picker value to today's string
             if(!document.getElementById('eventDate').value) {
                 document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
             }
@@ -575,16 +583,18 @@
         function renderView() {
             if (currentView === 'month') renderMonthView();
             else if (currentView === 'week') renderWeekView();
+            else if (currentView === 'day') renderDayView();
             else if (currentView === 'agenda') renderAgendaView();
+            updateStats();
         }
 
         function navigate(dir) {
-            if (currentView === 'month') {
+            if (currentView === 'month' || currentView === 'agenda') {
                 currentDate.setMonth(currentDate.getMonth() + dir);
             } else if (currentView === 'week') {
                 currentDate.setDate(currentDate.getDate() + (dir * 7));
-            } else if (currentView === 'agenda') {
-                currentDate.setMonth(currentDate.getMonth() + dir);
+            } else if (currentView === 'day') {
+                currentDate.setDate(currentDate.getDate() + dir);
             }
             renderView();
         }
@@ -595,8 +605,18 @@
         }
 
         function toggleAllDay(checkbox) {
-            const timeRow = document.getElementById('timeRow');
-            timeRow.style.display = checkbox.checked ? 'none' : 'grid';
+            document.getElementById('timeRow').style.display = checkbox.checked ? 'none' : 'grid';
+        }
+
+        function getFilteredEvents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const catFilter = document.getElementById('categoryFilter').value;
+            
+            return events.filter(e => {
+                const matchesQuery = !query || e.title.toLowerCase().includes(query) || (e.desc && e.desc.toLowerCase().includes(query));
+                const matchesCat = catFilter === 'all' || e.category === catFilter;
+                return matchesQuery && matchesCat;
+            });
         }
 
         // --- MONTH VIEW ---
@@ -609,46 +629,29 @@
             const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
             const totalDays = new Date(year, month + 1, 0).getDate();
             const prevTotalDays = new Date(year, month, 0).getDate();
+            const activeEvents = getFilteredEvents();
 
-            let gridHTML = `
-                <div class="weekdays">
-                    <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
-                </div>
-                <div class="days-grid">
-            `;
+            let gridHTML = `<div class="weekdays"><div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div></div><div class="days-grid">`;
 
-            // Previous month fill days
             for (let i = firstDayIndex; i > 0; i--) {
-                const dayNum = prevTotalDays - i + 1;
-                gridHTML += `<div class="day-cell other-month"><div class="day-number">${dayNum}</div></div>`;
+                gridHTML += `<div class="day-cell other-month"><div class="day-number">${prevTotalDays - i + 1}</div></div>`;
             }
 
-            // Current month days
             const todayStr = new Date().toISOString().split('T')[0];
             for (let i = 1; i <= totalDays; i++) {
-                const formattedMonth = String(month + 1).padStart(2, '0');
-                const formattedDay = String(i).padStart(2, '0');
-                const dateStr = `${year}-${formattedMonth}-${formattedDay}`;
-                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const isToday = dateStr === todayStr ? 'today' : '';
-                const dayEvents = events.filter(e => e.date === dateStr);
+                const dayEvents = activeEvents.filter(e => e.date === dateStr);
                 
                 let badgesHTML = '<div class="day-events-preview">';
                 dayEvents.slice(0, 2).forEach(ev => {
                     let timeStr = ev.isAllDay ? '' : `${ev.startTime} `;
-                    badgesHTML += `<div class="preview-badge">${timeStr}${ev.title}</div>`;
+                    badgesHTML += `<div class="preview-badge cat-${ev.category || 'work'}">${timeStr}${ev.title}</div>`;
                 });
-                if(dayEvents.length > 2) {
-                    badgesHTML += `<span style="font-size:10px; color:#666;">+${dayEvents.length - 2} weitere</span>`;
-                }
+                if(dayEvents.length > 2) badgesHTML += `<span style="font-size:10px; color:#888; font-weight:600;">+${dayEvents.length - 2} weitere</span>`;
                 badgesHTML += '</div>';
 
-                gridHTML += `
-                    <div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')">
-                        <div class="day-number">${i}</div>
-                        ${badgesHTML}
-                    </div>
-                `;
+                gridHTML += `<div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')"><div class="day-number">${i}</div>${badgesHTML}</div>`;
             }
             gridHTML += `</div>`;
             document.getElementById('calendarCard').innerHTML = gridHTML;
@@ -656,73 +659,81 @@
 
         // --- WEEK VIEW ---
         function renderWeekView() {
-            // Find start of the week (Monday)
             let curr = new Date(currentDate);
             let day = curr.getDay();
             let diff = curr.getDate() - day + (day === 0 ? -6 : 1);
             let monday = new Date(curr.setDate(diff));
+            document.getElementById('headerTitle').innerText = `Woche ab ${monday.toLocaleDateString('de-DE')}`;
 
-            document.getElementById('headerTitle').innerText = `Woche ab ${monday.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'})}`;
-
-            let weekHTML = `<div class="week-grid">`;
+            let weekHTML = `<div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:10px;">`;
             const todayStr = new Date().toISOString().split('T')[0];
+            const activeEvents = getFilteredEvents();
 
             for(let i=0; i<7; i++) {
                 let loopDate = new Date(monday);
                 loopDate.setDate(monday.getDate() + i);
                 let dateStr = loopDate.toISOString().split('T')[0];
-                let isToday = dateStr === todayStr ? 'today' : '';
-                let dayName = loopDate.toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'});
+                let isToday = dateStr === todayStr ? 'border-color:var(--proton-blue); background:rgba(98, 74, 255, 0.02);' : '';
+                let dayEvents = activeEvents.filter(e => e.date === dateStr);
 
-                let dayEvents = events.filter(e => e.date === dateStr);
-
-                weekHTML += `
-                    <div class="week-column ${isToday}" onclick="selectDate('${dateStr}')">
-                        <div class="week-col-header">${dayName}</div>
-                        <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
-                `;
+                weekHTML += `<div style="background:var(--cell-bg); border:1px solid var(--proton-border); border-radius:10px; padding:10px; min-height:400px; ${isToday}" onclick="selectDate('${dateStr}')">
+                    <div style="font-size:13px; font-weight:600; text-align:center; padding-bottom:8px; border-bottom:1px solid var(--proton-border);">${loopDate.toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'})}</div>
+                    <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">`;
 
                 dayEvents.forEach(ev => {
-                    let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime} - ${ev.endTime}`;
-                    weekHTML += `
-                        <div style="background:white; border:1px solid var(--proton-border); border-radius:6px; padding:6px; font-size:12px;">
-                            <strong style="color:var(--proton-blue);">${ev.title}</strong>
-                            <div style="font-size:10px; color:#666;">${timeStr}</div>
-                        </div>
-                    `;
+                    weekHTML += `<div style="background:var(--card-bg); border:1px solid var(--proton-border); border-radius:8px; padding:6px; font-size:12px;">
+                        <strong style="color:var(--proton-blue);">${ev.title}</strong>
+                        <div style="font-size:10px; color:#888;">${ev.isAllDay ? 'Ganztägig' : ev.startTime}</div>
+                    </div>`;
                 });
-
                 weekHTML += `</div></div>`;
             }
-
             weekHTML += `</div>`;
             document.getElementById('calendarCard').innerHTML = weekHTML;
+        }
+
+        // --- DAY VIEW ---
+        function renderDayView() {
+            const dateStr = currentDate.toISOString().split('T')[0];
+            document.getElementById('headerTitle').innerText = currentDate.toLocaleDateString('de-DE', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+            const activeEvents = getFilteredEvents().filter(e => e.date === dateStr);
+
+            let dayHTML = `<div style="display:flex; flex-direction:column; gap:10px;">`;
+            if(activeEvents.length === 0) {
+                dayHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine an diesem Tag.</p>`;
+            } else {
+                activeEvents.forEach(ev => {
+                    dayHTML += `<div class="event-item">
+                        <div class="event-info">
+                            <h4>${ev.title}</h4>
+                            <p>${ev.desc || ''}</p>
+                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' - ' + ev.endTime}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
+                        </div>
+                    </div>`;
+                });
+            }
+            dayHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = dayHTML;
         }
 
         // --- AGENDA VIEW ---
         function renderAgendaView() {
             document.getElementById('headerTitle').innerText = `Komplette Agenda`;
-            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let sorted = [...getFilteredEvents()].sort((a,b) => new Date(a.date) - new Date(b.date));
             
-            let agendaHTML = `<div class="agenda-container">`;
+            let agendaHTML = `<div style="display:flex; flex-direction:column; gap:12px;">`;
             if(sorted.length === 0) {
-                agendaHTML += `<p style="color:#888;">Keine Termine eingetragen.</p>`;
+                agendaHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine gefunden.</p>`;
             } else {
                 sorted.forEach((ev, idx) => {
-                    let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime} Uhr - ${ev.endTime} Uhr`;
-                    agendaHTML += `
-                        <div class="event-item" style="align-items:center;">
-                            <div class="event-info">
-                                <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
-                                <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
-                                <div class="event-meta">
-                                    <span>🕒 ${timeStr}</span>
-                                    ${ev.location ? `<span>📍 ${ev.location}</span>` : ''}
-                                </div>
-                            </div>
-                            <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
+                    agendaHTML += `<div class="event-item" style="align-items:center;">
+                        <div class="event-info">
+                            <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                            <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
+                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' Uhr'}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
                         </div>
-                    `;
+                        <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
+                    </div>`;
                 });
             }
             agendaHTML += `</div>`;
@@ -736,59 +747,58 @@
 
         function addEvent(e) {
             e.preventDefault();
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const location = document.getElementById('eventLocation').value;
-            const isAllDay = document.getElementById('isAllDay').checked;
-            const startTime = document.getElementById('eventStartTime').value;
-            const endTime = document.getElementById('eventEndTime').value;
-            const reminder = document.getElementById('eventReminder').value;
-            const desc = document.getElementById('eventDesc').value;
-
-            events.push({ title, date, location, isAllDay, startTime, endTime, reminder, desc });
+            events.push({
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                category: document.getElementById('eventCategory').value,
+                location: document.getElementById('eventLocation').value,
+                isAllDay: document.getElementById('isAllDay').checked,
+                startTime: document.getElementById('eventStartTime').value,
+                endTime: document.getElementById('eventEndTime').value,
+                desc: document.getElementById('eventDesc').value
+            });
             saveAndRefresh();
             document.getElementById('eventForm').reset();
             document.getElementById('timeRow').style.display = 'grid';
-            document.getElementById('eventDate').value = date; // retain date selection
         }
 
         function deleteEvent(index) {
             let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
             const target = sorted[index];
-            
-            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title && ev.startTime === target.startTime));
+            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title));
             saveAndRefresh();
         }
 
         function saveAndRefresh() {
-            localStorage.setItem('nox_events', JSON.stringify(events));
+            localStorage.setItem('nox_events_clean_pro', JSON.stringify(events));
             renderView();
             renderEventsList();
         }
 
         function renderEventsList() {
             const listContainer = document.getElementById('eventsList');
+            document.getElementById('eventCountBadge').innerText = `${events.length} Events`;
             if (events.length === 0) {
-                listContainer.innerHTML = '<p style="color:#888; font-size:13px;">Keine Events vorhanden.</p>';
+                listContainer.innerHTML = '<p style="color:#888; font-size:13px; text-align:center;">Keine Events vorhanden.</p>';
                 return;
             }
-
             let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
             let html = '';
             sorted.forEach((ev, idx) => {
-                let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime}`;
-                html += `
-                    <div class="event-item">
-                        <div class="event-info">
-                            <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
-                            <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
-                            <div class="event-meta"><span>${timeStr}</span> ${ev.location ? `<span>&bull; ${ev.location}</span>` : ''}</div>
-                        </div>
-                        <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
+                html += `<div class="event-item">
+                    <div class="event-info">
+                        <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                        <p>${ev.desc ? escapeHtml(ev.desc) : ''}</p>
                     </div>
-                `;
+                    <button class="delete-btn" onclick="deleteEvent(${idx})">&times;</button>
+                </div>`;
             });
             listContainer.innerHTML = html;
+        }
+
+        function updateStats() {
+            document.getElementById('statTotal').innerText = events.length;
+            document.getElementById('statImportant').innerText = events.filter(e => e.category === 'important').length;
         }
 
         function escapeHtml(text) {
@@ -796,16 +806,29 @@
         }
 
         function exportEvents() {
-            let fileContent = "# nox!314 advanced events format\n";
+            let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//nox!314//X!Planer Pro//DE\n";
             events.forEach(e => {
-                fileContent += `${e.date} | ${e.title} | ${e.isAllDay ? 'ALLDAY' : e.startTime+'-'+e.endTime} | ${e.location || ''} | ${e.reminder || 'none'} | ${e.desc || ''}\n`;
+                icsContent += "BEGIN:VEVENT\n";
+                icsContent += `SUMMARY:${e.title}\n`;
+                icsContent += `DESCRIPTION:${e.desc || ''}\n`;
+                icsContent += `LOCATION:${e.location || ''}\n`;
+                if(e.isAllDay) {
+                    let dClean = e.date.replace(/-/g, '');
+                    icsContent += `DTSTART;VALUE=DATE:${dClean}\n`;
+                } else {
+                    let stClean = e.date.replace(/-/g, '') + 'T' + e.startTime.replace(/:/g, '') + '00';
+                    let etClean = e.date.replace(/-/g, '') + 'T' + e.endTime.replace(/:/g, '') + '00';
+                    icsContent += `DTSTART:${stClean}\nDTEND:${etClean}\n`;
+                }
+                icsContent += "END:VEVENT\n";
             });
+            icsContent += "END:VCALENDAR";
 
-            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'advanced_events.txt';
+            a.download = 'calendar_export.ics';
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -813,45 +836,33 @@
         function importEvents(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
-                const content = e.target.result;
-                let importedCount = 0;
+                const text = e.target.result;
+                // Einfacher Parser für SUMMARY und DTSTART im .ics Format
+                const summaryMatch = text.match(/SUMMARY:(.*)/);
+                const dateMatch = text.match(/DTSTART(?:;VALUE=DATE)?:([0-9]{8})/);
 
-                const lines = content.split('\n');
-                lines.forEach(line => {
-                    line = line.trim();
-                    if (!line || line.startsWith('#')) return;
-
-                    const parts = line.split('|');
-                    if (parts.length >= 2) {
-                        const date = parts[0].trim();
-                        const title = parts[1].trim();
-                        let timePart = parts[2] ? parts[2].trim() : 'ALLDAY';
-                        const location = parts[3] ? parts[3].trim() : '';
-                        const reminder = parts[4] ? parts[4].trim() : 'none';
-                        const desc = parts[5] ? parts[5].trim() : '';
-                        
-                        let isAllDay = timePart === 'ALLDAY';
-                        let startTime = '';
-                        let endTime = '';
-
-                        if (!isAllDay && timePart.includes('-')) {
-                            const times = timePart.split('-');
-                            startTime = times[0].trim();
-                            endTime = times[1].trim();
-                        }
-
-                        if (!events.some(ev => ev.date === date && ev.title === title)) {
-                            events.push({ date, title, isAllDay, startTime, endTime, location, reminder, desc });
-                            importedCount++;
-                        }
-                    }
-                });
-
-                saveAndRefresh();
-                alert(`${importedCount} Event(s) erfolgreich importiert!`);
+                if (summaryMatch && dateMatch) {
+                    const title = summaryMatch[1].trim();
+                    const rawDate = dateMatch[1];
+                    const formattedDate = `${rawDate.slice(0,4)}-${rawDate.slice(4,6)}-${rawDate.slice(6,8)}`;
+                    
+                    events.push({
+                        title: title,
+                        date: formattedDate,
+                        category: 'work',
+                        location: 'Importiert',
+                        isAllDay: true,
+                        startTime: '',
+                        endTime: '',
+                        desc: 'Aus .ics Datei importiert'
+                    });
+                    saveAndRefresh();
+                    alert("Termin erfolgreich aus iCal-Datei importiert! 🚀");
+                } else {
+                    alert("Konnte keine gültigen Event-Daten in der .ics finden.");
+                }
                 event.target.value = '';
             };
             reader.readAsText(file);

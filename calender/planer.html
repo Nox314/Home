@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -85,7 +85,9 @@
             color: inherit;
         }
 
-        /* NAVIGATION */
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
 
         .topbar {
             position: sticky;
@@ -141,7 +143,9 @@
             background: var(--primary-soft);
         }
 
-        /* PAGE */
+        /* =====================================================
+           PAGE
+        ===================================================== */
 
         .page {
             width: min(1380px, calc(100% - 36px));
@@ -187,7 +191,9 @@
             gap: 8px;
         }
 
-        /* BUTTONS */
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
 
         .btn {
             min-height: 38px;
@@ -230,7 +236,9 @@
             font-size: 11px;
         }
 
-        /* STATS */
+        /* =====================================================
+           STATS
+        ===================================================== */
 
         .stats-grid {
             display: grid;
@@ -296,7 +304,9 @@
             font-size: 10px;
         }
 
-        /* TOOLBAR */
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
 
         .calendar-toolbar {
             display: flex;
@@ -410,7 +420,9 @@
             font-size: 11px;
         }
 
-        /* MAIN */
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
         .main-grid {
             display: grid;
@@ -437,12 +449,250 @@
             min-width: 0;
         }
 
+        /* =====================================================
+           SIDEBAR – NEUES SAUBERES LAYOUT
+        ===================================================== */
+
         .sidebar-panel {
-            padding: 16px;
+            padding: 0;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-section {
+            min-width: 0;
+            padding: 17px;
+        }
+
+        .sidebar-section + .sidebar-section {
+            margin: 0;
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .sidebar-heading h2 {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.25;
+        }
+
+        .count-badge {
+            flex: 0 0 auto;
+            padding: 4px 7px;
+            border-radius: 20px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        /* =====================================================
+           FORM – ÜBERLAPPUNGEN BEHOBEN
+        ===================================================== */
+
+        #eventForm {
+            width: 100%;
             min-width: 0;
         }
 
-        /* MONTH */
+        .form-group {
+            width: 100%;
+            min-width: 0;
+            margin: 0 0 11px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-2);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            height: 38px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            padding: 0 10px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 11px;
+            transition:
+                border-color .15s,
+                box-shadow .15s,
+                background .15s;
+        }
+
+        .form-control:hover {
+            border-color: var(--border-strong);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(98, 74, 255, .08);
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 78px;
+            padding: 9px 10px;
+            resize: vertical;
+            line-height: 1.45;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .form-row > * {
+            min-width: 0;
+        }
+
+        .checkbox {
+            width: 100%;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0 11px;
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            color: var(--text-2);
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .checkbox:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .checkbox input {
+            width: 15px;
+            height: 15px;
+            flex: 0 0 15px;
+            margin: 0;
+            accent-color: var(--primary);
+        }
+
+        #eventForm > .btn {
+            width: 100%;
+            min-height: 40px;
+            margin-top: 3px;
+        }
+
+        /* =====================================================
+           DROPZONE
+        ===================================================== */
+
+        .drop-zone {
+            width: 100%;
+            padding: 18px 12px;
+            border: 2px dashed var(--border-strong);
+            border-radius: 11px;
+            text-align: center;
+            background: var(--surface);
+            transition: .18s;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .drop-zone-icon {
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .drop-zone-title {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .drop-zone-text {
+            margin: 4px 0 10px;
+            color: var(--text-3);
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        /* =====================================================
+           SAVED EVENTS
+        ===================================================== */
+
+        .saved-events {
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .saved-event {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+        }
+
+        .saved-event-color {
+            width: 4px;
+            min-width: 4px;
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .saved-event-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .saved-event-title {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .saved-event-date {
+            margin-top: 3px;
+            color: var(--text-3);
+            font-size: 9px;
+        }
+
+        /* =====================================================
+           MONTH
+        ===================================================== */
 
         .week-header,
         .month-grid {
@@ -532,7 +782,9 @@
             padding: 2px;
         }
 
-        /* TIMELINE */
+        /* =====================================================
+           TIMELINE
+        ===================================================== */
 
         .timeline-shell {
             position: relative;
@@ -809,7 +1061,9 @@
             font-weight: 800;
         }
 
-        /* AGENDA */
+        /* =====================================================
+           AGENDA
+        ===================================================== */
 
         .agenda {
             display: flex;
@@ -890,170 +1144,9 @@
             background: #ffe1e1;
         }
 
-        /* SIDEBAR */
-
-        .sidebar-section + .sidebar-section {
-            margin-top: 18px;
-            padding-top: 18px;
-            border-top: 1px solid var(--border);
-        }
-
-        .sidebar-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .sidebar-heading h2 {
-            margin: 0;
-            font-size: 15px;
-        }
-
-        .count-badge {
-            padding: 4px 7px;
-            border-radius: 20px;
-            color: var(--primary);
-            background: var(--primary-soft);
-            font-size: 9px;
-            font-weight: 800;
-        }
-
-        /* FORM */
-
-        #eventForm {
-            width: 100%;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-            min-width: 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-2);
-            font-size: 9px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .form-control {
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            height: 36px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            outline: none;
-            padding: 0 9px;
-            background: var(--surface);
-            color: var(--text);
-            font-size: 11px;
-            transition: .15s;
-        }
-
-        textarea.form-control {
-            height: auto;
-            min-height: 75px;
-            padding: 9px;
-            resize: vertical;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(98, 74, 255, .08);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 8px;
-            width: 100%;
-        }
-
-        .checkbox {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            margin: 10px 0;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .checkbox input {
-            accent-color: var(--primary);
-        }
-
-        #eventForm > .btn {
-            width: 100%;
-        }
-
-        /* DROPZONE */
-
-        .drop-zone {
-            padding: 18px 10px;
-            border: 2px dashed var(--border-strong);
-            border-radius: 11px;
-            text-align: center;
-            background: var(--surface);
-            transition: .18s;
-        }
-
-        .drop-zone:hover {
-            border-color: var(--primary);
-            background: var(--primary-soft);
-        }
-
-        /* SAVED */
-
-        .saved-events {
-            max-height: 260px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .saved-event {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 9px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            background: var(--surface);
-        }
-
-        .saved-event-color {
-            width: 4px;
-            min-width: 4px;
-            height: 30px;
-            border-radius: 4px;
-        }
-
-        .saved-event-main {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .saved-event-title {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            font-size: 10px;
-            font-weight: 800;
-        }
-
-        .saved-event-date {
-            margin-top: 3px;
-            color: var(--text-3);
-            font-size: 9px;
-        }
-
-        /* EMPTY */
+        /* =====================================================
+           EMPTY
+        ===================================================== */
 
         .empty {
             min-height: 430px;
@@ -1086,7 +1179,9 @@
             font-size: 11px;
         }
 
-        /* MODAL */
+        /* =====================================================
+           MODAL
+        ===================================================== */
 
         .modal-backdrop {
             position: fixed;
@@ -1168,7 +1263,9 @@
             margin-top: 15px;
         }
 
-        /* TOAST */
+        /* =====================================================
+           TOAST
+        ===================================================== */
 
         .toast-container {
             position: fixed;
@@ -1208,7 +1305,17 @@
             font-size: 10px;
         }
 
-        /* RESPONSIVE */
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        /*
+         * WICHTIG:
+         * Die Sidebar wird nicht mehr in zwei schmale Spalten
+         * zerlegt. Genau das hat vorher das Formular auf mittleren
+         * Bildschirmbreiten zusammengedrückt und die Felder
+         * optisch überlappen lassen.
+         */
 
         @media (max-width: 1150px) {
             .main-grid {
@@ -1218,38 +1325,26 @@
             .sidebar-panel {
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-                gap: 18px;
+                gap: 0;
+            }
+
+            .sidebar-section:first-child {
+                grid-column: 1 / -1;
+            }
+
+            .sidebar-section:nth-child(2),
+            .sidebar-section:nth-child(3) {
+                min-width: 0;
             }
 
             .sidebar-section + .sidebar-section {
-                margin-top: 0;
-                padding-top: 0;
-                border-top: 0;
+                margin: 0;
+                padding-top: 17px;
+                border-top: 1px solid var(--border);
             }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 900px) {
-            .header-actions {
-                width: 100%;
-                justify-content: stretch;
-            }
-
-            .header-actions .btn {
-                flex: 1 1 150px;
-            }
-
-            .toolbar-right {
-                width: 100%;
-                justify-content: stretch;
-            }
-
-            .toolbar-right .search {
-                flex: 1 1 180px;
-                max-width: none;
             }
         }
 
@@ -1268,13 +1363,17 @@
                 width: 100%;
             }
 
+            /*
+             * Auf Tablets/Mobilgeräten wieder alles untereinander.
+             * Dadurch bleibt auch der Formularbereich großzügig.
+             */
             .sidebar-panel {
                 display: block;
             }
 
             .sidebar-section + .sidebar-section {
-                margin-top: 18px;
-                padding-top: 18px;
+                margin: 0;
+                padding-top: 17px;
                 border-top: 1px solid var(--border);
             }
 
@@ -1433,8 +1532,13 @@
                 grid-column: 1 / -1;
             }
 
+            /*
+             * Die beiden Formularfelder werden auf sehr kleinen
+             * Geräten ebenfalls untereinander gesetzt.
+             */
             .form-row {
                 grid-template-columns: 1fr;
+                gap: 0;
             }
 
             .modal {
@@ -1486,24 +1590,42 @@
     <section class="page-header">
         <div>
             <div class="eyebrow">X!Planer Pro</div>
-            <h1 class="page-title">Mein Kalender</h1>
+
+            <h1 class="page-title">
+                Mein Kalender
+            </h1>
+
             <p class="page-subtitle">
                 Termine planen, importieren und organisieren.
             </p>
         </div>
 
         <div class="header-actions">
-            <button type="button" class="btn secondary" onclick="openImport()">
+
+            <button
+                type="button"
+                class="btn secondary"
+                onclick="openImport()"
+            >
                 📥 <span>Import</span>
             </button>
 
-            <button type="button" class="btn secondary" onclick="exportICS()">
+            <button
+                type="button"
+                class="btn secondary"
+                onclick="exportICS()"
+            >
                 📤 <span>Export</span>
             </button>
 
-            <button type="button" class="btn" onclick="focusNewEvent()">
+            <button
+                type="button"
+                class="btn"
+                onclick="focusNewEvent()"
+            >
                 + Neuer Termin
             </button>
+
         </div>
     </section>
 
@@ -1514,8 +1636,12 @@
                 <span class="stat-label">Alle Termine</span>
                 <span class="stat-icon purple">📅</span>
             </div>
+
             <div class="stat-value" id="totalStat">0</div>
-            <div class="stat-description">Gespeicherte Events</div>
+
+            <div class="stat-description">
+                Gespeicherte Events
+            </div>
         </div>
 
         <div class="stat-card">
@@ -1523,8 +1649,12 @@
                 <span class="stat-label">Heute</span>
                 <span class="stat-icon green">✓</span>
             </div>
+
             <div class="stat-value" id="todayStat">0</div>
-            <div class="stat-description">Termine am heutigen Tag</div>
+
+            <div class="stat-description">
+                Termine am heutigen Tag
+            </div>
         </div>
 
         <div class="stat-card">
@@ -1532,8 +1662,12 @@
                 <span class="stat-label">Diese Woche</span>
                 <span class="stat-icon orange">◷</span>
             </div>
+
             <div class="stat-value" id="weekStat">0</div>
-            <div class="stat-description">Termine in dieser Woche</div>
+
+            <div class="stat-description">
+                Termine in dieser Woche
+            </div>
         </div>
 
         <div class="stat-card">
@@ -1541,8 +1675,12 @@
                 <span class="stat-label">Wichtig</span>
                 <span class="stat-icon red">!</span>
             </div>
+
             <div class="stat-value" id="importantStat">0</div>
-            <div class="stat-description">Markierte wichtige Termine</div>
+
+            <div class="stat-description">
+                Markierte wichtige Termine
+            </div>
         </div>
 
     </section>
@@ -1577,7 +1715,12 @@
                 ›
             </button>
 
-            <h2 class="period-title" id="periodTitle">—</h2>
+            <h2
+                class="period-title"
+                id="periodTitle"
+            >
+                —
+            </h2>
 
         </div>
 
@@ -1644,13 +1787,21 @@
             </div>
 
         </div>
+
     </section>
 
     <section class="main-grid">
 
-        <div class="calendar-panel" id="calendar"></div>
+        <div
+            class="calendar-panel"
+            id="calendar"
+        ></div>
 
         <aside class="sidebar-panel">
+
+            <!-- =================================================
+                 NEUER TERMIN
+            ================================================== -->
 
             <section class="sidebar-section">
 
@@ -1658,10 +1809,16 @@
                     <h2>Neuer Termin</h2>
                 </div>
 
-                <form id="eventForm" onsubmit="addEvent(event)">
+                <form
+                    id="eventForm"
+                    onsubmit="addEvent(event)"
+                >
 
                     <div class="form-group">
-                        <label for="title">Titel</label>
+                        <label for="title">
+                            Titel
+                        </label>
+
                         <input
                             class="form-control"
                             id="title"
@@ -1673,7 +1830,10 @@
                     <div class="form-row">
 
                         <div class="form-group">
-                            <label for="date">Datum</label>
+                            <label for="date">
+                                Datum
+                            </label>
+
                             <input
                                 class="form-control"
                                 id="date"
@@ -1683,20 +1843,39 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="category">Kategorie</label>
+                            <label for="category">
+                                Kategorie
+                            </label>
 
-                            <select class="form-control" id="category">
-                                <option value="work">Arbeit</option>
-                                <option value="personal">Privat</option>
-                                <option value="sport">Sport</option>
-                                <option value="important">Wichtig</option>
+                            <select
+                                class="form-control"
+                                id="category"
+                            >
+                                <option value="work">
+                                    Arbeit
+                                </option>
+
+                                <option value="personal">
+                                    Privat
+                                </option>
+
+                                <option value="sport">
+                                    Sport
+                                </option>
+
+                                <option value="important">
+                                    Wichtig
+                                </option>
                             </select>
                         </div>
 
                     </div>
 
                     <div class="form-group">
-                        <label for="location">Ort</label>
+                        <label for="location">
+                            Ort
+                        </label>
+
                         <input
                             class="form-control"
                             id="location"
@@ -1710,13 +1889,22 @@
                             type="checkbox"
                             onchange="toggleTime()"
                         >
-                        Ganztägiger Termin
+
+                        <span>
+                            Ganztägiger Termin
+                        </span>
                     </label>
 
-                    <div class="form-row" id="timeFields">
+                    <div
+                        class="form-row"
+                        id="timeFields"
+                    >
 
                         <div class="form-group">
-                            <label for="startTime">Von</label>
+                            <label for="startTime">
+                                Von
+                            </label>
+
                             <input
                                 class="form-control"
                                 id="startTime"
@@ -1726,7 +1914,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="endTime">Bis</label>
+                            <label for="endTime">
+                                Bis
+                            </label>
+
                             <input
                                 class="form-control"
                                 id="endTime"
@@ -1738,7 +1929,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Beschreibung</label>
+                        <label for="description">
+                            Beschreibung
+                        </label>
 
                         <textarea
                             class="form-control"
@@ -1747,7 +1940,10 @@
                         ></textarea>
                     </div>
 
-                    <button type="submit" class="btn">
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
                         ✨ Termin speichern
                     </button>
 
@@ -1755,11 +1951,22 @@
 
             </section>
 
+            <!-- =================================================
+                 IMPORT
+            ================================================== -->
+
             <section class="sidebar-section">
 
                 <div class="sidebar-heading">
-                    <h2>Kalender importieren</h2>
-                    <span class="count-badge">ICS</span>
+
+                    <h2>
+                        Kalender importieren
+                    </h2>
+
+                    <span class="count-badge">
+                        ICS
+                    </span>
+
                 </div>
 
                 <div
@@ -1767,17 +1974,16 @@
                     id="dropZone"
                     onclick="document.getElementById('fileInput').click()"
                 >
-                    <div style="font-size:26px; margin-bottom:5px;">
+
+                    <div class="drop-zone-icon">
                         📥
                     </div>
 
-                    <div style="font-size:11px; font-weight:800;">
+                    <div class="drop-zone-title">
                         ICS-Datei hier ablegen
                     </div>
 
-                    <div
-                        style="margin:4px 0 10px; color:var(--text-3); font-size:9px;"
-                    >
+                    <div class="drop-zone-text">
                         Google, Outlook, Apple Calendar usw.
                     </div>
 
@@ -1788,6 +1994,7 @@
                     >
                         Datei auswählen
                     </button>
+
                 </div>
 
                 <input
@@ -1801,14 +2008,31 @@
 
             </section>
 
+            <!-- =================================================
+                 GESPEICHERTE TERMINE
+            ================================================== -->
+
             <section class="sidebar-section">
 
                 <div class="sidebar-heading">
-                    <h2>Meine Termine</h2>
-                    <span class="count-badge" id="eventCount">0</span>
+
+                    <h2>
+                        Meine Termine
+                    </h2>
+
+                    <span
+                        class="count-badge"
+                        id="eventCount"
+                    >
+                        0
+                    </span>
+
                 </div>
 
-                <div class="saved-events" id="savedEvents"></div>
+                <div
+                    class="saved-events"
+                    id="savedEvents"
+                ></div>
 
             </section>
 
@@ -1822,7 +2046,9 @@
     © 2026 nox!314 • X!Planer Pro
 </footer>
 
-<!-- IMPORT MODAL -->
+<!-- =========================================================
+     IMPORT MODAL
+========================================================= -->
 
 <div
     class="modal-backdrop"
@@ -1832,7 +2058,10 @@
     <div class="modal">
 
         <div class="modal-header">
-            <h2>📥 Termine importieren</h2>
+
+            <h2>
+                📥 Termine importieren
+            </h2>
 
             <button
                 type="button"
@@ -1841,11 +2070,16 @@
             >
                 ×
             </button>
+
         </div>
 
         <p
             id="importInfo"
-            style="color:var(--text-2); font-size:11px; line-height:1.5;"
+            style="
+                color:var(--text-2);
+                font-size:11px;
+                line-height:1.5;
+            "
         ></p>
 
         <div
@@ -1877,7 +2111,10 @@
     </div>
 </div>
 
-<div class="toast-container" id="toastContainer"></div>
+<div
+    class="toast-container"
+    id="toastContainer"
+></div>
 
 <script>
 "use strict";
@@ -1950,7 +2187,8 @@ let events = loadEvents();
 ========================================================= */
 
 window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("date").value = dateString(new Date());
+    document.getElementById("date").value =
+        dateString(new Date());
 
     setupDragDrop();
     toggleTime();
@@ -1963,7 +2201,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function loadEvents() {
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
 
         if (!raw) {
             return initialEvents;
@@ -1991,6 +2230,7 @@ function saveEvents() {
         );
     } catch (error) {
         console.error("Save error:", error);
+
         toast(
             "Die Termine konnten nicht gespeichert werden.",
             "error"
@@ -2005,10 +2245,15 @@ function normalizeEvent(e) {
         date: e.date || dateString(new Date()),
         category: e.category || "work",
         location: e.location || "",
-        allDay: Boolean(e.allDay ?? e.isAllDay),
+        allDay: Boolean(
+            e.allDay ?? e.isAllDay
+        ),
         startTime: e.startTime || "",
         endTime: e.endTime || "",
-        description: e.description ?? e.desc ?? ""
+        description:
+            e.description ??
+            e.desc ??
+            ""
     };
 }
 
@@ -2018,15 +2263,27 @@ function normalizeEvent(e) {
 
 function dateString(date) {
     const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
+
+    const m = String(
+        date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const d = String(
+        date.getDate()
+    ).padStart(2, "0");
 
     return `${y}-${m}-${d}`;
 }
 
 function dateObject(str) {
-    const [y, m, d] = str.split("-").map(Number);
-    return new Date(y, m - 1, d);
+    const [y, m, d] =
+        str.split("-").map(Number);
+
+    return new Date(
+        y,
+        m - 1,
+        d
+    );
 }
 
 function escapeHTML(value) {
@@ -2100,7 +2357,8 @@ function timeToMinutes(time) {
         return 0;
     }
 
-    const [h, m] = time.split(":").map(Number);
+    const [h, m] =
+        time.split(":").map(Number);
 
     return h * 60 + m;
 }
@@ -2110,15 +2368,17 @@ function timeToMinutes(time) {
 ========================================================= */
 
 function filteredEvents() {
-    const query = document
-        .getElementById("search")
-        .value
-        .trim()
-        .toLowerCase();
+    const query =
+        document
+            .getElementById("search")
+            .value
+            .trim()
+            .toLowerCase();
 
-    const category = document
-        .getElementById("categoryFilter")
-        .value;
+    const category =
+        document
+            .getElementById("categoryFilter")
+            .value;
 
     return events.filter(e => {
         const text =
@@ -2126,8 +2386,12 @@ function filteredEvents() {
                 .toLowerCase();
 
         return (
-            (!query || text.includes(query)) &&
-            (category === "all" || e.category === category)
+            (!query ||
+                text.includes(query)) &&
+            (
+                category === "all" ||
+                e.category === category
+            )
         );
     });
 }
@@ -2153,16 +2417,24 @@ function setView(view) {
 
 function navigate(direction) {
     if (currentView === "month") {
+
         currentDate.setMonth(
-            currentDate.getMonth() + direction
+            currentDate.getMonth() +
+            direction
         );
+
     } else if (currentView === "week") {
+
         currentDate.setDate(
-            currentDate.getDate() + direction * 7
+            currentDate.getDate() +
+            direction * 7
         );
+
     } else {
+
         currentDate.setDate(
-            currentDate.getDate() + direction
+            currentDate.getDate() +
+            direction
         );
     }
 
@@ -2179,12 +2451,16 @@ function goToday() {
 ========================================================= */
 
 function render() {
+
     if (currentView === "month") {
         renderMonth();
+
     } else if (currentView === "week") {
         renderWeekTimeline();
+
     } else if (currentView === "day") {
         renderDayTimeline();
+
     } else {
         renderAgenda();
     }
@@ -2198,8 +2474,11 @@ function render() {
 ========================================================= */
 
 function renderMonth() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    const year =
+        currentDate.getFullYear();
+
+    const month =
+        currentDate.getMonth();
 
     const names = [
         "Januar",
@@ -2216,20 +2495,39 @@ function renderMonth() {
         "Dezember"
     ];
 
-    document.getElementById("periodTitle").textContent =
+    document.getElementById(
+        "periodTitle"
+    ).textContent =
         `${names[month]} ${year}`;
 
     const first =
-        (new Date(year, month, 1).getDay() + 6) % 7;
+        (
+            new Date(
+                year,
+                month,
+                1
+            ).getDay() + 6
+        ) % 7;
 
     const days =
-        new Date(year, month + 1, 0).getDate();
+        new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
 
     const prevDays =
-        new Date(year, month, 0).getDate();
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
 
-    const today = dateString(new Date());
-    const active = filteredEvents();
+    const today =
+        dateString(new Date());
+
+    const active =
+        filteredEvents();
 
     let html = `
         <div class="week-header">
@@ -2246,6 +2544,7 @@ function renderMonth() {
     `;
 
     for (let i = first; i > 0; i--) {
+
         html += `
             <div class="day other">
                 <div class="day-number">
@@ -2256,40 +2555,55 @@ function renderMonth() {
     }
 
     for (let d = 1; d <= days; d++) {
-        const date = new Date(year, month, d);
-        const key = dateString(date);
 
-        const dayEvents = active.filter(
-            e => e.date === key
-        );
+        const date =
+            new Date(year, month, d);
+
+        const key =
+            dateString(date);
+
+        const dayEvents =
+            active.filter(
+                e => e.date === key
+            );
 
         html += `
             <div
                 class="day ${key === today ? "today" : ""}"
                 onclick="selectDay('${key}')"
             >
-                <div class="day-number">${d}</div>
+                <div class="day-number">
+                    ${d}
+                </div>
 
                 <div class="event-list">
         `;
 
-        dayEvents.slice(0, 4).forEach(e => {
-            html += `
-                <div
-                    class="event-pill"
-                    style="background:${categoryColor(e.category)}"
-                    title="${escapeHTML(e.title)}"
-                >
-                    ${e.allDay
-                        ? ""
-                        : escapeHTML(e.startTime) + " "
-                    }
-                    ${escapeHTML(e.title)}
-                </div>
-            `;
-        });
+        dayEvents
+            .slice(0, 4)
+            .forEach(e => {
+
+                html += `
+                    <div
+                        class="event-pill"
+                        style="background:${categoryColor(e.category)}"
+                        title="${escapeHTML(e.title)}"
+                    >
+                        ${
+                            e.allDay
+                                ? ""
+                                : escapeHTML(
+                                    e.startTime
+                                ) + " "
+                        }
+
+                        ${escapeHTML(e.title)}
+                    </div>
+                `;
+            });
 
         if (dayEvents.length > 4) {
+
             html += `
                 <div class="more-events">
                     +${dayEvents.length - 4} weitere
@@ -2305,7 +2619,9 @@ function renderMonth() {
 
     html += `</div>`;
 
-    document.getElementById("calendar").innerHTML = html;
+    document.getElementById(
+        "calendar"
+    ).innerHTML = html;
 }
 
 /* =========================================================
@@ -2316,9 +2632,12 @@ function timelineHours() {
     let html = "";
 
     for (let h = 0; h < 24; h++) {
+
         html += `
             <div class="timeline-hour">
-                <span>${String(h).padStart(2, "0")}:00</span>
+                <span>
+                    ${String(h).padStart(2, "0")}:00
+                </span>
             </div>
         `;
     }
@@ -2331,61 +2650,80 @@ function timelineHours() {
 ========================================================= */
 
 function layoutTimelineEvents(dayEvents) {
-    const items = dayEvents
-        .filter(e => !e.allDay)
-        .map(e => {
-            const start = Math.max(
-                0,
-                Math.min(1439, timeToMinutes(e.startTime))
-            );
 
-            let end = e.endTime
-                ? timeToMinutes(e.endTime)
-                : start + 60;
+    const items =
+        dayEvents
+            .filter(e => !e.allDay)
+            .map(e => {
 
-            if (!Number.isFinite(end)) {
-                end = start + 60;
-            }
+                const start =
+                    Math.max(
+                        0,
+                        Math.min(
+                            1439,
+                            timeToMinutes(
+                                e.startTime
+                            )
+                        )
+                    );
 
-            if (end <= start) {
-                end = start + 60;
-            }
+                let end =
+                    e.endTime
+                        ? timeToMinutes(e.endTime)
+                        : start + 60;
 
-            end = Math.min(1440, end);
+                if (!Number.isFinite(end)) {
+                    end = start + 60;
+                }
 
-            return {
-                event: e,
-                start,
-                end,
-                column: 0,
-                columns: 1
-            };
-        })
-        .sort((a, b) => {
-            if (a.start !== b.start) {
-                return a.start - b.start;
-            }
+                if (end <= start) {
+                    end = start + 60;
+                }
 
-            return b.end - a.end;
-        });
+                end =
+                    Math.min(1440, end);
+
+                return {
+                    event: e,
+                    start,
+                    end,
+                    column: 0,
+                    columns: 1
+                };
+            })
+            .sort((a, b) => {
+
+                if (a.start !== b.start) {
+                    return a.start - b.start;
+                }
+
+                return b.end - a.end;
+            });
 
     const groups = [];
     let group = [];
     let groupEnd = -1;
 
     for (const item of items) {
+
         if (
             group.length === 0 ||
             item.start < groupEnd
         ) {
             group.push(item);
-            groupEnd = Math.max(
-                groupEnd,
-                item.end
-            );
+
+            groupEnd =
+                Math.max(
+                    groupEnd,
+                    item.end
+                );
+
         } else {
+
             groups.push(group);
+
             group = [item];
+
             groupEnd = item.end;
         }
     }
@@ -2395,9 +2733,11 @@ function layoutTimelineEvents(dayEvents) {
     }
 
     for (const currentGroup of groups) {
+
         const columnEnds = [];
 
         for (const item of currentGroup) {
+
             let column = 0;
 
             while (
@@ -2408,14 +2748,20 @@ function layoutTimelineEvents(dayEvents) {
             }
 
             item.column = column;
-            columnEnds[column] = item.end;
+
+            columnEnds[column] =
+                item.end;
         }
 
         const columnCount =
-            Math.max(1, columnEnds.length);
+            Math.max(
+                1,
+                columnEnds.length
+            );
 
         currentGroup.forEach(item => {
-            item.columns = columnCount;
+            item.columns =
+                columnCount;
         });
     }
 
@@ -2427,28 +2773,37 @@ function layoutTimelineEvents(dayEvents) {
 ========================================================= */
 
 function renderTimelineEvents(dayEvents) {
+
     const layout =
         layoutTimelineEvents(dayEvents);
 
     const hourHeight =
         parseInt(
-            getComputedStyle(document.documentElement)
-                .getPropertyValue("--hour-height")
+            getComputedStyle(
+                document.documentElement
+            ).getPropertyValue(
+                "--hour-height"
+            )
         ) || 64;
 
     return layout.map(item => {
+
         const top =
-            item.start / 60 * hourHeight;
+            item.start /
+            60 *
+            hourHeight;
 
         const height =
             Math.max(
                 28,
-                (item.end - item.start) /
-                    60 *
-                    hourHeight
+                (
+                    item.end -
+                    item.start
+                ) / 60 * hourHeight
             );
 
         const gap = 5;
+
         const columnWidth =
             100 / item.columns;
 
@@ -2478,15 +2833,23 @@ function renderTimelineEvents(dayEvents) {
                 </div>
 
                 <div class="timeline-event-time">
-                    ${escapeHTML(e.startTime || "--:--")}
-                    ${e.endTime
-                        ? " – " + escapeHTML(e.endTime)
-                        : ""
+                    ${escapeHTML(
+                        e.startTime || "--:--"
+                    )}
+
+                    ${
+                        e.endTime
+                            ? " – " +
+                              escapeHTML(
+                                  e.endTime
+                              )
+                            : ""
                     }
                 </div>
 
                 ${
-                    height >= 58 && e.location
+                    height >= 58 &&
+                    e.location
                         ? `
                             <div class="timeline-event-location">
                                 📍 ${escapeHTML(e.location)}
@@ -2504,7 +2867,10 @@ function renderTimelineEvents(dayEvents) {
 ========================================================= */
 
 function renderNowLine(key) {
-    if (key !== dateString(new Date())) {
+
+    if (
+        key !== dateString(new Date())
+    ) {
         return "";
     }
 
@@ -2516,12 +2882,17 @@ function renderNowLine(key) {
 
     const hourHeight =
         parseInt(
-            getComputedStyle(document.documentElement)
-                .getPropertyValue("--hour-height")
+            getComputedStyle(
+                document.documentElement
+            ).getPropertyValue(
+                "--hour-height"
+            )
         ) || 64;
 
     const top =
-        minutes / 60 * hourHeight;
+        minutes /
+        60 *
+        hourHeight;
 
     return `
         <div
@@ -2540,9 +2911,13 @@ function renderNowLine(key) {
 ========================================================= */
 
 function renderDayTimeline() {
-    const key = dateString(currentDate);
 
-    document.getElementById("periodTitle").textContent =
+    const key =
+        dateString(currentDate);
+
+    document.getElementById(
+        "periodTitle"
+    ).textContent =
         currentDate.toLocaleDateString(
             "de-DE",
             {
@@ -2553,36 +2928,51 @@ function renderDayTimeline() {
             }
         );
 
-    const dayEvents = filteredEvents()
-        .filter(e => e.date === key)
-        .sort(compareEvents);
+    const dayEvents =
+        filteredEvents()
+            .filter(
+                e => e.date === key
+            )
+            .sort(compareEvents);
 
     const allDayEvents =
-        dayEvents.filter(e => e.allDay);
+        dayEvents.filter(
+            e => e.allDay
+        );
 
     const timedEvents =
-        dayEvents.filter(e => !e.allDay);
+        dayEvents.filter(
+            e => !e.allDay
+        );
 
     const isToday =
-        key === dateString(new Date());
+        key === dateString(
+            new Date()
+        );
 
     const header = `
-        <div class="timeline-grid-header timeline-single-grid">
+        <div
+            class="timeline-grid-header timeline-single-grid"
+        >
 
             <div class="timeline-header-time"></div>
 
             <div class="timeline-day-cell">
 
-                <div class="timeline-day-date ${
-                    isToday ? "today" : ""
-                }">
+                <div
+                    class="timeline-day-date ${
+                        isToday ? "today" : ""
+                    }"
+                >
                     ${currentDate.getDate()}
                 </div>
 
                 <div class="timeline-day-name">
                     ${currentDate.toLocaleDateString(
                         "de-DE",
-                        { weekday: "long" }
+                        {
+                            weekday: "long"
+                        }
                     )}
                 </div>
 
@@ -2591,48 +2981,62 @@ function renderDayTimeline() {
         </div>
     `;
 
-    const allDay = allDayEvents.length
-        ? `
-            <div class="timeline-allday">
+    const allDay =
+        allDayEvents.length
+            ? `
+                <div class="timeline-allday">
 
-                <div class="timeline-allday-single">
+                    <div class="timeline-allday-single">
 
-                    <div class="timeline-allday-time"></div>
+                        <div class="timeline-allday-time"></div>
 
-                    <div class="timeline-allday-cell">
+                        <div class="timeline-allday-cell">
 
-                        ${
-                            allDayEvents.map(e => `
-                                <div
-                                    class="timeline-allday-event"
-                                    style="background:${categoryColor(e.category)}"
-                                    title="${escapeHTML(e.title)}"
-                                    onclick="event.stopPropagation(); selectDay('${key}')"
-                                >
-                                    ${escapeHTML(e.title)}
-                                </div>
-                            `).join("")
-                        }
+                            ${
+                                allDayEvents.map(
+                                    e => `
+                                        <div
+                                            class="timeline-allday-event"
+                                            style="background:${categoryColor(e.category)}"
+                                            title="${escapeHTML(e.title)}"
+                                            onclick="event.stopPropagation(); selectDay('${key}')"
+                                        >
+                                            ${escapeHTML(e.title)}
+                                        </div>
+                                    `
+                                ).join("")
+                            }
+
+                        </div>
 
                     </div>
 
                 </div>
+            `
+            : "";
 
-            </div>
-        `
-        : "";
+    const empty =
+        !dayEvents.length
+            ? `
+                <div class="timeline-empty empty">
+                    <div class="empty-icon">
+                        📅
+                    </div>
 
-    const empty = !dayEvents.length
-        ? `
-            <div class="timeline-empty empty">
-                <div class="empty-icon">📅</div>
-                <strong>Keine Termine</strong>
-                <span>Für diesen Tag ist noch nichts geplant.</span>
-            </div>
-        `
-        : "";
+                    <strong>
+                        Keine Termine
+                    </strong>
 
-    document.getElementById("calendar").innerHTML = `
+                    <span>
+                        Für diesen Tag ist noch nichts geplant.
+                    </span>
+                </div>
+            `
+            : "";
+
+    document.getElementById(
+        "calendar"
+    ).innerHTML = `
         <div class="timeline-shell">
 
             <div class="timeline-scroll">
@@ -2650,9 +3054,15 @@ function renderDayTimeline() {
 
                         <div class="timeline-single-content">
 
-                            ${renderTimelineEvents(timedEvents)}
+                            ${renderTimelineEvents(
+                                timedEvents
+                            )}
 
-                            ${isToday ? renderNowLine(key) : ""}
+                            ${
+                                isToday
+                                    ? renderNowLine(key)
+                                    : ""
+                            }
 
                             ${empty}
 
@@ -2675,59 +3085,90 @@ function renderDayTimeline() {
 ========================================================= */
 
 function renderWeekTimeline() {
-    const base = new Date(currentDate);
 
-    const weekday = base.getDay();
+    const base =
+        new Date(currentDate);
 
-    const monday = new Date(base);
+    const weekday =
+        base.getDay();
+
+    const monday =
+        new Date(base);
 
     monday.setDate(
         base.getDate() -
-        (weekday === 0 ? 6 : weekday - 1)
+        (
+            weekday === 0
+                ? 6
+                : weekday - 1
+        )
     );
 
-    monday.setHours(0, 0, 0, 0);
+    monday.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
-    const sunday = new Date(monday);
+    const sunday =
+        new Date(monday);
 
     sunday.setDate(
         monday.getDate() + 6
     );
 
-    document.getElementById("periodTitle").textContent =
-        `${formatDate(dateString(monday))} – ${formatDate(dateString(sunday))}`;
+    document.getElementById(
+        "periodTitle"
+    ).textContent =
+        `${formatDate(
+            dateString(monday)
+        )} – ${formatDate(
+            dateString(sunday)
+        )}`;
 
     let header = `
-        <div class="timeline-grid-header timeline-week-grid">
+        <div
+            class="timeline-grid-header timeline-week-grid"
+        >
 
             <div class="timeline-header-time"></div>
     `;
 
     for (let i = 0; i < 7; i++) {
-        const day = new Date(monday);
+
+        const day =
+            new Date(monday);
 
         day.setDate(
             monday.getDate() + i
         );
 
-        const key = dateString(day);
+        const key =
+            dateString(day);
 
         const today =
-            key === dateString(new Date());
+            key === dateString(
+                new Date()
+            );
 
         header += `
             <div class="timeline-day-cell">
 
-                <div class="timeline-day-date ${
-                    today ? "today" : ""
-                }">
+                <div
+                    class="timeline-day-date ${
+                        today ? "today" : ""
+                    }"
+                >
                     ${day.getDate()}
                 </div>
 
                 <div class="timeline-day-name">
                     ${day.toLocaleDateString(
                         "de-DE",
-                        { weekday: "short" }
+                        {
+                            weekday: "short"
+                        }
                     )}
                 </div>
 
@@ -2748,13 +3189,16 @@ function renderWeekTimeline() {
     let hasAllDayEvents = false;
 
     for (let i = 0; i < 7; i++) {
-        const day = new Date(monday);
+
+        const day =
+            new Date(monday);
 
         day.setDate(
             monday.getDate() + i
         );
 
-        const key = dateString(day);
+        const key =
+            dateString(day);
 
         const allDayEvents =
             filteredEvents().filter(
@@ -2771,16 +3215,20 @@ function renderWeekTimeline() {
             <div class="timeline-allday-cell">
 
                 ${
-                    allDayEvents.map(e => `
-                        <div
-                            class="timeline-allday-event"
-                            style="background:${categoryColor(e.category)}"
-                            title="${escapeHTML(e.title)}"
-                            onclick="event.stopPropagation(); selectDay('${key}')"
-                        >
-                            ${escapeHTML(e.title)}
-                        </div>
-                    `).join("")
+                    allDayEvents
+                        .map(
+                            e => `
+                                <div
+                                    class="timeline-allday-event"
+                                    style="background:${categoryColor(e.category)}"
+                                    title="${escapeHTML(e.title)}"
+                                    onclick="event.stopPropagation(); selectDay('${key}')"
+                                >
+                                    ${escapeHTML(e.title)}
+                                </div>
+                            `
+                        )
+                        .join("")
                 }
 
             </div>
@@ -2793,7 +3241,9 @@ function renderWeekTimeline() {
     `;
 
     const allDay =
-        hasAllDayEvents ? allDayCells : "";
+        hasAllDayEvents
+            ? allDayCells
+            : "";
 
     let body = `
         <div class="timeline-grid-body">
@@ -2806,13 +3256,16 @@ function renderWeekTimeline() {
     `;
 
     for (let i = 0; i < 7; i++) {
-        const day = new Date(monday);
+
+        const day =
+            new Date(monday);
 
         day.setDate(
             monday.getDate() + i
         );
 
-        const key = dateString(day);
+        const key =
+            dateString(day);
 
         const dayEvents =
             filteredEvents().filter(
@@ -2830,10 +3283,13 @@ function renderWeekTimeline() {
                 onclick="selectDay('${key}')"
             >
 
-                ${renderTimelineEvents(timedEvents)}
+                ${renderTimelineEvents(
+                    timedEvents
+                )}
 
                 ${
-                    key === dateString(new Date())
+                    key ===
+                    dateString(new Date())
                         ? renderNowLine(key)
                         : ""
                 }
@@ -2847,7 +3303,9 @@ function renderWeekTimeline() {
         </div>
     `;
 
-    document.getElementById("calendar").innerHTML = `
+    document.getElementById(
+        "calendar"
+    ).innerHTML = `
         <div class="timeline-shell">
 
             <div class="timeline-scroll">
@@ -2873,6 +3331,7 @@ function renderWeekTimeline() {
 ========================================================= */
 
 function scrollTimelineToCurrentTime() {
+
     if (
         currentView !== "day" &&
         currentView !== "week"
@@ -2880,25 +3339,39 @@ function scrollTimelineToCurrentTime() {
         return;
     }
 
-    const today = dateString(new Date());
+    const today =
+        dateString(new Date());
 
     let shouldScroll = false;
 
     if (currentView === "day") {
-        shouldScroll =
-            dateString(currentDate) === today;
-    } else {
-        const d = new Date(currentDate);
-        const day = d.getDay();
 
-        const monday = new Date(d);
+        shouldScroll =
+            dateString(currentDate) ===
+            today;
+
+    } else {
+
+        const d =
+            new Date(currentDate);
+
+        const day =
+            d.getDay();
+
+        const monday =
+            new Date(d);
 
         monday.setDate(
             d.getDate() -
-            (day === 0 ? 6 : day - 1)
+            (
+                day === 0
+                    ? 6
+                    : day - 1
+            )
         );
 
-        const sunday = new Date(monday);
+        const sunday =
+            new Date(monday);
 
         sunday.setDate(
             monday.getDate() + 6
@@ -2914,8 +3387,11 @@ function scrollTimelineToCurrentTime() {
     }
 
     setTimeout(() => {
+
         const scroll =
-            document.querySelector(".timeline-scroll");
+            document.querySelector(
+                ".timeline-scroll"
+            );
 
         if (!scroll) {
             return;
@@ -2925,16 +3401,24 @@ function scrollTimelineToCurrentTime() {
 
         const hourHeight =
             parseInt(
-                getComputedStyle(document.documentElement)
-                    .getPropertyValue("--hour-height")
+                getComputedStyle(
+                    document.documentElement
+                ).getPropertyValue(
+                    "--hour-height"
+                )
             ) || 64;
 
         const target =
-            (now.getHours() + 1) *
-            hourHeight;
+            (
+                now.getHours() + 1
+            ) * hourHeight;
 
         scroll.scrollTop =
-            Math.max(0, target - 180);
+            Math.max(
+                0,
+                target - 180
+            );
+
     }, 50);
 }
 
@@ -2943,25 +3427,44 @@ function scrollTimelineToCurrentTime() {
 ========================================================= */
 
 function renderAgenda() {
-    document.getElementById("periodTitle").textContent =
+
+    document.getElementById(
+        "periodTitle"
+    ).textContent =
         "Alle Termine";
 
     const list =
-        [...filteredEvents()].sort(compareEvents);
+        [...filteredEvents()]
+            .sort(compareEvents);
 
     if (!list.length) {
-        document.getElementById("calendar").innerHTML = `
+
+        document.getElementById(
+            "calendar"
+        ).innerHTML = `
             <div class="empty">
-                <div class="empty-icon">🔎</div>
-                <strong>Keine Termine gefunden</strong>
-                <span>Passe deine Suche oder den Filter an.</span>
+
+                <div class="empty-icon">
+                    🔎
+                </div>
+
+                <strong>
+                    Keine Termine gefunden
+                </strong>
+
+                <span>
+                    Passe deine Suche oder den Filter an.
+                </span>
+
             </div>
         `;
 
         return;
     }
 
-    document.getElementById("calendar").innerHTML = `
+    document.getElementById(
+        "calendar"
+    ).innerHTML = `
         <div class="agenda">
             ${list.map(eventHTML).join("")}
         </div>
@@ -2969,9 +3472,13 @@ function renderAgenda() {
 }
 
 function eventHTML(e) {
-    const time = e.allDay
-        ? "Ganztägig"
-        : `${e.startTime || "--:--"} – ${e.endTime || "--:--"}`;
+
+    const time =
+        e.allDay
+            ? "Ganztägig"
+            : `${e.startTime || "--:--"} – ${
+                e.endTime || "--:--"
+            }`;
 
     return `
         <article class="agenda-event">
@@ -2988,7 +3495,13 @@ function eventHTML(e) {
 
                 ${
                     e.description
-                        ? `<p>${escapeHTML(e.description)}</p>`
+                        ? `
+                            <p>
+                                ${escapeHTML(
+                                    e.description
+                                )}
+                            </p>
+                        `
                         : ""
                 }
 
@@ -2998,7 +3511,9 @@ function eventHTML(e) {
                         class="category-badge"
                         style="background:${categoryColor(e.category)}"
                     >
-                        ${categoryName(e.category)}
+                        ${categoryName(
+                            e.category
+                        )}
                     </span>
 
                     <span>
@@ -3007,7 +3522,13 @@ function eventHTML(e) {
 
                     ${
                         e.location
-                            ? `<span>📍 ${escapeHTML(e.location)}</span>`
+                            ? `
+                                <span>
+                                    📍 ${escapeHTML(
+                                        e.location
+                                    )}
+                                </span>
+                            `
                             : ""
                     }
 
@@ -3034,9 +3555,13 @@ function eventHTML(e) {
 ========================================================= */
 
 function selectDay(date) {
-    document.getElementById("date").value = date;
 
-    currentDate = dateObject(date);
+    document.getElementById(
+        "date"
+    ).value = date;
+
+    currentDate =
+        dateObject(date);
 
     render();
 }
@@ -3046,79 +3571,120 @@ function selectDay(date) {
 ========================================================= */
 
 function addEvent(event) {
+
     event.preventDefault();
 
     const title =
-        document.getElementById("title")
+        document
+            .getElementById("title")
             .value
             .trim();
 
     const date =
-        document.getElementById("date").value;
+        document.getElementById(
+            "date"
+        ).value;
 
     if (!title || !date) {
+
         toast(
             "Bitte Titel und Datum eingeben.",
             "error"
         );
+
         return;
     }
 
     const allDay =
-        document.getElementById("allDay").checked;
+        document.getElementById(
+            "allDay"
+        ).checked;
 
     const startTime =
-        document.getElementById("startTime").value;
+        document.getElementById(
+            "startTime"
+        ).value;
 
     const endTime =
-        document.getElementById("endTime").value;
+        document.getElementById(
+            "endTime"
+        ).value;
 
     if (
         !allDay &&
         startTime &&
         endTime &&
         timeToMinutes(endTime) <=
-            timeToMinutes(startTime)
+        timeToMinutes(startTime)
     ) {
+
         toast(
             "Die Endzeit muss nach der Startzeit liegen.",
             "error"
         );
+
         return;
     }
 
     const newEvent = {
         id: crypto.randomUUID(),
+
         title,
+
         date,
+
         category:
-            document.getElementById("category").value,
+            document.getElementById(
+                "category"
+            ).value,
+
         location:
-            document.getElementById("location")
-                .value
-                .trim(),
+            document.getElementById(
+                "location"
+            ).value.trim(),
+
         allDay,
-        startTime: allDay ? "" : startTime,
-        endTime: allDay ? "" : endTime,
+
+        startTime:
+            allDay
+                ? ""
+                : startTime,
+
+        endTime:
+            allDay
+                ? ""
+                : endTime,
+
         description:
-            document.getElementById("description")
-                .value
-                .trim()
+            document.getElementById(
+                "description"
+            ).value.trim()
     };
 
     events.push(newEvent);
 
     saveEvents();
 
-    document.getElementById("eventForm").reset();
+    document
+        .getElementById("eventForm")
+        .reset();
 
-    document.getElementById("date").value = date;
-    document.getElementById("startTime").value = "09:00";
-    document.getElementById("endTime").value = "10:00";
+    document.getElementById(
+        "date"
+    ).value = date;
+
+    document.getElementById(
+        "startTime"
+    ).value = "09:00";
+
+    document.getElementById(
+        "endTime"
+    ).value = "10:00";
 
     toggleTime();
 
-    currentDate = dateObject(date);
+    currentDate =
+        dateObject(date);
 
     render();
 
@@ -3129,12 +3695,15 @@ function addEvent(event) {
 }
 
 function focusNewEvent() {
-    const title =
-        document.getElementById("title");
 
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
+    const title =
+        document.getElementById(
+            "title"
+        );
+
+    title.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
     });
 
     setTimeout(() => {
@@ -3143,14 +3712,21 @@ function focusNewEvent() {
 }
 
 function toggleTime() {
+
     const checkbox =
-        document.getElementById("allDay");
+        document.getElementById(
+            "allDay"
+        );
 
     const fields =
-        document.getElementById("timeFields");
+        document.getElementById(
+            "timeFields"
+        );
 
     fields.style.display =
-        checkbox.checked ? "none" : "grid";
+        checkbox.checked
+            ? "none"
+            : "grid";
 }
 
 /* =========================================================
@@ -3158,8 +3734,11 @@ function toggleTime() {
 ========================================================= */
 
 function deleteEvent(id) {
+
     const e =
-        events.find(x => x.id === id);
+        events.find(
+            x => x.id === id
+        );
 
     if (!e) {
         return;
@@ -3174,7 +3753,9 @@ function deleteEvent(id) {
     }
 
     events =
-        events.filter(x => x.id !== id);
+        events.filter(
+            x => x.id !== id
+        );
 
     saveEvents();
     render();
@@ -3190,11 +3771,16 @@ function deleteEvent(id) {
 ========================================================= */
 
 function renderSavedEvents() {
-    const container =
-        document.getElementById("savedEvents");
 
-    document.getElementById("eventCount")
-        .textContent = events.length;
+    const container =
+        document.getElementById(
+            "savedEvents"
+        );
+
+    document.getElementById(
+        "eventCount"
+    ).textContent =
+        events.length;
 
     const sorted =
         [...events]
@@ -3202,6 +3788,7 @@ function renderSavedEvents() {
             .slice(0, 30);
 
     if (!sorted.length) {
+
         container.innerHTML = `
             <div
                 style="
@@ -3234,15 +3821,20 @@ function renderSavedEvents() {
                     </div>
 
                     <div class="saved-event-date">
+
                         ${formatDate(e.date)}
+
                         ·
+
                         ${
                             e.allDay
                                 ? "Ganztägig"
                                 : escapeHTML(
-                                    e.startTime || "--:--"
+                                    e.startTime ||
+                                    "--:--"
                                 )
                         }
+
                     </div>
 
                 </div>
@@ -3265,22 +3857,36 @@ function renderSavedEvents() {
 ========================================================= */
 
 function updateStats() {
-    const today = dateString(new Date());
+
+    const today =
+        dateString(new Date());
 
     const now = new Date();
 
-    const day = now.getDay();
+    const day =
+        now.getDay();
 
-    const monday = new Date(now);
+    const monday =
+        new Date(now);
 
     monday.setDate(
         now.getDate() -
-        (day === 0 ? 6 : day - 1)
+        (
+            day === 0
+                ? 6
+                : day - 1
+        )
     );
 
-    monday.setHours(0, 0, 0, 0);
+    monday.setHours(
+        0,
+        0,
+        0,
+        0
+    );
 
-    const sunday = new Date(monday);
+    const sunday =
+        new Date(monday);
 
     sunday.setDate(
         monday.getDate() + 6
@@ -3293,28 +3899,37 @@ function updateStats() {
         999
     );
 
-    document.getElementById("totalStat")
-        .textContent = events.length;
+    document.getElementById(
+        "totalStat"
+    ).textContent =
+        events.length;
 
-    document.getElementById("todayStat")
-        .textContent =
-            events.filter(
-                e => e.date === today
-            ).length;
+    document.getElementById(
+        "todayStat"
+    ).textContent =
+        events.filter(
+            e => e.date === today
+        ).length;
 
-    document.getElementById("weekStat")
-        .textContent =
-            events.filter(
-                e =>
-                    e.date >= dateString(monday) &&
-                    e.date <= dateString(sunday)
-            ).length;
+    document.getElementById(
+        "weekStat"
+    ).textContent =
+        events.filter(
+            e =>
+                e.date >=
+                dateString(monday) &&
+                e.date <=
+                dateString(sunday)
+        ).length;
 
-    document.getElementById("importantStat")
-        .textContent =
-            events.filter(
-                e => e.category === "important"
-            ).length;
+    document.getElementById(
+        "importantStat"
+    ).textContent =
+        events.filter(
+            e =>
+                e.category ===
+                "important"
+        ).length;
 }
 
 /* =========================================================
@@ -3322,6 +3937,7 @@ function updateStats() {
 ========================================================= */
 
 function exportICS() {
+
     const lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
@@ -3331,7 +3947,10 @@ function exportICS() {
     ];
 
     events.forEach(e => {
-        lines.push("BEGIN:VEVENT");
+
+        lines.push(
+            "BEGIN:VEVENT"
+        );
 
         lines.push(
             `UID:${escapeICS(e.id)}@nox314`
@@ -3346,33 +3965,47 @@ function exportICS() {
         );
 
         if (e.description) {
+
             lines.push(
-                `DESCRIPTION:${escapeICS(e.description)}`
+                `DESCRIPTION:${escapeICS(
+                    e.description
+                )}`
             );
         }
 
         if (e.location) {
+
             lines.push(
-                `LOCATION:${escapeICS(e.location)}`
+                `LOCATION:${escapeICS(
+                    e.location
+                )}`
             );
         }
 
         if (e.allDay) {
+
             lines.push(
-                `DTSTART;VALUE=DATE:${e.date.replace(/-/g, "")}`
+                `DTSTART;VALUE=DATE:${e.date.replace(
+                    /-/g,
+                    ""
+                )}`
             );
 
-            const next = dateObject(e.date);
+            const next =
+                dateObject(e.date);
 
             next.setDate(
                 next.getDate() + 1
             );
 
             lines.push(
-                `DTEND;VALUE=DATE:${dateString(next).replace(/-/g, "")}`
+                `DTEND;VALUE=DATE:${dateString(
+                    next
+                ).replace(/-/g, "")}`
             );
 
         } else {
+
             lines.push(
                 `DTSTART:${icsDateTime(
                     e.date,
@@ -3390,20 +4023,26 @@ function exportICS() {
             );
         }
 
-        lines.push("END:VEVENT");
+        lines.push(
+            "END:VEVENT"
+        );
     });
 
-    lines.push("END:VCALENDAR");
-
-    const blob = new Blob(
-        [
-            lines.join("\r\n") +
-            "\r\n"
-        ],
-        {
-            type: "text/calendar;charset=utf-8"
-        }
+    lines.push(
+        "END:VCALENDAR"
     );
+
+    const blob =
+        new Blob(
+            [
+                lines.join("\r\n") +
+                "\r\n"
+            ],
+            {
+                type:
+                    "text/calendar;charset=utf-8"
+            }
+        );
 
     const url =
         URL.createObjectURL(blob);
@@ -3414,7 +4053,9 @@ function exportICS() {
     a.href = url;
 
     a.download =
-        `xplaner-${dateString(new Date())}.ics`;
+        `xplaner-${dateString(
+            new Date()
+        )}.ics`;
 
     document.body.appendChild(a);
 
@@ -3432,7 +4073,11 @@ function exportICS() {
     );
 }
 
-function icsDateTime(date, time) {
+function icsDateTime(
+    date,
+    time
+) {
+
     return (
         date.replace(/-/g, "") +
         "T" +
@@ -3442,16 +4087,28 @@ function icsDateTime(date, time) {
 }
 
 function icsNow() {
-    const d = new Date();
+
+    const d =
+        new Date();
 
     return (
         d.getUTCFullYear() +
-        String(d.getUTCMonth() + 1).padStart(2, "0") +
-        String(d.getUTCDate()).padStart(2, "0") +
+        String(
+            d.getUTCMonth() + 1
+        ).padStart(2, "0") +
+        String(
+            d.getUTCDate()
+        ).padStart(2, "0") +
         "T" +
-        String(d.getUTCHours()).padStart(2, "0") +
-        String(d.getUTCMinutes()).padStart(2, "0") +
-        String(d.getUTCSeconds()).padStart(2, "0") +
+        String(
+            d.getUTCHours()
+        ).padStart(2, "0") +
+        String(
+            d.getUTCMinutes()
+        ).padStart(2, "0") +
+        String(
+            d.getUTCSeconds()
+        ).padStart(2, "0") +
         "Z"
     );
 }
@@ -3461,14 +4118,19 @@ function icsNow() {
 ========================================================= */
 
 function setupDragDrop() {
+
     const zone =
-        document.getElementById("dropZone");
+        document.getElementById(
+            "dropZone"
+        );
 
     ["dragenter", "dragover"]
         .forEach(type => {
+
             zone.addEventListener(
                 type,
                 e => {
+
                     e.preventDefault();
 
                     zone.style.borderColor =
@@ -3482,9 +4144,11 @@ function setupDragDrop() {
 
     ["dragleave", "drop"]
         .forEach(type => {
+
             zone.addEventListener(
                 type,
                 e => {
+
                     e.preventDefault();
 
                     zone.style.borderColor =
@@ -3499,6 +4163,7 @@ function setupDragDrop() {
     zone.addEventListener(
         "drop",
         e => {
+
             const files =
                 [...e.dataTransfer.files];
 
@@ -3508,12 +4173,14 @@ function setupDragDrop() {
 }
 
 function openImport() {
+
     document
         .getElementById("fileInput")
         .click();
 }
 
 async function handleFiles(event) {
+
     const files =
         [...event.target.files];
 
@@ -3523,6 +4190,7 @@ async function handleFiles(event) {
 }
 
 async function processFiles(files) {
+
     if (!files.length) {
         return;
     }
@@ -3530,6 +4198,7 @@ async function processFiles(files) {
     let imported = [];
 
     for (const file of files) {
+
         const filename =
             file.name.toLowerCase();
 
@@ -3541,6 +4210,7 @@ async function processFiles(files) {
         }
 
         try {
+
             const text =
                 await file.text();
 
@@ -3550,6 +4220,7 @@ async function processFiles(files) {
                 );
 
         } catch (error) {
+
             console.error(
                 "Import error:",
                 error
@@ -3577,7 +4248,8 @@ async function processFiles(files) {
                 )
         );
 
-    pendingImport = newEvents;
+    pendingImport =
+        newEvents;
 
     showImportPreview(
         newEvents,
@@ -3591,10 +4263,12 @@ async function processFiles(files) {
 ========================================================= */
 
 function parseICS(text) {
-    text = text
-        .replace(/^\uFEFF/, "")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n");
+
+    text =
+        text
+            .replace(/^\uFEFF/, "")
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n");
 
     const raw =
         text.split("\n");
@@ -3602,6 +4276,7 @@ function parseICS(text) {
     const lines = [];
 
     for (const line of raw) {
+
         if (
             (
                 line.startsWith(" ") ||
@@ -3609,27 +4284,42 @@ function parseICS(text) {
             ) &&
             lines.length
         ) {
-            lines[lines.length - 1] +=
-                line.slice(1);
+
+            lines[
+                lines.length - 1
+            ] += line.slice(1);
+
         } else {
+
             lines.push(line);
         }
     }
 
     const result = [];
+
     let event = null;
 
     for (const line of lines) {
+
         const upper =
             line.toUpperCase();
 
-        if (upper === "BEGIN:VEVENT") {
+        if (
+            upper ===
+            "BEGIN:VEVENT"
+        ) {
+
             event = {};
             continue;
         }
 
-        if (upper === "END:VEVENT") {
+        if (
+            upper ===
+            "END:VEVENT"
+        ) {
+
             if (event) {
+
                 const converted =
                     convertICS(event);
 
@@ -3654,20 +4344,28 @@ function parseICS(text) {
         }
 
         const left =
-            line.slice(0, index);
+            line.slice(
+                0,
+                index
+            );
 
         const value =
-            line.slice(index + 1);
+            line.slice(
+                index + 1
+            );
 
         const parts =
             left.split(";");
 
         const name =
-            parts.shift().toUpperCase();
+            parts
+                .shift()
+                .toUpperCase();
 
         const params = {};
 
         parts.forEach(part => {
+
             const equal =
                 part.indexOf("=");
 
@@ -3676,7 +4374,12 @@ function parseICS(text) {
             }
 
             params[
-                part.slice(0, equal).toUpperCase()
+                part
+                    .slice(
+                        0,
+                        equal
+                    )
+                    .toUpperCase()
             ] =
                 part
                     .slice(equal + 1)
@@ -3696,6 +4399,7 @@ function parseICS(text) {
 }
 
 function convertICS(data) {
+
     if (!data.DTSTART) {
         return null;
     }
@@ -3711,11 +4415,14 @@ function convertICS(data) {
 
     const end =
         data.DTEND
-            ? parseICSDate(data.DTEND.value)
+            ? parseICSDate(
+                data.DTEND.value
+            )
             : null;
 
     const allDay =
-        data.DTSTART.params.VALUE === "DATE" ||
+        data.DTSTART.params.VALUE ===
+            "DATE" ||
         /^\d{8}$/.test(
             data.DTSTART.value
         );
@@ -3740,17 +4447,28 @@ function convertICS(data) {
 
     return {
         id: crypto.randomUUID(),
+
         title,
+
         date: start.date,
+
         allDay,
-        startTime: allDay
-            ? ""
-            : start.time,
-        endTime: allDay
-            ? ""
-            : end?.time || start.time,
+
+        startTime:
+            allDay
+                ? ""
+                : start.time,
+
+        endTime:
+            allDay
+                ? ""
+                : end?.time ||
+                  start.time,
+
         location,
+
         description,
+
         category:
             detectCategory(
                 title,
@@ -3760,13 +4478,27 @@ function convertICS(data) {
 }
 
 function parseICSDate(value) {
+
     value =
         String(value).trim();
 
-    if (/^\d{8}$/.test(value)) {
+    if (
+        /^\d{8}$/.test(value)
+    ) {
+
         return {
             date:
-                `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`,
+                `${value.slice(
+                    0,
+                    4
+                )}-${value.slice(
+                    4,
+                    6
+                )}-${value.slice(
+                    6,
+                    8
+                )}`,
+
             time: ""
         };
     }
@@ -3783,6 +4515,7 @@ function parseICSDate(value) {
     return {
         date:
             `${match[1]}-${match[2]}-${match[3]}`,
+
         time:
             `${match[4]}:${match[5]}`
     };
@@ -3796,17 +4529,26 @@ function showImportPreview(
     list,
     duplicates
 ) {
+
     const modal =
-        document.getElementById("modal");
+        document.getElementById(
+            "modal"
+        );
 
     const info =
-        document.getElementById("importInfo");
+        document.getElementById(
+            "importInfo"
+        );
 
     const preview =
-        document.getElementById("importPreview");
+        document.getElementById(
+            "importPreview"
+        );
 
     const button =
-        document.getElementById("importButton");
+        document.getElementById(
+            "importButton"
+        );
 
     info.textContent =
         `${list.length} neue Termine gefunden.` +
@@ -3817,12 +4559,16 @@ function showImportPreview(
         );
 
     if (!list.length) {
+
         preview.innerHTML = `
             <div
                 class="empty"
                 style="min-height:180px;"
             >
-                <div class="empty-icon">✓</div>
+
+                <div class="empty-icon">
+                    ✓
+                </div>
 
                 <strong>
                     Keine neuen Termine
@@ -3831,12 +4577,14 @@ function showImportPreview(
                 <span>
                     Alle Termine sind bereits vorhanden.
                 </span>
+
             </div>
         `;
 
         button.disabled = true;
 
     } else {
+
         preview.innerHTML =
             list.map(e => `
                 <div class="import-item">
@@ -3848,6 +4596,7 @@ function showImportPreview(
                     <div class="import-item-meta">
 
                         ${formatDate(e.date)}
+
                         ·
 
                         ${
@@ -3860,7 +4609,9 @@ function showImportPreview(
 
                         ${
                             e.location
-                                ? ` · 📍 ${escapeHTML(e.location)}`
+                                ? ` · 📍 ${escapeHTML(
+                                    e.location
+                                )}`
                                 : ""
                         }
 
@@ -3876,6 +4627,7 @@ function showImportPreview(
 }
 
 function confirmImport() {
+
     if (!pendingImport.length) {
         return;
     }
@@ -3884,7 +4636,9 @@ function confirmImport() {
         pendingImport.length;
 
     events =
-        events.concat(pendingImport);
+        events.concat(
+            pendingImport
+        );
 
     saveEvents();
 
@@ -3901,6 +4655,7 @@ function confirmImport() {
 }
 
 function closeModal() {
+
     document
         .getElementById("modal")
         .classList.remove("show");
@@ -3909,7 +4664,11 @@ function closeModal() {
 }
 
 function closeModalOutside(event) {
-    if (event.target.id === "modal") {
+
+    if (
+        event.target.id ===
+        "modal"
+    ) {
         closeModal();
     }
 }
@@ -3919,6 +4678,7 @@ function closeModalOutside(event) {
 ========================================================= */
 
 function sameEvent(a, b) {
+
     return (
         a.date === b.date &&
         a.startTime === b.startTime &&
@@ -3930,13 +4690,18 @@ function sameEvent(a, b) {
 }
 
 function uniqueEvents(list) {
+
     const output = [];
 
     for (const e of list) {
+
         if (
             !output.some(
                 existing =>
-                    sameEvent(existing, e)
+                    sameEvent(
+                        existing,
+                        e
+                    )
             )
         ) {
             output.push(e);
@@ -3954,8 +4719,10 @@ function detectCategory(
     title,
     description
 ) {
+
     const text =
-        `${title} ${description}`.toLowerCase();
+        `${title} ${description}`
+            .toLowerCase();
 
     if (
         /deadline|dringend|wichtig|prüfung|arzt|urgent|exam/
@@ -3989,27 +4756,33 @@ function toast(
     message,
     type = ""
 ) {
+
     const container =
         document.getElementById(
             "toastContainer"
         );
 
     const el =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     el.className =
         `toast ${type}`;
 
-    el.textContent = message;
+    el.textContent =
+        message;
 
     container.appendChild(el);
 
     setTimeout(() => {
+
         el.style.opacity = "0";
 
         setTimeout(() => {
             el.remove();
         }, 200);
+
     }, 3000);
 }
 
@@ -4020,18 +4793,26 @@ function toast(
 document.addEventListener(
     "keydown",
     event => {
-        if (event.key === "Escape") {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
             closeModal();
         }
 
         if (
             event.ctrlKey &&
-            event.key.toLowerCase() === "k"
+            event.key.toLowerCase() ===
+            "k"
         ) {
+
             event.preventDefault();
 
             document
-                .getElementById("search")
+                .getElementById(
+                    "search"
+                )
                 .focus();
         }
     }
@@ -4042,12 +4823,14 @@ document.addEventListener(
 ========================================================= */
 
 setInterval(() => {
+
     if (
         currentView === "day" ||
         currentView === "week"
     ) {
         render();
     }
+
 }, 60000);
 
 </script>

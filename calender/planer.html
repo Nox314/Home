@@ -1,874 +1,3778 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X!Planer (Beta) - nox!314</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --proton-blue: #624aff;
-            --proton-blue-hover: #4f37e0;
-            --proton-dark: #1c1c1c;
-            --proton-light: #f5f7fa;
-            --proton-border: #e0e4eb;
-            --proton-text: #333333;
-            --card-bg: #ffffff;
-            --cell-bg: #fafbfc;
-            --shadow-sm: 0 4px 12px rgba(98, 74, 255, 0.06);
-            --shadow-md: 0 12px 32px rgba(0,0,0,0.08);
-            --radius: 14px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--proton-light);
-            color: var(--proton-text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<title>X!Planer Pro – nox!314</title>
 
-        #topMenu {
-            background-color: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--proton-border);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .wrap {
-            margin: 0 auto;
-            padding: 0 20px;
-            max-width: 1200px;
-        }
+<style>
+:root {
+    --primary: #624aff;
+    --primary-dark: #5039df;
+    --primary-soft: #f0edff;
 
-        #topMenu .wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 70px;
-        }
+    --green: #00a884;
+    --green-soft: #e8faf5;
 
-        .logo {
-            font-weight: 700;
-            font-size: 24px;
-            color: var(--proton-dark);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-        .logo span { color: var(--proton-blue); }
+    --orange: #f59e0b;
+    --orange-soft: #fff6df;
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
+    --red: #ef4444;
+    --red-soft: #fff0f0;
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--proton-text);
-            font-weight: 500;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
+    --blue: #2563eb;
+    --blue-soft: #edf4ff;
 
-        .nav-links a:hover, .nav-links a.active {
-            background-color: rgba(98, 74, 255, 0.1);
-            color: var(--proton-blue);
-        }
+    --text: #202124;
+    --text-2: #5f6368;
+    --text-3: #8b9199;
 
-        .main-container {
-            flex: 1;
-            padding: 40px 0;
-        }
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --surface: #fafbfc;
 
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            background: var(--card-bg);
-            padding: 20px 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--proton-border);
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+    --border: #e5e7eb;
+    --border-strong: #d5d9e0;
 
-        .calendar-header h1 {
-            margin: 0;
-            font-size: 22px;
-            color: var(--proton-dark);
-        }
+    --radius: 16px;
+    --radius-sm: 10px;
 
-        .view-switchers {
-            display: flex;
-            background: var(--proton-light);
-            padding: 4px;
-            border-radius: 10px;
-            gap: 4px;
-            border: 1px solid var(--proton-border);
-        }
+    --shadow: 0 4px 18px rgba(31, 35, 41, .055);
+    --shadow-hover: 0 12px 30px rgba(31, 35, 41, .10);
+}
 
-        .view-btn {
-            background: transparent;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--proton-text);
-            transition: all 0.2s;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .view-btn.active {
-            background: var(--card-bg);
-            color: var(--proton-blue);
-            box-shadow: var(--shadow-sm);
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        .calendar-nav-btns, .action-btns {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Inter, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+}
 
-        .btn {
-            background-color: var(--proton-blue);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
-        }
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
 
-        .btn:hover {
-            background-color: var(--proton-blue-hover);
-            transform: translateY(-1px);
-        }
+button {
+    cursor: pointer;
+}
 
-        .btn-secondary {
-            background-color: var(--card-bg);
-            color: var(--proton-text);
-            border: 1px solid var(--proton-border);
-            box-shadow: none;
-        }
+a {
+    color: inherit;
+}
 
-        .btn-secondary:hover {
-            background-color: rgba(98, 74, 255, 0.05);
-            color: var(--proton-blue);
-            border-color: var(--proton-blue);
-        }
+/* =========================================================
+   NAV
+========================================================= */
 
-        .calendar-layout {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 30px;
-        }
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 68px;
+    background: rgba(255,255,255,.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+}
 
-        @media(max-width: 950px) {
-            .calendar-layout {
-                grid-template-columns: 1fr;
-            }
-        }
+.topbar-inner {
+    width: min(1380px, calc(100% - 36px));
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
 
-        .calendar-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--proton-border);
-        }
+.logo {
+    text-decoration: none;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -.7px;
+}
 
-        /* Month View */
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: 600;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
+.logo span {
+    color: var(--primary);
+}
 
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-        }
+.nav {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
 
-        .day-cell {
-            min-height: 105px;
-            background: var(--cell-bg);
-            border: 1px solid var(--proton-border);
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
+.nav a {
+    padding: 9px 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 600;
+}
 
-        .day-cell:hover {
-            border-color: var(--proton-blue);
-            background: var(--card-bg);
-            box-shadow: var(--shadow-sm);
-            transform: translateY(-2px);
-        }
+.nav a:hover,
+.nav a.active {
+    color: var(--primary);
+    background: var(--primary-soft);
+}
 
-        .day-cell.other-month {
-            opacity: 0.3;
-        }
+/* =========================================================
+   PAGE
+========================================================= */
 
-        .day-cell.today {
-            border-color: var(--proton-blue);
-            background: rgba(98, 74, 255, 0.04);
-        }
+.page {
+    width: min(1380px, calc(100% - 36px));
+    margin: 0 auto;
+    padding: 28px 0 50px;
+}
 
-        .day-number {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--proton-dark);
-            margin-bottom: 6px;
-        }
+/* =========================================================
+   HEADER
+========================================================= */
 
-        .day-events-preview {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            font-size: 11px;
-        }
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 22px;
+}
 
-        .preview-badge {
-            padding: 2px 6px;
-            border-radius: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-weight: 500;
-            color: white;
-        }
+.eyebrow {
+    margin-bottom: 5px;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
 
-        /* Kategorien Farben */
-        .cat-work { background-color: #624aff; }
-        .cat-personal { background-color: #00b894; }
-        .cat-sport { background-color: #ff9f43; }
-        .cat-important { background-color: #ff5252; }
+.page-title {
+    margin: 0;
+    font-size: 29px;
+    line-height: 1.1;
+    letter-spacing: -.8px;
+}
 
-        /* Sidebar / Event Manager */
-        .sidebar-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--proton-border);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            height: fit-content;
-        }
+.page-subtitle {
+    margin: 7px 0 0;
+    color: var(--text-2);
+    font-size: 13px;
+}
 
-        .sidebar-card h3 {
-            margin: 0 0 5px 0;
-            font-size: 18px;
-            color: var(--proton-dark);
-        }
+.header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-bottom: 12px;
-        }
+/* =========================================================
+   BUTTONS
+========================================================= */
 
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-        }
+.btn {
+    min-height: 38px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: white;
+    background: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 5px 14px rgba(98,74,255,.18);
+    transition: .18s;
+}
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+.btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
 
-        .form-group input, .form-group textarea, .form-group select {
-            padding: 10px;
-            border: 1px solid var(--proton-border);
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            background: var(--cell-bg);
-            color: var(--proton-text);
-            transition: border-color 0.2s;
-        }
+.btn.secondary {
+    color: var(--text);
+    background: white;
+    border-color: var(--border);
+    box-shadow: none;
+}
 
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--proton-blue);
-            background: var(--card-bg);
-        }
+.btn.secondary:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--primary-soft);
+}
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 12px;
-        }
+.btn.danger {
+    color: var(--red);
+    background: var(--red-soft);
+    border-color: #ffd9d9;
+    box-shadow: none;
+}
 
-        .checkbox-group input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--proton-blue);
-            cursor: pointer;
-        }
+.btn.small {
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+}
 
-        .events-list {
-            max-height: 220px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding-right: 4px;
-        }
+/* =========================================================
+   DASHBOARD STATS
+========================================================= */
 
-        .event-item {
-            background: var(--cell-bg);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--proton-border);
-            font-size: 13px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: border-color 0.2s;
-        }
-        .event-item:hover {
-            border-color: var(--proton-blue);
-        }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
 
-        .event-info h4 {
-            margin: 0 0 3px 0;
-            font-size: 13px;
-            color: var(--proton-dark);
-        }
+.stat-card {
+    padding: 17px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
 
-        .event-info p {
-            margin: 0 0 4px 0;
-            color: #666;
-            font-size: 12px;
-            word-break: break-word;
-        }
+.stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-        .event-meta {
-            font-size: 11px;
-            color: #888;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+.stat-icon {
+    width: 35px;
+    height: 35px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    font-size: 16px;
+}
 
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ff5252;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 0 4px;
-            font-weight: 700;
-        }
-        .delete-btn:hover { color: #ff0000; }
+.stat-icon.purple {
+    background: var(--primary-soft);
+}
 
-        .stats-badge-box {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            background: var(--cell-bg);
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--proton-border);
-            font-size: 12px;
-            font-weight: 500;
-        }
+.stat-icon.green {
+    background: var(--green-soft);
+}
 
-        footer {
-            background-color: var(--card-bg);
-            padding: 25px 0;
-            margin-top: auto;
-            border-top: 1px solid var(--proton-border);
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-        }
-    </style>
+.stat-icon.orange {
+    background: var(--orange-soft);
+}
+
+.stat-icon.red {
+    background: var(--red-soft);
+}
+
+.stat-label {
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.stat-value {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.stat-description {
+    margin-top: 3px;
+    color: var(--text-3);
+    font-size: 10px;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.calendar-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.calendar-navigation {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-arrow {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: white;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.nav-arrow:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.period-title {
+    min-width: 180px;
+    margin: 0 8px;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.view-switcher {
+    display: flex;
+    padding: 3px;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.view-btn {
+    border: 0;
+    padding: 7px 10px;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-2);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.view-btn.active {
+    color: var(--primary);
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.search {
+    width: 180px;
+    height: 35px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0 10px;
+    outline: none;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 11px;
+}
+
+.search:focus {
+    border-color: var(--primary);
+    background: white;
+}
+
+.filter {
+    height: 35px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0 9px;
+    outline: none;
+    background: var(--surface);
+    font-size: 11px;
+}
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 18px;
+    align-items: start;
+}
+
+.calendar-panel,
+.sidebar-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.calendar-panel {
+    padding: 16px;
+    min-height: 650px;
+}
+
+/* =========================================================
+   MONTH
+========================================================= */
+
+.week-header,
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.week-header {
+    margin-bottom: 7px;
+}
+
+.weekday {
+    padding: 5px;
+    color: var(--text-3);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.day {
+    min-height: 112px;
+    padding: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: .15s;
+}
+
+.day:hover {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.day.other {
+    opacity: .38;
+}
+
+.day.today {
+    border-color: var(--primary);
+    background: #faf9ff;
+}
+
+.day.selected {
+    box-shadow: inset 0 0 0 2px rgba(98,74,255,.15);
+}
+
+.day-number {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 5px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.today .day-number {
+    color: white;
+    background: var(--primary);
+}
+
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.event-pill {
+    min-width: 0;
+    padding: 4px 6px;
+    border-radius: 5px;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.more-events {
+    color: var(--text-3);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px;
+}
+
+/* =========================================================
+   WEEK
+========================================================= */
+
+.week-view {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(125px, 1fr));
+    gap: 7px;
+    overflow-x: auto;
+}
+
+.week-column {
+    min-height: 570px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--surface);
+    overflow: hidden;
+}
+
+.week-column.today {
+    border-color: var(--primary);
+}
+
+.week-column-header {
+    padding: 11px 8px;
+    text-align: center;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.week-day-name {
+    color: var(--text-3);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.week-day-number {
+    margin-top: 4px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.week-day-number.today-number {
+    color: var(--primary);
+}
+
+.week-column-events {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.week-event {
+    padding: 8px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+}
+
+.week-event-title {
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.week-event-time {
+    margin-top: 3px;
+    color: var(--text-3);
+    font-size: 9px;
+}
+
+/* =========================================================
+   AGENDA / DAY
+========================================================= */
+
+.agenda {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.agenda-event {
+    display: grid;
+    grid-template-columns: 75px 1fr auto;
+    gap: 13px;
+    align-items: center;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--surface);
+}
+
+.agenda-event:hover {
+    border-color: var(--primary);
+    background: white;
+}
+
+.agenda-time {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.agenda-content h3 {
+    margin: 0 0 4px;
+    font-size: 13px;
+}
+
+.agenda-content p {
+    margin: 0;
+    color: var(--text-2);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 7px;
+    color: var(--text-3);
+    font-size: 9px;
+}
+
+.category-badge {
+    display: inline-flex;
+    padding: 3px 7px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 800;
+}
+
+.delete-icon {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 8px;
+    color: var(--red);
+    background: var(--red-soft);
+    font-size: 17px;
+}
+
+.delete-icon:hover {
+    background: #ffe1e1;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar-panel {
+    padding: 16px;
+}
+
+.sidebar-section + .sidebar-section {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+.sidebar-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.sidebar-heading h2 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.count-badge {
+    padding: 4px 7px;
+    border-radius: 20px;
+    color: var(--primary);
+    background: var(--primary-soft);
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-2);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.form-control {
+    width: 100%;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    outline: none;
+    padding: 0 9px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 11px;
+}
+
+textarea.form-control {
+    height: auto;
+    min-height: 75px;
+    padding: 9px;
+    resize: vertical;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    background: white;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 10px 0;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.checkbox input {
+    accent-color: var(--primary);
+}
+
+/* =========================================================
+   MINI EVENT LIST
+========================================================= */
+
+.saved-events {
+    max-height: 260px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.saved-event {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+}
+
+.saved-event-color {
+    width: 4px;
+    min-width: 4px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.saved-event-main {
+    min-width: 0;
+    flex: 1;
+}
+
+.saved-event-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.saved-event-date {
+    margin-top: 3px;
+    color: var(--text-3);
+    font-size: 9px;
+}
+
+/* =========================================================
+   IMPORT
+========================================================= */
+
+.drop-zone {
+    padding: 18px 10px;
+    border: 2px dashed var(--border-strong);
+    border-radius: 11px;
+    text-align: center;
+    background: var(--surface);
+    transition: .15s;
+}
+
+.drop-zone.dragover {
+    border-color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.drop-icon {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.drop-title {
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.drop-description {
+    margin: 4px 0 10px;
+    color: var(--text-3);
+    font-size: 9px;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    min-height: 430px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--text-3);
+    text-align: center;
+}
+
+.empty-icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    background: var(--primary-soft);
+    font-size: 26px;
+}
+
+.empty strong {
+    color: var(--text);
+    font-size: 14px;
+}
+
+.empty span {
+    margin-top: 5px;
+    font-size: 11px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(30,33,40,.42);
+    backdrop-filter: blur(5px);
+}
+
+.modal-backdrop.show {
+    display: flex;
+}
+
+.modal {
+    width: min(700px, 100%);
+    max-height: 88vh;
+    overflow: auto;
+    padding: 20px;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 25px 70px rgba(0,0,0,.18);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--surface);
+    font-size: 18px;
+}
+
+.import-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 430px;
+    overflow-y: auto;
+}
+
+.import-item {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+}
+
+.import-item-title {
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.import-item-meta {
+    margin-top: 3px;
+    color: var(--text-3);
+    font-size: 9px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.toast {
+    max-width: 340px;
+    padding: 11px 14px;
+    border-radius: 9px;
+    color: white;
+    background: #25272b;
+    box-shadow: var(--shadow-hover);
+    font-size: 11px;
+    animation: toast .2s ease;
+}
+
+.toast.success {
+    background: #087f5b;
+}
+
+.toast.error {
+    background: #c92a2a;
+}
+
+@keyframes toast {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+.cat-work {
+    background: var(--primary);
+}
+
+.cat-personal {
+    background: var(--green);
+}
+
+.cat-sport {
+    background: var(--orange);
+}
+
+.cat-important {
+    background: var(--red);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    background: white;
+    color: var(--text-3);
+    text-align: center;
+    font-size: 10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .sidebar-section + .sidebar-section {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .calendar-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .toolbar-right {
+        width: 100%;
+    }
+
+    .search {
+        flex: 1;
+    }
+
+    .month-grid,
+    .week-header {
+        gap: 4px;
+    }
+
+    .day {
+        min-height: 85px;
+        padding: 5px;
+    }
+
+    .event-pill {
+        font-size: 8px;
+    }
+
+    .sidebar-panel {
+        display: block;
+    }
+
+    .sidebar-section + .sidebar-section {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .topbar-inner,
+    .page {
+        width: min(100% - 20px, 1380px);
+    }
+
+    .nav a {
+        padding: 7px 6px;
+        font-size: 10px;
+    }
+
+    .logo {
+        font-size: 19px;
+    }
+
+    .page {
+        padding-top: 18px;
+    }
+
+    .page-title {
+        font-size: 23px;
+    }
+
+    .stats-grid {
+        gap: 7px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-value {
+        font-size: 20px;
+    }
+
+    .calendar-panel {
+        padding: 8px;
+        overflow-x: auto;
+    }
+
+    .month-grid,
+    .week-header {
+        min-width: 650px;
+    }
+
+    .toolbar-right {
+        width: 100%;
+    }
+
+    .view-switcher {
+        width: 100%;
+    }
+
+    .view-btn {
+        flex: 1;
+    }
+
+    .agenda-event {
+        grid-template-columns: 55px 1fr auto;
+        gap: 8px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <nav id="topMenu">
-        <div class="wrap">
-            <a href="index.html" class="logo">nox<span>!</span>314</a>
-            <div class="nav-links">
-                <a href="index.html">Start</a>
-                <a href="date.html" class="active">X!Planer Pro</a>
-                <a href="iss.html">Iss</a>
-                <a href="info.html">Info</a>
-            </div>
+<header class="topbar">
+    <div class="topbar-inner">
+
+        <a class="logo" href="index.html">
+            nox<span>!</span>314
+        </a>
+
+        <nav class="nav">
+            <a href="index.html">Start</a>
+            <a href="date.html" class="active">X!Planer Pro</a>
+            <a href="iss.html">Iss</a>
+            <a href="info.html">Info</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="page">
+
+    <section class="page-header">
+
+        <div>
+            <div class="eyebrow">X!Planer Pro</div>
+
+            <h1 class="page-title">
+                Mein Kalender
+            </h1>
+
+            <p class="page-subtitle">
+                Termine planen, importieren und organisieren.
+            </p>
         </div>
-    </nav>
 
-    <div class="main-container">
-        <div class="wrap">
-            
-            <div class="calendar-header">
-                <h1 id="headerTitle">Monat Jahr</h1>
-                
-                <div class="view-switchers">
-                    <button class="view-btn active" id="btnMonthView" onclick="switchView('month')">Monat</button>
-                    <button class="view-btn" id="btnWeekView" onclick="switchView('week')">Woche</button>
-                    <button class="view-btn" id="btnDayView" onclick="switchView('day')">Tag</button>
-                    <button class="view-btn" id="btnAgendaView" onclick="switchView('agenda')">Agenda</button>
-                </div>
+        <div class="header-actions">
 
-                <div class="calendar-nav-btns">
-                    <button class="btn btn-secondary" onclick="navigate(-1)">← Zurück</button>
-                    <button class="btn btn-secondary" onclick="goToToday()">Heute</button>
-                    <button class="btn btn-secondary" onclick="navigate(1)">Weiter →</button>
-                </div>
-                
-                <div class="action-btns">
-                    <input type="text" id="searchInput" placeholder="Suche..." oninput="renderView()" style="padding: 9px 12px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px; width:130px;">
-                    
-                    <select id="categoryFilter" onchange="renderView()" style="padding: 9px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px;">
-                        <option value="all">Alle Kategorien</option>
-                        <option value="work">Arbeit</option>
-                        <option value="personal">Privat</option>
-                        <option value="sport">Sport</option>
-                        <option value="important">Wichtig</option>
-                    </select>
+            <button
+                class="btn secondary"
+                onclick="openImport()"
+            >
+                📥 Import
+            </button>
 
-                    <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import</button>
-                    <input type="file" id="fileInput" style="display:none" accept=".ics,.txt" onchange="importEvents(event)">
-                    <button class="btn btn-secondary" onclick="exportEvents()">📤 Export iCal</button>
-                </div>
+            <button
+                class="btn secondary"
+                onclick="exportICS()"
+            >
+                📤 Export
+            </button>
+
+            <button
+                class="btn"
+                onclick="focusNewEvent()"
+            >
+                + Neuer Termin
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">Alle Termine</span>
+                <span class="stat-icon purple">📅</span>
             </div>
 
-            <div class="calendar-layout">
-                <div class="calendar-card" id="calendarCard">
-                    <!-- Dynamischer Content -->
-                </div>
+            <div
+                class="stat-value"
+                id="totalStat"
+            >
+                0
+            </div>
 
-                <div class="sidebar-card">
-                    <h3>Termin hinzufügen</h3>
-                    <form id="eventForm" onsubmit="addEvent(event)">
-                        <div class="form-group">
-                            <label for="eventTitle">Titel</label>
-                            <input type="text" id="eventTitle" placeholder="z.B. Projekt-Meeting" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="eventDate">Datum</label>
-                                <input type="date" id="eventDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="eventCategory">Kategorie</label>
-                                <select id="eventCategory">
-                                    <option value="work">Arbeit</option>
-                                    <option value="personal">Privat</option>
-                                    <option value="sport">Sport</option>
-                                    <option value="important">Wichtig</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eventLocation">Ort (optional)</label>
-                            <input type="text" id="eventLocation" placeholder="z.B. Büro / Zoom">
-                        </div>
-
-                        <label class="checkbox-group">
-                            <input type="checkbox" id="isAllDay" onchange="toggleAllDay(this)"> Ganztägig
-                        </label>
-
-                        <div class="form-row" id="timeRow">
-                            <div class="form-group">
-                                <label for="eventStartTime">Von</label>
-                                <input type="time" id="eventStartTime" value="09:00">
-                            </div>
-                            <div class="form-group">
-                                <label for="eventEndTime">Bis</label>
-                                <input type="time" id="eventEndTime" value="10:00">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eventDesc">Beschreibung</label>
-                            <textarea id="eventDesc" rows="2" placeholder="Details..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern ✨</button>
-                    </form>
-
-                    <hr style="border:0; border-top:1px solid var(--proton-border); margin: 5px 0;">
-
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3>Gespeicherte Events</h3>
-                        <span id="eventCountBadge" style="font-size: 11px; background: rgba(98, 74, 255, 0.1); color: var(--proton-blue); padding: 2px 8px; border-radius: 20px; font-weight: 600;">0 Events</span>
-                    </div>
-
-                    <div class="events-list" id="eventsList"></div>
-
-                    <div class="stats-badge-box" id="statsBox">
-                        <div>📊 Gesamt: <span id="statTotal">0</span></div>
-                        <div>⚡ Wichtig: <span id="statImportant">0</span></div>
-                    </div>
-                </div>
+            <div class="stat-description">
+                Gespeicherte Events
             </div>
 
         </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">Heute</span>
+                <span class="stat-icon green">✓</span>
+            </div>
+
+            <div
+                class="stat-value"
+                id="todayStat"
+            >
+                0
+            </div>
+
+            <div class="stat-description">
+                Termine am heutigen Tag
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">Diese Woche</span>
+                <span class="stat-icon orange">◷</span>
+            </div>
+
+            <div
+                class="stat-value"
+                id="weekStat"
+            >
+                0
+            </div>
+
+            <div class="stat-description">
+                Termine in dieser Woche
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+                <span class="stat-label">Wichtig</span>
+                <span class="stat-icon red">!</span>
+            </div>
+
+            <div
+                class="stat-value"
+                id="importantStat"
+            >
+                0
+            </div>
+
+            <div class="stat-description">
+                Markierte wichtige Termine
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TOOLBAR -->
+
+    <section class="calendar-toolbar">
+
+        <div class="calendar-navigation">
+
+            <button
+                class="nav-arrow"
+                onclick="navigate(-1)"
+            >
+                ‹
+            </button>
+
+            <button
+                class="btn secondary small"
+                onclick="goToday()"
+            >
+                Heute
+            </button>
+
+            <button
+                class="nav-arrow"
+                onclick="navigate(1)"
+            >
+                ›
+            </button>
+
+            <h2
+                class="period-title"
+                id="periodTitle"
+            >
+                —
+            </h2>
+
+        </div>
+
+
+        <div class="toolbar-right">
+
+            <input
+                class="search"
+                id="search"
+                type="search"
+                placeholder="🔎 Termine suchen..."
+                oninput="render()"
+            >
+
+            <select
+                class="filter"
+                id="categoryFilter"
+                onchange="render()"
+            >
+                <option value="all">Alle Kategorien</option>
+                <option value="work">Arbeit</option>
+                <option value="personal">Privat</option>
+                <option value="sport">Sport</option>
+                <option value="important">Wichtig</option>
+            </select>
+
+            <div class="view-switcher">
+
+                <button
+                    class="view-btn active"
+                    data-view="month"
+                    onclick="setView('month')"
+                >
+                    Monat
+                </button>
+
+                <button
+                    class="view-btn"
+                    data-view="week"
+                    onclick="setView('week')"
+                >
+                    Woche
+                </button>
+
+                <button
+                    class="view-btn"
+                    data-view="day"
+                    onclick="setView('day')"
+                >
+                    Tag
+                </button>
+
+                <button
+                    class="view-btn"
+                    data-view="agenda"
+                    onclick="setView('agenda')"
+                >
+                    Agenda
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTENT -->
+
+    <section class="main-grid">
+
+
+        <div
+            class="calendar-panel"
+            id="calendar"
+        ></div>
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar-panel">
+
+
+            <!-- NEW EVENT -->
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+                    <h2>Neuer Termin</h2>
+                </div>
+
+
+                <form
+                    id="eventForm"
+                    onsubmit="addEvent(event)"
+                >
+
+                    <div class="form-group">
+
+                        <label>Titel</label>
+
+                        <input
+                            class="form-control"
+                            id="title"
+                            required
+                            placeholder="z.B. Projekt-Meeting"
+                        >
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>Datum</label>
+
+                            <input
+                                class="form-control"
+                                id="date"
+                                type="date"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Kategorie</label>
+
+                            <select
+                                class="form-control"
+                                id="category"
+                            >
+                                <option value="work">Arbeit</option>
+                                <option value="personal">Privat</option>
+                                <option value="sport">Sport</option>
+                                <option value="important">Wichtig</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Ort</label>
+
+                        <input
+                            class="form-control"
+                            id="location"
+                            placeholder="z.B. Büro / Zoom"
+                        >
+
+                    </div>
+
+
+                    <label class="checkbox">
+
+                        <input
+                            id="allDay"
+                            type="checkbox"
+                            onchange="toggleTime()"
+                        >
+
+                        Ganztägiger Termin
+
+                    </label>
+
+
+                    <div
+                        class="form-row"
+                        id="timeFields"
+                    >
+
+                        <div class="form-group">
+
+                            <label>Von</label>
+
+                            <input
+                                class="form-control"
+                                id="startTime"
+                                type="time"
+                                value="09:00"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Bis</label>
+
+                            <input
+                                class="form-control"
+                                id="endTime"
+                                type="time"
+                                value="10:00"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Beschreibung</label>
+
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            placeholder="Weitere Informationen..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        class="btn"
+                        style="width:100%;"
+                    >
+                        ✨ Termin speichern
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- IMPORT -->
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+
+                    <h2>Kalender importieren</h2>
+
+                    <span class="count-badge">
+                        ICS
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="drop-zone"
+                    id="dropZone"
+                    onclick="document.getElementById('fileInput').click()"
+                >
+
+                    <div class="drop-icon">
+                        📥
+                    </div>
+
+                    <div class="drop-title">
+                        ICS-Datei hier ablegen
+                    </div>
+
+                    <div class="drop-description">
+                        Google, Outlook, Apple Calendar usw.
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn secondary small"
+                        onclick="event.stopPropagation(); document.getElementById('fileInput').click()"
+                    >
+                        Datei auswählen
+                    </button>
+
+                </div>
+
+
+                <input
+                    hidden
+                    id="fileInput"
+                    type="file"
+                    multiple
+                    accept=".ics,.ical,text/calendar"
+                    onchange="handleFiles(event)"
+                >
+
+            </section>
+
+
+            <!-- EVENTS -->
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+
+                    <h2>Meine Termine</h2>
+
+                    <span
+                        class="count-badge"
+                        id="eventCount"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="saved-events"
+                    id="savedEvents"
+                ></div>
+
+            </section>
+
+        </aside>
+
+    </section>
+
+</main>
+
+
+<footer>
+    © 2026 nox!314 • X!Planer Pro
+</footer>
+
+
+<!-- IMPORT MODAL -->
+
+<div
+    class="modal-backdrop"
+    id="modal"
+    onclick="closeModalOutside(event)"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>📥 Termine importieren</h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <p
+            id="importInfo"
+            style="
+                color:var(--text-2);
+                font-size:11px;
+                line-height:1.5;
+            "
+        ></p>
+
+
+        <div
+            class="import-preview"
+            id="importPreview"
+        ></div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="btn secondary"
+                onclick="closeModal()"
+            >
+                Abbrechen
+            </button>
+
+            <button
+                class="btn"
+                id="importButton"
+                onclick="confirmImport()"
+            >
+                Termine importieren
+            </button>
+
+        </div>
+
     </div>
 
-    <footer>
-        <div class="wrap">&copy; 2026 nox!314 &bull; Advanced X!Planer Pro (Clean Light Edition)</div>
-    </footer>
+</div>
 
-    <script>
-        let currentDate = new Date();
-        let currentView = 'month'; 
-        
-        let events = JSON.parse(localStorage.getItem('nox_events_clean_pro')) || [
-            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true, startTime: '', endTime: '', location: 'Online', category: 'work' },
-            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check', isAllDay: false, startTime: '14:00', endTime: '15:30', location: 'Serverraum', category: 'important' }
-        ];
 
-        function initApp() {
-            renderView();
-            renderEventsList();
-            if(!document.getElementById('eventDate').value) {
-                document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+<div
+    class="toast-container"
+    id="toastContainer"
+></div>
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const STORAGE_KEY = "nox_xplaner_pro_v4";
+
+let currentDate = new Date();
+let currentView = "month";
+let pendingImport = [];
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const initialEvents = [
+    {
+        id: crypto.randomUUID(),
+        title: "Release X!Secure",
+        date: "2026-06-15",
+        category: "work",
+        location: "Online",
+        allDay: true,
+        startTime: "",
+        endTime: "",
+        description: "Beta-Launch des neuen Passwort-Managers."
+    },
+    {
+        id: crypto.randomUUID(),
+        title: "Server Wartung",
+        date: "2026-06-28",
+        category: "important",
+        location: "Serverraum",
+        allDay: false,
+        startTime: "14:00",
+        endTime: "15:30",
+        description: "Kurzer Downtime-Check."
+    }
+];
+
+
+let events = loadEvents();
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("date").value =
+        dateString(new Date());
+
+    setupDragDrop();
+
+    render();
+    updateStats();
+
+});
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadEvents() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!raw) {
+            return initialEvents;
+        }
+
+        const data = JSON.parse(raw);
+
+        if (!Array.isArray(data)) {
+            return initialEvents;
+        }
+
+        return data.map(normalizeEvent);
+
+    } catch {
+
+        return initialEvents;
+    }
+}
+
+
+function saveEvents() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(events)
+    );
+}
+
+
+function normalizeEvent(e) {
+
+    return {
+        id: e.id || crypto.randomUUID(),
+        title: e.title || "Ohne Titel",
+        date: e.date || dateString(new Date()),
+        category: e.category || "work",
+        location: e.location || "",
+        allDay: Boolean(
+            e.allDay ?? e.isAllDay
+        ),
+        startTime: e.startTime || "",
+        endTime: e.endTime || "",
+        description:
+            e.description ??
+            e.desc ??
+            ""
+    };
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function dateString(date) {
+
+    const y = date.getFullYear();
+    const m =
+        String(date.getMonth() + 1)
+            .padStart(2, "0");
+    const d =
+        String(date.getDate())
+            .padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+function dateObject(str) {
+
+    const [y,m,d] =
+        str.split("-").map(Number);
+
+    return new Date(y,m-1,d);
+}
+
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeICS(value) {
+
+    return String(value ?? "")
+        .replace(/\\/g,"\\\\")
+        .replace(/\r?\n/g,"\\n")
+        .replace(/;/g,"\\;")
+        .replace(/,/g,"\\,");
+}
+
+
+function unescapeICS(value) {
+
+    return String(value ?? "")
+        .replace(/\\n/gi,"\n")
+        .replace(/\\,/g,",")
+        .replace(/\\;/g,";")
+        .replace(/\\\\/g,"\\");
+}
+
+
+function formatDate(str) {
+
+    if (!str) return "";
+
+    return dateObject(str)
+        .toLocaleDateString(
+            "de-DE",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                year:"numeric"
             }
-        }
+        );
+}
 
-        function switchView(view) {
-            currentView = view;
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn${view.charAt(0).toUpperCase() + view.slice(1)}View`).classList.add('active');
-            renderView();
-        }
 
-        function renderView() {
-            if (currentView === 'month') renderMonthView();
-            else if (currentView === 'week') renderWeekView();
-            else if (currentView === 'day') renderDayView();
-            else if (currentView === 'agenda') renderAgendaView();
-            updateStats();
-        }
+function categoryName(category) {
 
-        function navigate(dir) {
-            if (currentView === 'month' || currentView === 'agenda') {
-                currentDate.setMonth(currentDate.getMonth() + dir);
-            } else if (currentView === 'week') {
-                currentDate.setDate(currentDate.getDate() + (dir * 7));
-            } else if (currentView === 'day') {
-                currentDate.setDate(currentDate.getDate() + dir);
-            }
-            renderView();
-        }
+    return {
+        work:"Arbeit",
+        personal:"Privat",
+        sport:"Sport",
+        important:"Wichtig"
+    }[category] || "Arbeit";
+}
 
-        function goToToday() {
-            currentDate = new Date();
-            renderView();
-        }
 
-        function toggleAllDay(checkbox) {
-            document.getElementById('timeRow').style.display = checkbox.checked ? 'none' : 'grid';
-        }
+function categoryColor(category) {
 
-        function getFilteredEvents() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const catFilter = document.getElementById('categoryFilter').value;
-            
-            return events.filter(e => {
-                const matchesQuery = !query || e.title.toLowerCase().includes(query) || (e.desc && e.desc.toLowerCase().includes(query));
-                const matchesCat = catFilter === 'all' || e.category === catFilter;
-                return matchesQuery && matchesCat;
-            });
-        }
+    return {
+        work:"#624aff",
+        personal:"#00a884",
+        sport:"#f59e0b",
+        important:"#ef4444"
+    }[category] || "#624aff";
+}
 
-        // --- MONTH VIEW ---
-        function renderMonthView() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-            document.getElementById('headerTitle').innerText = `${monthNames[month]} ${year}`;
 
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
-            const totalDays = new Date(year, month + 1, 0).getDate();
-            const prevTotalDays = new Date(year, month, 0).getDate();
-            const activeEvents = getFilteredEvents();
+function compareEvents(a,b) {
 
-            let gridHTML = `<div class="weekdays"><div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div></div><div class="days-grid">`;
+    return (
+        `${a.date} ${a.startTime || "00:00"}`
+    ).localeCompare(
+        `${b.date} ${b.startTime || "00:00"}`
+    );
+}
 
-            for (let i = firstDayIndex; i > 0; i--) {
-                gridHTML += `<div class="day-cell other-month"><div class="day-number">${prevTotalDays - i + 1}</div></div>`;
-            }
 
-            const todayStr = new Date().toISOString().split('T')[0];
-            for (let i = 1; i <= totalDays; i++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                const isToday = dateStr === todayStr ? 'today' : '';
-                const dayEvents = activeEvents.filter(e => e.date === dateStr);
-                
-                let badgesHTML = '<div class="day-events-preview">';
-                dayEvents.slice(0, 2).forEach(ev => {
-                    let timeStr = ev.isAllDay ? '' : `${ev.startTime} `;
-                    badgesHTML += `<div class="preview-badge cat-${ev.category || 'work'}">${timeStr}${ev.title}</div>`;
-                });
-                if(dayEvents.length > 2) badgesHTML += `<span style="font-size:10px; color:#888; font-weight:600;">+${dayEvents.length - 2} weitere</span>`;
-                badgesHTML += '</div>';
+/* =========================================================
+   FILTER
+========================================================= */
 
-                gridHTML += `<div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')"><div class="day-number">${i}</div>${badgesHTML}</div>`;
-            }
-            gridHTML += `</div>`;
-            document.getElementById('calendarCard').innerHTML = gridHTML;
-        }
+function filteredEvents() {
 
-        // --- WEEK VIEW ---
-        function renderWeekView() {
-            let curr = new Date(currentDate);
-            let day = curr.getDay();
-            let diff = curr.getDate() - day + (day === 0 ? -6 : 1);
-            let monday = new Date(curr.setDate(diff));
-            document.getElementById('headerTitle').innerText = `Woche ab ${monday.toLocaleDateString('de-DE')}`;
+    const query =
+        document.getElementById("search")
+            .value
+            .trim()
+            .toLowerCase();
 
-            let weekHTML = `<div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:10px;">`;
-            const todayStr = new Date().toISOString().split('T')[0];
-            const activeEvents = getFilteredEvents();
+    const category =
+        document.getElementById("categoryFilter")
+            .value;
 
-            for(let i=0; i<7; i++) {
-                let loopDate = new Date(monday);
-                loopDate.setDate(monday.getDate() + i);
-                let dateStr = loopDate.toISOString().split('T')[0];
-                let isToday = dateStr === todayStr ? 'border-color:var(--proton-blue); background:rgba(98, 74, 255, 0.02);' : '';
-                let dayEvents = activeEvents.filter(e => e.date === dateStr);
+    return events.filter(e => {
 
-                weekHTML += `<div style="background:var(--cell-bg); border:1px solid var(--proton-border); border-radius:10px; padding:10px; min-height:400px; ${isToday}" onclick="selectDate('${dateStr}')">
-                    <div style="font-size:13px; font-weight:600; text-align:center; padding-bottom:8px; border-bottom:1px solid var(--proton-border);">${loopDate.toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'})}</div>
-                    <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">`;
+        const text =
+            `${e.title} ${e.description} ${e.location}`
+                .toLowerCase();
 
-                dayEvents.forEach(ev => {
-                    weekHTML += `<div style="background:var(--card-bg); border:1px solid var(--proton-border); border-radius:8px; padding:6px; font-size:12px;">
-                        <strong style="color:var(--proton-blue);">${ev.title}</strong>
-                        <div style="font-size:10px; color:#888;">${ev.isAllDay ? 'Ganztägig' : ev.startTime}</div>
-                    </div>`;
-                });
-                weekHTML += `</div></div>`;
-            }
-            weekHTML += `</div>`;
-            document.getElementById('calendarCard').innerHTML = weekHTML;
-        }
+        return (
+            (!query || text.includes(query)) &&
+            (
+                category === "all" ||
+                e.category === category
+            )
+        );
 
-        // --- DAY VIEW ---
-        function renderDayView() {
-            const dateStr = currentDate.toISOString().split('T')[0];
-            document.getElementById('headerTitle').innerText = currentDate.toLocaleDateString('de-DE', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-            const activeEvents = getFilteredEvents().filter(e => e.date === dateStr);
+    });
 
-            let dayHTML = `<div style="display:flex; flex-direction:column; gap:10px;">`;
-            if(activeEvents.length === 0) {
-                dayHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine an diesem Tag.</p>`;
-            } else {
-                activeEvents.forEach(ev => {
-                    dayHTML += `<div class="event-item">
-                        <div class="event-info">
-                            <h4>${ev.title}</h4>
-                            <p>${ev.desc || ''}</p>
-                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' - ' + ev.endTime}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
-                        </div>
-                    </div>`;
-                });
-            }
-            dayHTML += `</div>`;
-            document.getElementById('calendarCard').innerHTML = dayHTML;
-        }
+}
 
-        // --- AGENDA VIEW ---
-        function renderAgendaView() {
-            document.getElementById('headerTitle').innerText = `Komplette Agenda`;
-            let sorted = [...getFilteredEvents()].sort((a,b) => new Date(a.date) - new Date(b.date));
-            
-            let agendaHTML = `<div style="display:flex; flex-direction:column; gap:12px;">`;
-            if(sorted.length === 0) {
-                agendaHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine gefunden.</p>`;
-            } else {
-                sorted.forEach((ev, idx) => {
-                    agendaHTML += `<div class="event-item" style="align-items:center;">
-                        <div class="event-info">
-                            <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
-                            <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
-                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' Uhr'}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
-                        </div>
-                        <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
-                    </div>`;
-                });
-            }
-            agendaHTML += `</div>`;
-            document.getElementById('calendarCard').innerHTML = agendaHTML;
-        }
 
-        function selectDate(dateStr) {
-            document.getElementById('eventDate').value = dateStr;
-            document.getElementById('eventTitle').focus();
-        }
+/* =========================================================
+   VIEW
+========================================================= */
 
-        function addEvent(e) {
-            e.preventDefault();
-            events.push({
-                title: document.getElementById('eventTitle').value,
-                date: document.getElementById('eventDate').value,
-                category: document.getElementById('eventCategory').value,
-                location: document.getElementById('eventLocation').value,
-                isAllDay: document.getElementById('isAllDay').checked,
-                startTime: document.getElementById('eventStartTime').value,
-                endTime: document.getElementById('eventEndTime').value,
-                desc: document.getElementById('eventDesc').value
-            });
-            saveAndRefresh();
-            document.getElementById('eventForm').reset();
-            document.getElementById('timeRow').style.display = 'grid';
-        }
+function setView(view) {
 
-        function deleteEvent(index) {
-            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
-            const target = sorted[index];
-            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title));
-            saveAndRefresh();
-        }
+    currentView = view;
 
-        function saveAndRefresh() {
-            localStorage.setItem('nox_events_clean_pro', JSON.stringify(events));
-            renderView();
-            renderEventsList();
-        }
+    document
+        .querySelectorAll(".view-btn")
+        .forEach(btn => {
 
-        function renderEventsList() {
-            const listContainer = document.getElementById('eventsList');
-            document.getElementById('eventCountBadge').innerText = `${events.length} Events`;
-            if (events.length === 0) {
-                listContainer.innerHTML = '<p style="color:#888; font-size:13px; text-align:center;">Keine Events vorhanden.</p>';
-                return;
-            }
-            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
-            let html = '';
-            sorted.forEach((ev, idx) => {
-                html += `<div class="event-item">
-                    <div class="event-info">
-                        <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
-                        <p>${ev.desc ? escapeHtml(ev.desc) : ''}</p>
+            btn.classList.toggle(
+                "active",
+                btn.dataset.view === view
+            );
+
+        });
+
+    render();
+}
+
+
+function navigate(direction) {
+
+    if (currentView === "month") {
+
+        currentDate.setMonth(
+            currentDate.getMonth() + direction
+        );
+
+    } else if (currentView === "week") {
+
+        currentDate.setDate(
+            currentDate.getDate() +
+            direction * 7
+        );
+
+    } else {
+
+        currentDate.setDate(
+            currentDate.getDate() +
+            direction
+        );
+
+    }
+
+    render();
+}
+
+
+function goToday() {
+
+    currentDate = new Date();
+
+    render();
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render() {
+
+    if (currentView === "month") {
+        renderMonth();
+    }
+
+    if (currentView === "week") {
+        renderWeek();
+    }
+
+    if (currentView === "day") {
+        renderDay();
+    }
+
+    if (currentView === "agenda") {
+        renderAgenda();
+    }
+
+    renderSavedEvents();
+    updateStats();
+}
+
+
+/* =========================================================
+   MONTH
+========================================================= */
+
+function renderMonth() {
+
+    const year =
+        currentDate.getFullYear();
+
+    const month =
+        currentDate.getMonth();
+
+    const names = [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+    ];
+
+    document.getElementById("periodTitle")
+        .textContent =
+            `${names[month]} ${year}`;
+
+    const first =
+        (new Date(year,month,1).getDay()+6)%7;
+
+    const days =
+        new Date(year,month+1,0).getDate();
+
+    const prevDays =
+        new Date(year,month,0).getDate();
+
+    const today =
+        dateString(new Date());
+
+    const active =
+        filteredEvents();
+
+    let html = `
+        <div class="week-header">
+
+            <div class="weekday">Mo</div>
+            <div class="weekday">Di</div>
+            <div class="weekday">Mi</div>
+            <div class="weekday">Do</div>
+            <div class="weekday">Fr</div>
+            <div class="weekday">Sa</div>
+            <div class="weekday">So</div>
+
+        </div>
+
+        <div class="month-grid">
+    `;
+
+    for (
+        let i = first;
+        i > 0;
+        i--
+    ) {
+
+        html += `
+            <div class="day other">
+                <div class="day-number">
+                    ${prevDays-i+1}
+                </div>
+            </div>
+        `;
+    }
+
+
+    for (
+        let d = 1;
+        d <= days;
+        d++
+    ) {
+
+        const date =
+            new Date(year,month,d);
+
+        const key =
+            dateString(date);
+
+        const dayEvents =
+            active.filter(
+                e => e.date === key
+            );
+
+        html += `
+            <div
+                class="day ${key === today ? "today" : ""}"
+                onclick="selectDay('${key}')"
+            >
+
+                <div class="day-number">
+                    ${d}
+                </div>
+
+                <div class="event-list">
+        `;
+
+
+        dayEvents
+            .slice(0,4)
+            .forEach(e => {
+
+                html += `
+                    <div
+                        class="event-pill"
+                        style="background:${categoryColor(e.category)}"
+                        title="${escapeHTML(e.title)}"
+                    >
+                        ${
+                            e.allDay
+                                ? ""
+                                : escapeHTML(e.startTime)+" "
+                        }
+                        ${escapeHTML(e.title)}
                     </div>
-                    <button class="delete-btn" onclick="deleteEvent(${idx})">&times;</button>
-                </div>`;
+                `;
             });
-            listContainer.innerHTML = html;
+
+
+        if (dayEvents.length > 4) {
+
+            html += `
+                <div class="more-events">
+                    +${dayEvents.length-4} weitere
+                </div>
+            `;
         }
 
-        function updateStats() {
-            document.getElementById('statTotal').innerText = events.length;
-            document.getElementById('statImportant').innerText = events.filter(e => e.category === 'important').length;
+
+        html += `
+                </div>
+            </div>
+        `;
+    }
+
+
+    html += `
+        </div>
+    `;
+
+    document.getElementById("calendar")
+        .innerHTML = html;
+}
+
+
+/* =========================================================
+   WEEK
+========================================================= */
+
+function renderWeek() {
+
+    const d =
+        new Date(currentDate);
+
+    const weekday =
+        d.getDay();
+
+    const monday =
+        new Date(d);
+
+    monday.setDate(
+        d.getDate() -
+        (weekday === 0 ? 6 : weekday - 1)
+    );
+
+    document.getElementById("periodTitle")
+        .textContent =
+            `Woche ${formatDate(dateString(monday))}`;
+
+
+    const active =
+        filteredEvents();
+
+    const today =
+        dateString(new Date());
+
+    let html =
+        `<div class="week-view">`;
+
+
+    for (let i=0;i<7;i++) {
+
+        const day =
+            new Date(monday);
+
+        day.setDate(
+            monday.getDate()+i
+        );
+
+        const key =
+            dateString(day);
+
+        const dayEvents =
+            active
+                .filter(e=>e.date===key)
+                .sort(compareEvents);
+
+
+        html += `
+            <div
+                class="week-column ${key===today?"today":""}"
+                onclick="selectDay('${key}')"
+            >
+
+                <div class="week-column-header">
+
+                    <div class="week-day-name">
+                        ${day.toLocaleDateString(
+                            "de-DE",
+                            {weekday:"short"}
+                        )}
+                    </div>
+
+                    <div class="
+                        week-day-number
+                        ${key===today?"today-number":""}
+                    ">
+                        ${day.getDate()}
+                    </div>
+
+                </div>
+
+                <div class="week-column-events">
+        `;
+
+
+        if (!dayEvents.length) {
+
+            html += `
+                <div style="
+                    text-align:center;
+                    color:var(--text-3);
+                    font-size:9px;
+                    padding:20px 5px;
+                ">
+                    Keine Termine
+                </div>
+            `;
         }
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
 
-        function exportEvents() {
-            let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//nox!314//X!Planer Pro//DE\n";
-            events.forEach(e => {
-                icsContent += "BEGIN:VEVENT\n";
-                icsContent += `SUMMARY:${e.title}\n`;
-                icsContent += `DESCRIPTION:${e.desc || ''}\n`;
-                icsContent += `LOCATION:${e.location || ''}\n`;
-                if(e.isAllDay) {
-                    let dClean = e.date.replace(/-/g, '');
-                    icsContent += `DTSTART;VALUE=DATE:${dClean}\n`;
-                } else {
-                    let stClean = e.date.replace(/-/g, '') + 'T' + e.startTime.replace(/:/g, '') + '00';
-                    let etClean = e.date.replace(/-/g, '') + 'T' + e.endTime.replace(/:/g, '') + '00';
-                    icsContent += `DTSTART:${stClean}\nDTEND:${etClean}\n`;
+        dayEvents.forEach(e => {
+
+            html += `
+                <div
+                    class="week-event"
+                    style="
+                        border-left-color:
+                        ${categoryColor(e.category)}
+                    "
+                >
+
+                    <div class="week-event-title">
+                        ${escapeHTML(e.title)}
+                    </div>
+
+                    <div class="week-event-time">
+                        ${
+                            e.allDay
+                                ? "Ganztägig"
+                                : escapeHTML(
+                                    e.startTime || "--:--"
+                                )
+                        }
+                    </div>
+
+                </div>
+            `;
+        });
+
+
+        html += `
+                </div>
+            </div>
+        `;
+    }
+
+
+    html += `</div>`;
+
+    document.getElementById("calendar")
+        .innerHTML = html;
+}
+
+
+/* =========================================================
+   DAY
+========================================================= */
+
+function renderDay() {
+
+    const key =
+        dateString(currentDate);
+
+    document.getElementById("periodTitle")
+        .textContent =
+            currentDate.toLocaleDateString(
+                "de-DE",
+                {
+                    weekday:"long",
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
                 }
-                icsContent += "END:VEVENT\n";
-            });
-            icsContent += "END:VCALENDAR";
+            );
 
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'calendar_export.ics';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
 
-        function importEvents(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                // Einfacher Parser für SUMMARY und DTSTART im .ics Format
-                const summaryMatch = text.match(/SUMMARY:(.*)/);
-                const dateMatch = text.match(/DTSTART(?:;VALUE=DATE)?:([0-9]{8})/);
+    const dayEvents =
+        filteredEvents()
+            .filter(e=>e.date===key)
+            .sort(compareEvents);
 
-                if (summaryMatch && dateMatch) {
-                    const title = summaryMatch[1].trim();
-                    const rawDate = dateMatch[1];
-                    const formattedDate = `${rawDate.slice(0,4)}-${rawDate.slice(4,6)}-${rawDate.slice(6,8)}`;
-                    
-                    events.push({
-                        title: title,
-                        date: formattedDate,
-                        category: 'work',
-                        location: 'Importiert',
-                        isAllDay: true,
-                        startTime: '',
-                        endTime: '',
-                        desc: 'Aus .ics Datei importiert'
-                    });
-                    saveAndRefresh();
-                    alert("Termin erfolgreich aus iCal-Datei importiert! 🚀");
-                } else {
-                    alert("Konnte keine gültigen Event-Daten in der .ics finden.");
+
+    if (!dayEvents.length) {
+
+        document.getElementById("calendar")
+            .innerHTML = `
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        📅
+                    </div>
+
+                    <strong>
+                        Keine Termine
+                    </strong>
+
+                    <span>
+                        Für diesen Tag ist noch nichts geplant.
+                    </span>
+
+                </div>
+            `;
+
+        return;
+    }
+
+
+    document.getElementById("calendar")
+        .innerHTML =
+            `<div class="agenda">
+                ${
+                    dayEvents
+                        .map(eventHTML)
+                        .join("")
                 }
-                event.target.value = '';
-            };
-            reader.readAsText(file);
+             </div>`;
+}
+
+
+/* =========================================================
+   AGENDA
+========================================================= */
+
+function renderAgenda() {
+
+    document.getElementById("periodTitle")
+        .textContent =
+            "Alle Termine";
+
+
+    const list =
+        filteredEvents()
+            .sort(compareEvents);
+
+
+    if (!list.length) {
+
+        document.getElementById("calendar")
+            .innerHTML = `
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🔎
+                    </div>
+
+                    <strong>
+                        Keine Termine gefunden
+                    </strong>
+
+                    <span>
+                        Passe deine Suche oder den Filter an.
+                    </span>
+
+                </div>
+            `;
+
+        return;
+    }
+
+
+    document.getElementById("calendar")
+        .innerHTML =
+            `<div class="agenda">
+                ${
+                    list
+                        .map(eventHTML)
+                        .join("")
+                }
+             </div>`;
+}
+
+
+function eventHTML(e) {
+
+    const time =
+        e.allDay
+            ? "Ganztägig"
+            : `${e.startTime || "--:--"} – ${e.endTime || "--:--"}`;
+
+    return `
+        <article class="agenda-event">
+
+            <div class="agenda-time">
+                ${escapeHTML(time)}
+            </div>
+
+            <div class="agenda-content">
+
+                <h3>
+                    ${escapeHTML(e.title)}
+                </h3>
+
+                ${
+                    e.description
+                        ? `<p>
+                            ${escapeHTML(e.description)}
+                           </p>`
+                        : ""
+                }
+
+                <div class="event-meta">
+
+                    <span class="category-badge"
+                        style="
+                            background:
+                            ${categoryColor(e.category)}
+                        "
+                    >
+                        ${categoryName(e.category)}
+                    </span>
+
+                    <span>
+                        📅 ${formatDate(e.date)}
+                    </span>
+
+                    ${
+                        e.location
+                            ? `<span>
+                                📍 ${escapeHTML(e.location)}
+                               </span>`
+                            : ""
+                    }
+
+                </div>
+
+            </div>
+
+            <button
+                class="delete-icon"
+                onclick="deleteEvent('${e.id}')"
+                title="Löschen"
+            >
+                ×
+            </button>
+
+        </article>
+    `;
+}
+
+
+/* =========================================================
+   SELECT DAY
+========================================================= */
+
+function selectDay(date) {
+
+    document.getElementById("date")
+        .value = date;
+
+    document.getElementById("title")
+        .focus();
+
+    currentDate =
+        dateObject(date);
+
+    if (currentView === "month") {
+        render();
+    }
+
+}
+
+
+/* =========================================================
+   NEW EVENT
+========================================================= */
+
+function addEvent(event) {
+
+    event.preventDefault();
+
+
+    const title =
+        document.getElementById("title")
+            .value.trim();
+
+    const date =
+        document.getElementById("date")
+            .value;
+
+
+    if (!title || !date) {
+
+        toast(
+            "Bitte Titel und Datum eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    events.push({
+
+        id: crypto.randomUUID(),
+
+        title,
+
+        date,
+
+        category:
+            document.getElementById("category")
+                .value,
+
+        location:
+            document.getElementById("location")
+                .value.trim(),
+
+        allDay:
+            document.getElementById("allDay")
+                .checked,
+
+        startTime:
+            document.getElementById("startTime")
+                .value,
+
+        endTime:
+            document.getElementById("endTime")
+                .value,
+
+        description:
+            document.getElementById("description")
+                .value.trim()
+
+    });
+
+
+    saveEvents();
+
+    document.getElementById("eventForm")
+        .reset();
+
+    document.getElementById("date")
+        .value = date;
+
+    document.getElementById("timeFields")
+        .style.display = "grid";
+
+
+    render();
+
+    toast(
+        "Termin gespeichert.",
+        "success"
+    );
+}
+
+
+function focusNewEvent() {
+
+    document.getElementById("title")
+        .focus();
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior:"smooth"
+    });
+}
+
+
+function toggleTime() {
+
+    document.getElementById("timeFields")
+        .style.display =
+            document.getElementById("allDay")
+                .checked
+                ? "none"
+                : "grid";
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteEvent(id) {
+
+    const e =
+        events.find(x=>x.id===id);
+
+    if (!e) return;
+
+
+    if (
+        !confirm(
+            `„${e.title}“ wirklich löschen?`
+        )
+    ) {
+        return;
+    }
+
+
+    events =
+        events.filter(x=>x.id!==id);
+
+    saveEvents();
+
+    render();
+
+    toast(
+        "Termin gelöscht.",
+        "success"
+    );
+}
+
+
+/* =========================================================
+   SAVED EVENTS
+========================================================= */
+
+function renderSavedEvents() {
+
+    const container =
+        document.getElementById("savedEvents");
+
+    document.getElementById("eventCount")
+        .textContent = events.length;
+
+
+    const sorted =
+        [...events]
+            .sort(compareEvents)
+            .slice(0,30);
+
+
+    if (!sorted.length) {
+
+        container.innerHTML = `
+            <div style="
+                padding:18px 5px;
+                text-align:center;
+                color:var(--text-3);
+                font-size:10px;
+            ">
+                Noch keine Termine.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        sorted.map(e => `
+
+            <div class="saved-event">
+
+                <div
+                    class="saved-event-color"
+                    style="
+                        background:
+                        ${categoryColor(e.category)}
+                    "
+                ></div>
+
+                <div class="saved-event-main">
+
+                    <div class="saved-event-title">
+                        ${escapeHTML(e.title)}
+                    </div>
+
+                    <div class="saved-event-date">
+                        ${formatDate(e.date)}
+                        ·
+                        ${
+                            e.allDay
+                                ? "Ganztägig"
+                                : escapeHTML(
+                                    e.startTime || "--:--"
+                                )
+                        }
+                    </div>
+
+                </div>
+
+                <button
+                    class="delete-icon"
+                    onclick="deleteEvent('${e.id}')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+    const today =
+        dateString(new Date());
+
+    const now =
+        new Date();
+
+    const day =
+        now.getDay();
+
+    const monday =
+        new Date(now);
+
+    monday.setDate(
+        now.getDate() -
+        (day===0 ? 6 : day-1)
+    );
+
+    const mondayString =
+        dateString(monday);
+
+    const sunday =
+        new Date(monday);
+
+    sunday.setDate(
+        monday.getDate()+6
+    );
+
+    const sundayString =
+        dateString(sunday);
+
+
+    document.getElementById("totalStat")
+        .textContent = events.length;
+
+
+    document.getElementById("todayStat")
+        .textContent =
+            events.filter(
+                e=>e.date===today
+            ).length;
+
+
+    document.getElementById("weekStat")
+        .textContent =
+            events.filter(
+                e =>
+                    e.date >= mondayString &&
+                    e.date <= sundayString
+            ).length;
+
+
+    document.getElementById("importantStat")
+        .textContent =
+            events.filter(
+                e=>e.category==="important"
+            ).length;
+}
+
+
+/* =========================================================
+   ICS EXPORT
+========================================================= */
+
+function exportICS() {
+
+    const lines = [
+
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//nox!314//X!Planer Pro//DE",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH"
+
+    ];
+
+
+    events.forEach(e => {
+
+        lines.push("BEGIN:VEVENT");
+
+        lines.push(
+            `UID:${escapeICS(e.id)}@nox314`
+        );
+
+        lines.push(
+            `DTSTAMP:${icsNow()}`
+        );
+
+        lines.push(
+            `SUMMARY:${escapeICS(e.title)}`
+        );
+
+
+        if (e.description) {
+
+            lines.push(
+                `DESCRIPTION:${escapeICS(e.description)}`
+            );
         }
 
-        window.onload = initApp;
-    </script>
+
+        if (e.location) {
+
+            lines.push(
+                `LOCATION:${escapeICS(e.location)}`
+            );
+        }
+
+
+        if (e.allDay) {
+
+            lines.push(
+                `DTSTART;VALUE=DATE:${e.date.replace(/-/g,"")}`
+            );
+
+        } else {
+
+            lines.push(
+                `DTSTART:${icsDateTime(
+                    e.date,
+                    e.startTime || "00:00"
+                )}`
+            );
+
+            lines.push(
+                `DTEND:${icsDateTime(
+                    e.date,
+                    e.endTime || e.startTime || "01:00"
+                )}`
+            );
+        }
+
+
+        lines.push("END:VEVENT");
+
+    });
+
+
+    lines.push("END:VCALENDAR");
+
+
+    const blob =
+        new Blob(
+            [lines.join("\r\n")+"\r\n"],
+            {
+                type:"text/calendar;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        `xplaner-${dateString(new Date())}.ics`;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    setTimeout(
+        ()=>URL.revokeObjectURL(url),
+        1000
+    );
+
+
+    toast(
+        "Kalender exportiert.",
+        "success"
+    );
+}
+
+
+function icsDateTime(date,time) {
+
+    return (
+        date.replace(/-/g,"") +
+        "T" +
+        time.replace(/:/g,"") +
+        "00"
+    );
+}
+
+
+function icsNow() {
+
+    const d = new Date();
+
+    return (
+        d.getUTCFullYear() +
+        String(d.getUTCMonth()+1).padStart(2,"0") +
+        String(d.getUTCDate()).padStart(2,"0") +
+        "T" +
+        String(d.getUTCHours()).padStart(2,"0") +
+        String(d.getUTCMinutes()).padStart(2,"0") +
+        String(d.getUTCSeconds()).padStart(2,"0") +
+        "Z"
+    );
+}
+
+
+/* =========================================================
+   ICS IMPORT
+========================================================= */
+
+function setupDragDrop() {
+
+    const zone =
+        document.getElementById("dropZone");
+
+
+    ["dragenter","dragover"]
+        .forEach(type => {
+
+            zone.addEventListener(
+                type,
+                e => {
+
+                    e.preventDefault();
+
+                    zone.classList.add(
+                        "dragover"
+                    );
+
+                }
+            );
+
+        });
+
+
+    ["dragleave","drop"]
+        .forEach(type => {
+
+            zone.addEventListener(
+                type,
+                e => {
+
+                    e.preventDefault();
+
+                    zone.classList.remove(
+                        "dragover"
+                    );
+
+                }
+            );
+
+        });
+
+
+    zone.addEventListener(
+        "drop",
+        e => {
+
+            const files =
+                [...e.dataTransfer.files];
+
+            processFiles(files);
+
+        }
+    );
+}
+
+
+function openImport() {
+
+    document.getElementById("fileInput")
+        .click();
+}
+
+
+async function handleFiles(event) {
+
+    const files =
+        [...event.target.files];
+
+    event.target.value = "";
+
+    processFiles(files);
+}
+
+
+async function processFiles(files) {
+
+    if (!files.length) return;
+
+
+    let imported = [];
+
+
+    for (const file of files) {
+
+        if (
+            !file.name
+                .toLowerCase()
+                .endsWith(".ics") &&
+            !file.name
+                .toLowerCase()
+                .endsWith(".ical")
+        ) {
+            continue;
+        }
+
+
+        try {
+
+            const text =
+                await file.text();
+
+            imported =
+                imported.concat(
+                    parseICS(text)
+                );
+
+        } catch (error) {
+
+            console.error(
+                "Import error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    imported =
+        uniqueEvents(imported);
+
+
+    const newEvents =
+        imported.filter(
+            importedEvent =>
+                !events.some(
+                    existing =>
+                        sameEvent(
+                            existing,
+                            importedEvent
+                        )
+                )
+        );
+
+
+    pendingImport =
+        newEvents;
+
+
+    showImportPreview(
+        newEvents,
+        imported.length-newEvents.length
+    );
+}
+
+
+/* =========================================================
+   ICS PARSER
+========================================================= */
+
+function parseICS(text) {
+
+    text =
+        text
+            .replace(/^\uFEFF/,"")
+            .replace(/\r\n/g,"\n")
+            .replace(/\r/g,"\n");
+
+
+    const raw =
+        text.split("\n");
+
+    const lines = [];
+
+
+    for (const line of raw) {
+
+        if (
+            (line.startsWith(" ") ||
+             line.startsWith("\t")) &&
+            lines.length
+        ) {
+
+            lines[lines.length-1] +=
+                line.slice(1);
+
+        } else {
+
+            lines.push(line);
+
+        }
+
+    }
+
+
+    const result = [];
+
+    let event = null;
+
+
+    for (const line of lines) {
+
+        const upper =
+            line.toUpperCase();
+
+
+        if (
+            upper ===
+            "BEGIN:VEVENT"
+        ) {
+
+            event = {};
+
+            continue;
+        }
+
+
+        if (
+            upper ===
+            "END:VEVENT"
+        ) {
+
+            if (event) {
+
+                const converted =
+                    convertICS(event);
+
+                if (converted) {
+                    result.push(converted);
+                }
+
+            }
+
+            event = null;
+
+            continue;
+        }
+
+
+        if (!event) continue;
+
+
+        const index =
+            line.indexOf(":");
+
+
+        if (index < 0) continue;
+
+
+        const left =
+            line.slice(0,index);
+
+        const value =
+            line.slice(index+1);
+
+
+        const parts =
+            left.split(";");
+
+        const name =
+            parts.shift().toUpperCase();
+
+
+        const params = {};
+
+
+        parts.forEach(part => {
+
+            const equal =
+                part.indexOf("=");
+
+            if (equal < 0) return;
+
+            params[
+                part.slice(0,equal).toUpperCase()
+            ] =
+                part.slice(equal+1)
+                    .replace(/^"(.*)"$/,"$1");
+
+        });
+
+
+        event[name] = {
+            value,
+            params
+        };
+
+    }
+
+
+    return result;
+}
+
+
+function convertICS(data) {
+
+    if (!data.DTSTART) {
+        return null;
+    }
+
+
+    const start =
+        parseICSDate(
+            data.DTSTART.value
+        );
+
+
+    if (!start) {
+        return null;
+    }
+
+
+    const end =
+        data.DTEND
+            ? parseICSDate(
+                data.DTEND.value
+            )
+            : null;
+
+
+    const allDay =
+        data.DTSTART.params.VALUE === "DATE" ||
+        /^\d{8}$/.test(
+            data.DTSTART.value
+        );
+
+
+    const title =
+        unescapeICS(
+            data.SUMMARY?.value ||
+            "Ohne Titel"
+        ).trim();
+
+
+    const description =
+        unescapeICS(
+            data.DESCRIPTION?.value ||
+            ""
+        ).trim();
+
+
+    const location =
+        unescapeICS(
+            data.LOCATION?.value ||
+            ""
+        ).trim();
+
+
+    return {
+
+        id: crypto.randomUUID(),
+
+        title,
+
+        date: start.date,
+
+        allDay,
+
+        startTime:
+            allDay
+                ? ""
+                : start.time,
+
+        endTime:
+            allDay
+                ? ""
+                : end?.time || start.time,
+
+        location,
+
+        description,
+
+        category:
+            detectCategory(
+                title,
+                description
+            )
+
+    };
+}
+
+
+function parseICSDate(value) {
+
+    value =
+        String(value).trim();
+
+
+    if (/^\d{8}$/.test(value)) {
+
+        return {
+
+            date:
+                `${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)}`,
+
+            time:""
+
+        };
+
+    }
+
+
+    const match =
+        value.match(
+            /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/
+        );
+
+
+    if (!match) {
+        return null;
+    }
+
+
+    return {
+
+        date:
+            `${match[1]}-${match[2]}-${match[3]}`,
+
+        time:
+            `${match[4]}:${match[5]}`
+
+    };
+}
+
+
+/* =========================================================
+   IMPORT PREVIEW
+========================================================= */
+
+function showImportPreview(list,duplicates) {
+
+    const modal =
+        document.getElementById("modal");
+
+    const info =
+        document.getElementById("importInfo");
+
+    const preview =
+        document.getElementById("importPreview");
+
+    const button =
+        document.getElementById("importButton");
+
+
+    info.innerHTML =
+        `${list.length} neue Termine gefunden.` +
+        (
+            duplicates
+                ? ` ${duplicates} Duplikate werden übersprungen.`
+                : ""
+        );
+
+
+    if (!list.length) {
+
+        preview.innerHTML = `
+            <div class="empty" style="min-height:180px;">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <strong>
+                    Keine neuen Termine
+                </strong>
+
+                <span>
+                    Alle Termine sind bereits vorhanden.
+                </span>
+
+            </div>
+        `;
+
+        button.disabled = true;
+
+    } else {
+
+        preview.innerHTML =
+            list.map(e => `
+
+                <div class="import-item">
+
+                    <div class="import-item-title">
+                        ${escapeHTML(e.title)}
+                    </div>
+
+                    <div class="import-item-meta">
+
+                        ${formatDate(e.date)}
+                        ·
+                        ${
+                            e.allDay
+                                ? "Ganztägig"
+                                : escapeHTML(
+                                    e.startTime
+                                )
+                        }
+
+                        ${
+                            e.location
+                                ? ` · 📍 ${escapeHTML(e.location)}`
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+        button.disabled = false;
+    }
+
+
+    modal.classList.add("show");
+}
+
+
+function confirmImport() {
+
+    if (!pendingImport.length) return;
+
+
+    const count =
+        pendingImport.length;
+
+
+    events =
+        events.concat(
+            pendingImport
+        );
+
+
+    saveEvents();
+
+    pendingImport = [];
+
+
+    closeModal();
+
+    render();
+
+
+    toast(
+        `${count} Termin(e) importiert.`,
+        "success"
+    );
+}
+
+
+function closeModal() {
+
+    document.getElementById("modal")
+        .classList.remove("show");
+
+    pendingImport = [];
+}
+
+
+function closeModalOutside(event) {
+
+    if (
+        event.target.id === "modal"
+    ) {
+        closeModal();
+    }
+}
+
+
+/* =========================================================
+   DUPLICATES
+========================================================= */
+
+function sameEvent(a,b) {
+
+    return (
+        a.date === b.date &&
+        a.startTime === b.startTime &&
+        a.title.trim().toLowerCase() ===
+            b.title.trim().toLowerCase() &&
+        a.location.trim().toLowerCase() ===
+            b.location.trim().toLowerCase()
+    );
+}
+
+
+function uniqueEvents(list) {
+
+    const output = [];
+
+
+    for (const e of list) {
+
+        if (
+            !output.some(
+                existing =>
+                    sameEvent(
+                        existing,
+                        e
+                    )
+            )
+        ) {
+            output.push(e);
+        }
+
+    }
+
+
+    return output;
+}
+
+
+/* =========================================================
+   CATEGORY DETECTION
+========================================================= */
+
+function detectCategory(title,description) {
+
+    const text =
+        `${title} ${description}`
+            .toLowerCase();
+
+
+    if (
+        /deadline|dringend|wichtig|prüfung|arzt|urgent|exam/
+            .test(text)
+    ) {
+        return "important";
+    }
+
+
+    if (
+        /sport|gym|fitness|training|laufen|fußball|fussball|tennis/
+            .test(text)
+    ) {
+        return "sport";
+    }
+
+
+    if (
+        /familie|privat|urlaub|geburtstag|party|freunde/
+            .test(text)
+    ) {
+        return "personal";
+    }
+
+
+    return "work";
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(message,type="") {
+
+    const container =
+        document.getElementById("toastContainer");
+
+
+    const el =
+        document.createElement("div");
+
+    el.className =
+        `toast ${type}`;
+
+    el.textContent =
+        message;
+
+
+    container.appendChild(el);
+
+
+    setTimeout(() => {
+
+        el.style.opacity = "0";
+
+        setTimeout(
+            ()=>el.remove(),
+            200
+        );
+
+    },3000);
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+            closeModal();
+        }
+
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "k"
+        ) {
+
+            event.preventDefault();
+
+            document.getElementById("search")
+                .focus();
+
+        }
+
+    }
+);
+
+</script>
+
 </body>
 </html>

@@ -1,3379 +1,4056 @@
-<!DOCTYPE html> <html lang="de"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>X!Planer Pro – nox!314</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"
-
-<style>
-:root { --primary:#624aff; --primary-dark:#5039df; --primary-soft:#f0edff;
-
---green:#00a884; --green-soft:#e8faf5;
-
---orange:#f59e0b; --orange-soft:#fff6df;
-
---red:#ef4444; --red-soft:#fff0f0;
-
---blue:#2563eb; --blue-soft:#edf4ff;
-
---text:#202124; --text-2:#5f6368; --text-3:#8b9199;
-
---bg:#f5f6f8; --card:#fff; --surface:#fafbfc;
-
---border:#e5e7eb; --border-strong:#d5d9e0;
-
---radius:16px; --radius-sm:10px;
-
---hour-height:64px;
-
---shadow:0 4px 18px rgba(31,35,41,.055); --shadow-hover:0 12px 30px rgba(31,35,41,.10); }
-
-{
-box-sizing:border-box; }
-
-html { scroll-behavior:smooth; }
-
-body { margin:0; min-height:100vh; font-family:Inter,sans-serif; color:var(--text); background:var(--bg); }
-
-button, input, select, textarea { font:inherit; }
-
-button { cursor:pointer; }
-
-button:disabled { cursor:not-allowed; opacity:.45; }
-
-a { color:inherit; }
-
-/* ========================================================= NAVIGATION ========================================================= */
-
-.topbar { position:sticky; top:0; z-index:100; height:68px; background:rgba(255,255,255,.94); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
-
-.topbar-inner { width:min(1380px,calc(100% - 36px)); height:100%; margin:auto;
-
-display:flex; align-items:center; justify-content:space-between; gap:25px; }
-
-.logo { text-decoration:none; font-size:23px; font-weight:800; letter-spacing:-.7px; white-space:nowrap; }
-
-.logo span { color:var(--primary); }
-
-.nav { display:flex; gap:4px; align-items:center; }
-
-.nav a { padding:9px 12px; border-radius:9px;
-
-text-decoration:none; color:var(--text-2);
-
-font-size:13px; font-weight:600;
-
-transition:.18s; }
-
-.nav a:hover, .nav a.active { color:var(--primary); background:var(--primary-soft); }
-
-/* ========================================================= PAGE ========================================================= */
-
-.page { width:min(1380px,calc(100% - 36px)); margin:auto; padding:28px 0 50px; }
-
-.page-header { display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:22px; }
-
-.eyebrow { margin-bottom:5px;
-
-color:var(--primary);
-
-font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-
-.page-title { margin:0;
-
-font-size:29px; line-height:1.1; letter-spacing:-.8px; }
-
-.page-subtitle { margin:7px 0 0;
-
-color:var(--text-2);
-
-font-size:13px; }
-
-.header-actions { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:8px;
-
-min-width:0; }
-
-.header-actions .btn { flex:0 1 auto; white-space:nowrap; }
-
-/* ========================================================= BUTTONS ========================================================= */
-
-.btn { min-height:38px;
-
-border:1px solid transparent; border-radius:10px;
-
-padding:0 14px;
-
-display:inline-flex; align-items:center; justify-content:center; gap:7px;
-
-color:#fff; background:var(--primary);
-
-font-size:12px; font-weight:700;
-
-box-shadow:0 5px 14px rgba(98,74,255,.18);
-
-transition: background .18s, transform .18s, border-color .18s, color .18s; }
-
-.btn:hover { background:var(--primary-dark); transform:translateY(-1px); }
-
-.btn.secondary { color:var(--text); background:#fff; border-color:var(--border); box-shadow:none; }
-
-.btn.secondary:hover { color:var(--primary); border-color:var(--primary); background:var(--primary-soft); }
-
-.btn.small { min-height:32px; padding:0 10px; font-size:11px; }
-
-/* ========================================================= STATS ========================================================= */
-
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
-
-.stat-card { padding:17px;
-
-background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-
-box-shadow:var(--shadow); }
-
-.stat-top { display:flex; align-items:center; justify-content:space-between; }
-
-.stat-icon { width:35px; height:35px;
-
-display:grid; place-items:center;
-
-border-radius:10px; font-size:16px; }
-
-.stat-icon.purple { background:var(--primary-soft); }
-
-.stat-icon.green { background:var(--green-soft); }
-
-.stat-icon.orange { background:var(--orange-soft); }
-
-.stat-icon.red { background:var(--red-soft); }
-
-.stat-label { color:var(--text-2);
-
-font-size:11px; font-weight:600; }
-
-.stat-value { margin-top:10px;
-
-font-size:24px; font-weight:800; }
-
-.stat-description { margin-top:3px;
-
-color:var(--text-3);
-
-font-size:10px; }
-
-/* ========================================================= TOOLBAR ========================================================= */
-
-.calendar-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px;
-
-flex-wrap:wrap;
-
-margin-bottom:14px; padding:12px;
-
-background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-
-box-shadow:var(--shadow);
-
-min-width:0; }
-
-.calendar-navigation { display:flex; align-items:center; gap:6px;
-
-min-width:0; }
-
-.nav-arrow { width:34px; height:34px;
-
-flex:0 0 34px;
-
-border:1px solid var(--border); border-radius:9px;
-
-background:#fff; color:var(--text);
-
-font-size:16px;
-
-transition:.18s; }
-
-.nav-arrow:hover { color:var(--primary); border-color:var(--primary); background:var(--primary-soft); }
-
-.period-title { min-width:230px;
-
-margin:0 8px;
-
-font-size:16px; font-weight:800; }
-
-.toolbar-right { display:flex; align-items:center; justify-content:flex-end; gap:7px;
-
-flex:1 1 auto;
-
-min-width:0; flex-wrap:wrap; }
-
-.view-switcher { display:flex;
-
-padding:3px; gap:2px;
-
-background:var(--surface); border:1px solid var(--border); border-radius:9px; }
-
-.view-btn { border:0;
-
-padding:7px 10px;
-
-border-radius:7px;
-
-background:transparent; color:var(--text-2);
-
-font-size:11px; font-weight:700;
-
-transition:.18s; }
-
-.view-btn.active { color:var(--primary); background:#fff; box-shadow:var(--shadow); }
-
-.search { width:180px; height:35px;
-
-min-width:130px; max-width:220px;
-
-border:1px solid var(--border); border-radius:9px;
-
-padding:0 10px;
-
-outline:none;
-
-background:var(--surface); color:var(--text);
-
-font-size:11px; }
-
-.search:focus { border-color:var(--primary); background:#fff; }
-
-.filter { height:35px;
-
-max-width:180px;
-
-border:1px solid var(--border); border-radius:9px;
-
-padding:0 9px;
-
-outline:none;
-
-background:var(--surface);
-
-font-size:11px; }
-
-/* ========================================================= MAIN ========================================================= */
-
-.main-grid { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:18px; align-items:start; }
-
-.main-grid > * { min-width:0; }
-
-.calendar-panel, .sidebar-panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
-
-.calendar-panel { padding:16px; min-height:650px; min-width:0; }
-
-.sidebar-panel { padding:16px; min-width:0; }
-
-/* ========================================================= MONTH ========================================================= */
-
-.week-header, .month-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:7px; }
-
-.week-header { margin-bottom:7px; }
-
-.weekday { padding:5px;
-
-color:var(--text-3);
-
-text-align:center;
-
-font-size:10px; font-weight:800;
-
-text-transform:uppercase; }
-
-.day { min-height:112px;
-
-padding:8px;
-
-overflow:hidden;
-
-border:1px solid var(--border); border-radius:11px;
-
-background:var(--surface);
-
-cursor:pointer;
-
-transition:.15s; }
-
-.day:hover { border-color:var(--primary); background:#fff;
-
-box-shadow:var(--shadow);
-
-transform:translateY(-1px); }
-
-.day.other { opacity:.38; }
-
-.day.today { border-color:var(--primary); background:#faf9ff; }
-
-.day-number { width:25px; height:25px;
-
-display:grid; place-items:center;
-
-margin-bottom:5px;
-
-border-radius:50%;
-
-font-size:11px; font-weight:800; }
-
-.today .day-number { color:#fff; background:var(--primary); }
-
-.event-list { display:flex; flex-direction:column; gap:3px; }
-
-.event-pill { min-width:0;
-
-padding:4px 6px;
-
-border-radius:5px;
-
-color:#fff;
-
-font-size:9px; font-weight:700;
-
-white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-.more-events { color:var(--text-3);
-
-font-size:9px; font-weight:700;
-
-padding:2px; }
-
-/* ========================================================= TIMELINE – GENERAL ========================================================= */
-
-.timeline-shell { position:relative;
-
-width:100%;
-
-overflow:hidden;
-
-border:1px solid var(--border); border-radius:13px;
-
-background:#fff; }
-
-.timeline-scroll { width:100%;
-
-overflow-x:auto; overflow-y:hidden;
-
-scrollbar-width:thin; }
-
-.timeline-inner { min-width:0; }
-
-/*
-
-Tagesansicht
-*/ .timeline-single-grid { display:grid;
-
-grid-template-columns: 62px minmax(0,1fr);
-
-min-width:620px; }
-
-/*
-
-Wochenansicht:
-linke Uhr + 7 exakt definierte Tages-Spalten
-*/ .timeline-week-grid { display:grid;
-
-grid-template-columns: 62px repeat(7,minmax(130px,1fr));
-
-min-width:972px; }
-
-/* Header */
-
-.timeline-grid-header { position:sticky; top:0;
-
-z-index:30;
-
-border-bottom:1px solid var(--border);
-
-background:rgba(255,255,255,.97);
-
-backdrop-filter:blur(10px); }
-
-.timeline-grid-header > div { min-width:0;
-
-border-right:1px solid var(--border); }
-
-.timeline-grid-header > div:last-child { border-right:0; }
-
-.timeline-header-time { min-height:58px;
-
-background:#fafbfc; }
-
-/* Tagesheader */
-
-.timeline-day-cell { min-height:58px;
-
-padding:9px 10px;
-
-display:flex; align-items:center; justify-content:center;
-
-gap:8px; }
-
-.timeline-day-cell .timeline-day-date { font-size:17px; font-weight:800; }
-
-.timeline-day-cell .timeline-day-date.today { color:var(--primary); }
-
-.timeline-day-cell .timeline-day-name { color:var(--text-3);
-
-font-size:9px; font-weight:800;
-
-text-transform:uppercase; }
-
-/* ========================================================= GANZTÄGIGE EVENTS ========================================================= */
-
-.timeline-allday { border-bottom:1px solid var(--border); background:#fafbfc; }
-
-.timeline-allday-grid { display:grid;
-
-grid-template-columns: 62px repeat(7,minmax(130px,1fr));
-
-min-width:972px; }
-
-.timeline-allday-single { display:grid;
-
-grid-template-columns: 62px minmax(0,1fr);
-
-min-width:620px; }
-
-.timeline-allday-time { min-height:42px;
-
-border-right:1px solid var(--border); }
-
-.timeline-allday-cell { min-height:42px;
-
-padding:6px;
-
-display:flex; flex-direction:column;
-
-gap:4px;
-
-border-right:1px solid var(--border); }
-
-.timeline-allday-cell:last-child { border-right:0; }
-
-.timeline-allday-event { width:100%; min-width:0;
-
-padding:5px 7px;
-
-border-radius:6px;
-
-color:#fff;
-
-font-size:8px; line-height:1.2; font-weight:800;
-
-white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-
-cursor:pointer; }
-
-/* ========================================================= TIMELINE BODY ========================================================= */
-
-.timeline-grid-body { display:grid;
-
-grid-template-columns: 62px minmax(0,1fr);
-
-height:calc(var(--hour-height) * 24); }
-
-.timeline-hours { border-right:1px solid var(--border); background:#fafbfc; }
-
-.timeline-hour { height:var(--hour-height);
-
-position:relative;
-
-border-bottom:1px solid var(--border); }
-
-.timeline-hour span { position:absolute;
-
-right:8px; top:-7px;
-
-color:var(--text-3);
-
-font-size:9px; font-weight:700; }
-
-/* Woche */
-
-.timeline-week-content { display:grid;
-
-grid-template-columns: repeat(7,minmax(130px,1fr));
-
-min-width:910px;
-
-height:100%; }
-
-.timeline-day-column { position:relative;
-
-min-width:0;
-
-height:calc(var(--hour-height) * 24);
-
-border-right:1px solid var(--border);
-
-background: repeating-linear-gradient( to bottom, transparent 0, transparent calc(var(--hour-height) - 1px), var(--border) calc(var(--hour-height) - 1px), var(--border) var(--hour-height) ); }
-
-.timeline-day-column:last-child { border-right:0; }
-
-/* Tag */
-
-.timeline-single-content { position:relative;
-
-min-width:0;
-
-height:calc(var(--hour-height) * 24);
-
-background: repeating-linear-gradient( to bottom, transparent 0, transparent calc(var(--hour-height) - 1px), var(--border) calc(var(--hour-height) - 1px), var(--border) var(--hour-height) ); }
-
-/* ========================================================= TIMELINE EVENTS ========================================================= */
-
-.timeline-event { position:absolute;
-
-z-index:5;
-
-min-width:70px;
-
-padding:7px 8px;
-
-border-radius:8px;
-
-color:#fff;
-
-overflow:hidden;
-
-cursor:pointer;
-
-box-shadow:0 3px 10px rgba(0,0,0,.10);
-
-transition: transform .15s ease, box-shadow .15s ease, z-index .15s ease; }
-
-.timeline-event:hover { z-index:20;
-
-transform:translateY(-1px);
-
-box-shadow:0 8px 22px rgba(0,0,0,.16); }
-
-.timeline-event-title { overflow:hidden;
-
-text-overflow:ellipsis; white-space:nowrap;
-
-font-size:10px; line-height:1.25; font-weight:800; }
-
-.timeline-event-time { margin-top:3px;
-
-font-size:8px; font-weight:600;
-
-opacity:.9; }
-
-.timeline-event-location { margin-top:3px;
-
-overflow:hidden;
-
-text-overflow:ellipsis; white-space:nowrap;
-
-font-size:8px;
-
-opacity:.85; }
-
-/* ========================================================= NOW LINE ========================================================= */
-
-.timeline-now { position:absolute;
-
-left:0; right:0;
-
-height:2px;
-
-z-index:25;
-
-background:var(--red);
-
-pointer-events:none; }
-
-.timeline-now::before { content:"";
-
-position:absolute;
-
-left:-1px; top:-4px;
-
-width:10px; height:10px;
-
-border-radius:50%;
-
-background:var(--red);
-
-box-shadow: 0 0 0 3px rgba(239,68,68,.13); }
-
-.timeline-now-label { position:absolute;
-
-right:8px; top:-8px;
-
-padding:2px 5px;
-
-border-radius:5px;
-
-color:#fff; background:var(--red);
-
-font-size:8px; font-weight:800; }
-
-/* ========================================================= EMPTY TIMELINE ========================================================= */
-
-.timeline-empty { position:absolute;
-
-inset:0;
-
-z-index:2;
-
-pointer-events:none; }
-
-/* ========================================================= AGENDA ========================================================= */
-
-.agenda { display:flex; flex-direction:column; gap:8px; }
-
-.agenda-event { display:grid;
-
-grid-template-columns:75px minmax(0,1fr) auto;
-
-gap:13px;
-
-align-items:center;
-
-padding:13px;
-
-border:1px solid var(--border); border-radius:11px;
-
-background:var(--surface);
-
-transition:.15s; }
-
-.agenda-event:hover { border-color:var(--primary); background:#fff; }
-
-.agenda-time { color:var(--primary);
-
-font-size:11px; font-weight:800; }
-
-.agenda-content { min-width:0; }
-
-.agenda-content h3 { margin:0 0 4px;
-
-font-size:13px; }
-
-.agenda-content p { margin:0;
-
-color:var(--text-2);
-
-font-size:11px; line-height:1.5;
-
-word-break:break-word; }
-
-.event-meta { display:flex;
-
-flex-wrap:wrap;
-
-gap:6px;
-
-margin-top:7px;
-
-color:var(--text-3);
-
-font-size:9px; }
-
-.category-badge { display:inline-flex;
-
-padding:3px 7px;
-
-border-radius:20px;
-
-color:#fff;
-
-font-weight:800; }
-
-.delete-icon { width:30px; height:30px;
-
-flex:0 0 30px;
-
-border:0; border-radius:8px;
-
-color:var(--red); background:var(--red-soft);
-
-font-size:17px;
-
-transition:.15s; }
-
-.delete-icon:hover { background:#ffe1e1; }
-
-/* ========================================================= SIDEBAR ========================================================= */
-
-.sidebar-section + .sidebar-section { margin-top:18px; padding-top:18px;
-
-border-top:1px solid var(--border); }
-
-.sidebar-heading { display:flex;
-
-justify-content:space-between; align-items:center;
-
-margin-bottom:12px; }
-
-.sidebar-heading h2 { margin:0;
-
-font-size:15px; }
-
-.count-badge { padding:4px 7px;
-
-border-radius:20px;
-
-color:var(--primary); background:var(--primary-soft);
-
-font-size:9px; font-weight:800; }
-
-/* ========================================================= FORM ========================================================= */
-
-#eventForm { width:100%; }
-
-.form-group { margin-bottom:10px;
-
-min-width:0; }
-
-.form-group label { display:block;
-
-margin-bottom:5px;
-
-color:var(--text-2);
-
-font-size:9px; font-weight:800;
-
-text-transform:uppercase; }
-
-.form-control { width:100%; max-width:100%; min-width:0;
-
-height:36px;
-
-border:1px solid var(--border); border-radius:9px;
-
-outline:none;
-
-padding:0 9px;
-
-background:var(--surface); color:var(--text);
-
-font-size:11px;
-
-transition:.15s; }
-
-textarea.form-control { height:auto; min-height:75px;
-
-padding:9px;
-
-resize:vertical; }
-
-.form-control:focus { border-color:var(--primary); background:#fff;
-
-box-shadow:0 0 0 3px rgba(98,74,255,.08); }
-
-.form-row { display:grid;
-
-grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-
-gap:8px;
-
-width:100%; }
-
-.checkbox { display:flex; align-items:center;
-
-gap:7px;
-
-margin:10px 0;
-
-font-size:11px; font-weight:600; }
-
-.checkbox input { accent-color:var(--primary); }
-
-#eventForm > .btn { width:100%; min-width:0;
-
-white-space:normal; }
-
-/* ========================================================= DROP ZONE ========================================================= */
-
-.drop-zone { padding:18px 10px;
-
-border:2px dashed var(--border-strong); border-radius:11px;
-
-text-align:center;
-
-background:var(--surface);
-
-transition:.18s; }
-
-.drop-zone:hover { border-color:var(--primary); background:var(--primary-soft); }
-
-/* ========================================================= SAVED EVENTS ========================================================= */
-
-.saved-events { max-height:260px;
-
-overflow-y:auto;
-
-display:flex; flex-direction:column;
-
-gap:6px; }
-
-.saved-event { display:flex; align-items:center;
-
-gap:8px;
-
-padding:9px;
-
-border:1px solid var(--border); border-radius:9px;
-
-background:var(--surface); }
-
-.saved-event-color { width:4px; min-width:4px; height:30px;
-
-border-radius:4px; }
-
-.saved-event-main { min-width:0; flex:1; }
-
-.saved-event-title { overflow:hidden;
-
-white-space:nowrap; text-overflow:ellipsis;
-
-font-size:10px; font-weight:800; }
-
-.saved-event-date { margin-top:3px;
-
-color:var(--text-3);
-
-font-size:9px; }
-
-/* ========================================================= EMPTY ========================================================= */
-
-.empty { min-height:430px;
-
-display:flex; align-items:center; justify-content:center;
-
-flex-direction:column;
-
-color:var(--text-3);
-
-text-align:center; }
-
-.empty-icon { width:60px; height:60px;
-
-display:grid; place-items:center;
-
-margin-bottom:12px;
-
-border-radius:18px;
-
-background:var(--primary-soft);
-
-font-size:26px; }
-
-.empty strong { color:var(--text);
-
-font-size:14px; }
-
-.empty span { margin-top:5px;
-
-font-size:11px; }
-
-/* ========================================================= MODAL ========================================================= */
-
-.modal-backdrop { position:fixed;
-
-inset:0;
-
-z-index:500;
-
-display:none;
-
-align-items:center; justify-content:center;
-
-padding:18px;
-
-background:rgba(30,33,40,.42);
-
-backdrop-filter:blur(5px); }
-
-.modal-backdrop.show { display:flex; }
-
-.modal { width:min(700px,100%); max-height:88vh;
-
-overflow:auto;
-
-padding:20px;
-
-border-radius:16px;
-
-background:#fff;
-
-box-shadow:0 25px 70px rgba(0,0,0,.18); }
-
-.modal-header { display:flex;
-
-justify-content:space-between; align-items:center;
-
-margin-bottom:15px; }
-
-.modal-header h2 { margin:0;
-
-font-size:18px; }
-
-.close { width:32px; height:32px;
-
-border:0; border-radius:8px;
-
-background:var(--surface);
-
-font-size:18px; }
-
-.import-preview { display:flex; flex-direction:column;
-
-gap:6px;
-
-max-height:430px;
-
-overflow-y:auto; }
-
-.import-item { padding:10px;
-
-border:1px solid var(--border); border-radius:9px;
-
-background:var(--surface); }
-
-.import-item-title { font-size:11px; font-weight:800; }
-
-.import-item-meta { margin-top:3px;
-
-color:var(--text-3);
-
-font-size:9px; }
-
-.modal-actions { display:flex;
-
-justify-content:flex-end;
-
-gap:7px;
-
-margin-top:15px; }
-
-/* ========================================================= TOAST ========================================================= */
-
-.toast-container { position:fixed;
-
-right:18px; bottom:18px;
-
-z-index:1000;
-
-display:flex; flex-direction:column;
-
-gap:7px; }
-
-.toast { max-width:340px;
-
-padding:11px 14px;
-
-border-radius:9px;
-
-color:#fff;
-
-background:#25272b;
-
-box-shadow:var(--shadow-hover);
-
-font-size:11px;
-
-transition:opacity .2s; }
-
-.toast.success { background:#087f5b; }
-
-.toast.error { background:#c92a2a; }
-
-/* ========================================================= FOOTER ========================================================= */
-
-footer { padding:24px;
-
-border-top:1px solid var(--border);
-
-background:#fff;
-
-color:var(--text-3);
-
-text-align:center;
-
-font-size:10px; }
-
-/* ========================================================= RESPONSIVE ========================================================= */
-
-@media(max-width:1150px) {
-
-.main-grid { grid-template-columns:1fr; }
-
-.sidebar-panel { display:grid;
-
-grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-
-gap:18px; }
-
-.sidebar-section + .sidebar-section { margin-top:0; padding-top:0;
-
-border-top:0; }
-
-.stats-grid { grid-template-columns:repeat(2,1fr); } }
-
-@media(max-width:900px) {
-
-.header-actions { width:100%;
-
-justify-content:stretch; }
-
-.header-actions .btn { flex:1 1 150px; }
-
-.toolbar-right { width:100%;
-
-justify-content:stretch; }
-
-.toolbar-right .search { flex:1 1 180px;
-
-max-width:none; } }
-
-@media(max-width:800px) {
-
-.page-header { align-items:flex-start; flex-direction:column; }
-
-.calendar-toolbar { align-items:flex-start; flex-direction:column; }
-
-.toolbar-right { width:100%; }
-
-.sidebar-panel { display:block; }
-
-.sidebar-section + .sidebar-section { margin-top:18px; padding-top:18px;
-
-border-top:1px solid var(--border); }
-
-.period-title { min-width:170px; } }
-
-@media(max-width:600px) {
-
-.topbar-inner, .page { width:calc(100% - 20px); }
-
-.topbar { height:60px; }
-
-.nav { gap:1px; }
-
-.nav a { padding:7px 6px;
-
-font-size:10px; }
-
-.logo { font-size:19px; }
-
-.page { padding-top:18px; }
-
-.page-title { font-size:23px; }
-
-.stats-grid { gap:7px; }
-
-.stat-card { padding:12px; }
-
-.stat-value { font-size:20px; }
-
-.calendar-panel { padding:8px;
-
-overflow:hidden; }
-
-/* * Monatsansicht bleibt horizontal scrollbar, * statt die 7 Spalten zusammenzuquetschen. */ .month-grid, .week-header { min-width:650px; }
-
-.calendar-panel:has(.month-grid) { overflow-x:auto; }
-
-.calendar-toolbar { padding:9px; }
-
-.calendar-navigation { width:100%; }
-
-.period-title { flex:1;
-
-min-width:0;
-
-margin:0 4px;
-
-font-size:14px;
-
-white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-.toolbar-right { width:100%; }
-
-.view-switcher { width:100%; }
-
-.view-btn { flex:1; }
-
-.filter { flex:1;
-
-max-width:none; }
-
-.timeline-single-grid, .timeline-allday-single { min-width:560px;
-
-grid-template-columns: 50px minmax(0,1fr); }
-
-.timeline-week-grid, .timeline-allday-grid { min-width:900px;
-
-grid-template-columns: 50px repeat(7,minmax(121px,1fr)); }
-
-.timeline-grid-body { grid-template-columns: 50px minmax(0,1fr); }
-
-.timeline-week-content { min-width:850px; }
-
-.timeline-day-cell { padding:8px 5px;
-
-flex-direction:column;
-
-gap:1px; }
-
-.timeline-day-cell .timeline-day-date { font-size:15px; }
-
-.timeline-event { min-width:65px;
-
-padding:6px; }
-
-.timeline-event-title { font-size:9px; }
-
-.timeline-event-time { font-size:7px; }
-
-.agenda-event { grid-template-columns: 55px minmax(0,1fr) auto;
-
-gap:8px; }
-
-.header-actions { display:grid;
-
-grid-template-columns:1fr 1fr;
-
-width:100%; }
-
-.header-actions .btn { width:100%; }
-
-.header-actions .btn:last-child { grid-column:1 / -1; }
-
-.form-row { grid-template-columns:1fr; }
-
-.modal { padding:15px; }
-
-.modal-actions { flex-direction:column-reverse; }
-
-.modal-actions .btn { width:100%; }
-
-.toast-container { left:10px; right:10px; bottom:10px; }
-
-.toast { max-width:none; } } 
-</style> 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>X!Planer Pro – nox!314</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #624aff;
+            --primary-dark: #5039df;
+            --primary-soft: #f0edff;
+
+            --green: #00a884;
+            --green-soft: #e8faf5;
+
+            --orange: #f59e0b;
+            --orange-soft: #fff6df;
+
+            --red: #ef4444;
+            --red-soft: #fff0f0;
+
+            --blue: #2563eb;
+            --blue-soft: #edf4ff;
+
+            --text: #202124;
+            --text-2: #5f6368;
+            --text-3: #8b9199;
+
+            --bg: #f5f6f8;
+            --card: #fff;
+            --surface: #fafbfc;
+
+            --border: #e5e7eb;
+            --border-strong: #d5d9e0;
+
+            --radius: 16px;
+            --radius-sm: 10px;
+
+            --hour-height: 64px;
+
+            --shadow: 0 4px 18px rgba(31, 35, 41, .055);
+            --shadow-hover: 0 12px 30px rgba(31, 35, 41, .10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: .45;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* NAVIGATION */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 68px;
+            background: rgba(255, 255, 255, .94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            width: min(1380px, calc(100% - 36px));
+            height: 100%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .logo {
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .nav a {
+            padding: 9px 12px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 600;
+            transition: .18s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        /* PAGE */
+
+        .page {
+            width: min(1380px, calc(100% - 36px));
+            margin: auto;
+            padding: 28px 0 50px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 29px;
+            line-height: 1.1;
+            letter-spacing: -.8px;
+        }
+
+        .page-subtitle {
+            margin: 7px 0 0;
+            color: var(--text-2);
+            font-size: 13px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            min-height: 38px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            color: #fff;
+            background: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 5px 14px rgba(98, 74, 255, .18);
+            transition: .18s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn.secondary {
+            color: var(--text);
+            background: #fff;
+            border-color: var(--border);
+            box-shadow: none;
+        }
+
+        .btn.secondary:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .btn.small {
+            min-height: 32px;
+            padding: 0 10px;
+            font-size: 11px;
+        }
+
+        /* STATS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            padding: 17px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-icon {
+            width: 35px;
+            height: 35px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .stat-icon.purple {
+            background: var(--primary-soft);
+        }
+
+        .stat-icon.green {
+            background: var(--green-soft);
+        }
+
+        .stat-icon.orange {
+            background: var(--orange-soft);
+        }
+
+        .stat-icon.red {
+            background: var(--red-soft);
+        }
+
+        .stat-label {
+            color: var(--text-2);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            margin-top: 10px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .stat-description {
+            margin-top: 3px;
+            color: var(--text-3);
+            font-size: 10px;
+        }
+
+        /* TOOLBAR */
+
+        .calendar-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            padding: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-navigation {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .nav-arrow {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 34px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #fff;
+            color: var(--text);
+            font-size: 16px;
+            transition: .18s;
+        }
+
+        .nav-arrow:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .period-title {
+            min-width: 230px;
+            margin: 0 8px;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 7px;
+            flex: 1 1 auto;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+
+        .view-switcher {
+            display: flex;
+            padding: 3px;
+            gap: 2px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .view-btn {
+            border: 0;
+            padding: 7px 10px;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 11px;
+            font-weight: 700;
+            transition: .18s;
+        }
+
+        .view-btn.active {
+            color: var(--primary);
+            background: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .search {
+            width: 180px;
+            height: 35px;
+            min-width: 130px;
+            max-width: 220px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 10px;
+            outline: none;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 11px;
+        }
+
+        .search:focus {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        .filter {
+            height: 35px;
+            max-width: 180px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 9px;
+            outline: none;
+            background: var(--surface);
+            font-size: 11px;
+        }
+
+        /* MAIN */
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 330px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .main-grid > * {
+            min-width: 0;
+        }
+
+        .calendar-panel,
+        .sidebar-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-panel {
+            padding: 16px;
+            min-height: 650px;
+            min-width: 0;
+        }
+
+        .sidebar-panel {
+            padding: 16px;
+            min-width: 0;
+        }
+
+        /* MONTH */
+
+        .week-header,
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .week-header {
+            margin-bottom: 7px;
+        }
+
+        .weekday {
+            padding: 5px;
+            color: var(--text-3);
+            text-align: center;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .day {
+            min-height: 112px;
+            padding: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: var(--surface);
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .day:hover {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+        .day.other {
+            opacity: .38;
+        }
+
+        .day.today {
+            border-color: var(--primary);
+            background: #faf9ff;
+        }
+
+        .day-number {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 5px;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .today .day-number {
+            color: #fff;
+            background: var(--primary);
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .event-pill {
+            min-width: 0;
+            padding: 4px 6px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .more-events {
+            color: var(--text-3);
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px;
+        }
+
+        /* TIMELINE */
+
+        .timeline-shell {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #fff;
+        }
+
+        .timeline-scroll {
+            width: 100%;
+            overflow: auto;
+            max-height: 680px;
+            scrollbar-width: thin;
+        }
+
+        .timeline-inner {
+            min-width: 0;
+        }
+
+        .timeline-single-grid {
+            display: grid;
+            grid-template-columns: 62px minmax(0, 1fr);
+            min-width: 620px;
+        }
+
+        .timeline-week-grid {
+            display: grid;
+            grid-template-columns: 62px repeat(7, minmax(130px, 1fr));
+            min-width: 972px;
+        }
+
+        .timeline-grid-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, .97);
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-grid-header > div {
+            min-width: 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .timeline-grid-header > div:last-child {
+            border-right: 0;
+        }
+
+        .timeline-header-time {
+            min-height: 58px;
+            background: #fafbfc;
+        }
+
+        .timeline-day-cell {
+            min-height: 58px;
+            padding: 9px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .timeline-day-date {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .timeline-day-date.today {
+            color: var(--primary);
+        }
+
+        .timeline-day-name {
+            color: var(--text-3);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .timeline-allday {
+            border-bottom: 1px solid var(--border);
+            background: #fafbfc;
+        }
+
+        .timeline-allday-grid {
+            display: grid;
+            grid-template-columns: 62px repeat(7, minmax(130px, 1fr));
+            min-width: 972px;
+        }
+
+        .timeline-allday-single {
+            display: grid;
+            grid-template-columns: 62px minmax(0, 1fr);
+            min-width: 620px;
+        }
+
+        .timeline-allday-time {
+            min-height: 42px;
+            border-right: 1px solid var(--border);
+        }
+
+        .timeline-allday-cell {
+            min-height: 42px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-right: 1px solid var(--border);
+        }
+
+        .timeline-allday-cell:last-child {
+            border-right: 0;
+        }
+
+        .timeline-allday-event {
+            width: 100%;
+            min-width: 0;
+            padding: 5px 7px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 8px;
+            line-height: 1.2;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+
+        .timeline-grid-body {
+            display: grid;
+            grid-template-columns: 62px minmax(0, 1fr);
+            height: calc(var(--hour-height) * 24);
+        }
+
+        .timeline-hours {
+            border-right: 1px solid var(--border);
+            background: #fafbfc;
+        }
+
+        .timeline-hour {
+            height: var(--hour-height);
+            position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .timeline-hour span {
+            position: absolute;
+            right: 8px;
+            top: -7px;
+            color: var(--text-3);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .timeline-week-content {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(130px, 1fr));
+            min-width: 910px;
+            height: 100%;
+        }
+
+        .timeline-day-column {
+            position: relative;
+            min-width: 0;
+            height: calc(var(--hour-height) * 24);
+            border-right: 1px solid var(--border);
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent calc(var(--hour-height) - 1px),
+                    var(--border) calc(var(--hour-height) - 1px),
+                    var(--border) var(--hour-height)
+                );
+            cursor: pointer;
+        }
+
+        .timeline-day-column:last-child {
+            border-right: 0;
+        }
+
+        .timeline-single-content {
+            position: relative;
+            min-width: 0;
+            height: calc(var(--hour-height) * 24);
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    transparent 0,
+                    transparent calc(var(--hour-height) - 1px),
+                    var(--border) calc(var(--hour-height) - 1px),
+                    var(--border) var(--hour-height)
+                );
+        }
+
+        .timeline-event {
+            position: absolute;
+            z-index: 5;
+            min-width: 70px;
+            padding: 7px 8px;
+            border-radius: 8px;
+            color: #fff;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .10);
+            transition: .15s ease;
+        }
+
+        .timeline-event:hover {
+            z-index: 20;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .16);
+        }
+
+        .timeline-event-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 800;
+        }
+
+        .timeline-event-time {
+            margin-top: 3px;
+            font-size: 8px;
+            font-weight: 600;
+            opacity: .9;
+        }
+
+        .timeline-event-location {
+            margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 8px;
+            opacity: .85;
+        }
+
+        .timeline-now {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            z-index: 25;
+            background: var(--red);
+            pointer-events: none;
+        }
+
+        .timeline-now::before {
+            content: "";
+            position: absolute;
+            left: -1px;
+            top: -4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--red);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, .13);
+        }
+
+        .timeline-now-label {
+            position: absolute;
+            right: 8px;
+            top: -8px;
+            padding: 2px 5px;
+            border-radius: 5px;
+            color: #fff;
+            background: var(--red);
+            font-size: 8px;
+            font-weight: 800;
+        }
+
+        /* AGENDA */
+
+        .agenda {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .agenda-event {
+            display: grid;
+            grid-template-columns: 75px minmax(0, 1fr) auto;
+            gap: 13px;
+            align-items: center;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: var(--surface);
+            transition: .15s;
+        }
+
+        .agenda-event:hover {
+            border-color: var(--primary);
+            background: #fff;
+        }
+
+        .agenda-time {
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .agenda-content {
+            min-width: 0;
+        }
+
+        .agenda-content h3 {
+            margin: 0 0 4px;
+            font-size: 13px;
+        }
+
+        .agenda-content p {
+            margin: 0;
+            color: var(--text-2);
+            font-size: 11px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .event-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 7px;
+            color: var(--text-3);
+            font-size: 9px;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            padding: 3px 7px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        .delete-icon {
+            width: 30px;
+            height: 30px;
+            flex: 0 0 30px;
+            border: 0;
+            border-radius: 8px;
+            color: var(--red);
+            background: var(--red-soft);
+            font-size: 17px;
+            transition: .15s;
+        }
+
+        .delete-icon:hover {
+            background: #ffe1e1;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar-section + .sidebar-section {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sidebar-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-heading h2 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .count-badge {
+            padding: 4px 7px;
+            border-radius: 20px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        /* FORM */
+
+        #eventForm {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+            min-width: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-2);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .form-control {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            padding: 0 9px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 11px;
+            transition: .15s;
+        }
+
+        textarea.form-control {
+            height: auto;
+            min-height: 75px;
+            padding: 9px;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(98, 74, 255, .08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 10px 0;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .checkbox input {
+            accent-color: var(--primary);
+        }
+
+        #eventForm > .btn {
+            width: 100%;
+        }
+
+        /* DROPZONE */
+
+        .drop-zone {
+            padding: 18px 10px;
+            border: 2px dashed var(--border-strong);
+            border-radius: 11px;
+            text-align: center;
+            background: var(--surface);
+            transition: .18s;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        /* SAVED */
+
+        .saved-events {
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .saved-event {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+        }
+
+        .saved-event-color {
+            width: 4px;
+            min-width: 4px;
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .saved-event-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .saved-event-title {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .saved-event-date {
+            margin-top: 3px;
+            color: var(--text-3);
+            font-size: 9px;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            min-height: 430px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--text-3);
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            background: var(--primary-soft);
+            font-size: 26px;
+        }
+
+        .empty strong {
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .empty span {
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        /* MODAL */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(30, 33, 40, .42);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal {
+            width: min(700px, 100%);
+            max-height: 88vh;
+            overflow: auto;
+            padding: 20px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .18);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .close {
+            width: 32px;
+            height: 32px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--surface);
+            font-size: 18px;
+        }
+
+        .import-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 430px;
+            overflow-y: auto;
+        }
+
+        .import-item {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+        }
+
+        .import-item-title {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .import-item-meta {
+            margin-top: 3px;
+            color: var(--text-3);
+            font-size: 9px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+            margin-top: 15px;
+        }
+
+        /* TOAST */
+
+        .toast-container {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .toast {
+            max-width: 340px;
+            padding: 11px 14px;
+            border-radius: 9px;
+            color: #fff;
+            background: #25272b;
+            box-shadow: var(--shadow-hover);
+            font-size: 11px;
+            transition: opacity .2s;
+        }
+
+        .toast.success {
+            background: #087f5b;
+        }
+
+        .toast.error {
+            background: #c92a2a;
+        }
+
+        footer {
+            padding: 24px;
+            border-top: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-3);
+            text-align: center;
+            font-size: 10px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1150px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-panel {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 18px;
+            }
+
+            .sidebar-section + .sidebar-section {
+                margin-top: 0;
+                padding-top: 0;
+                border-top: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .header-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .header-actions .btn {
+                flex: 1 1 150px;
+            }
+
+            .toolbar-right {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .toolbar-right .search {
+                flex: 1 1 180px;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .calendar-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .toolbar-right {
+                width: 100%;
+            }
+
+            .sidebar-panel {
+                display: block;
+            }
+
+            .sidebar-section + .sidebar-section {
+                margin-top: 18px;
+                padding-top: 18px;
+                border-top: 1px solid var(--border);
+            }
+
+            .period-title {
+                min-width: 170px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .topbar-inner,
+            .page {
+                width: calc(100% - 20px);
+            }
+
+            .topbar {
+                height: 60px;
+            }
+
+            .nav {
+                gap: 1px;
+            }
+
+            .nav a {
+                padding: 7px 6px;
+                font-size: 10px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .page {
+                padding-top: 18px;
+            }
+
+            .page-title {
+                font-size: 23px;
+            }
+
+            .stats-grid {
+                gap: 7px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .calendar-panel {
+                padding: 8px;
+                overflow-x: auto;
+            }
+
+            .month-grid,
+            .week-header {
+                min-width: 650px;
+            }
+
+            .calendar-toolbar {
+                padding: 9px;
+            }
+
+            .calendar-navigation {
+                width: 100%;
+            }
+
+            .period-title {
+                flex: 1;
+                min-width: 0;
+                margin: 0 4px;
+                font-size: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .toolbar-right {
+                width: 100%;
+            }
+
+            .view-switcher {
+                width: 100%;
+            }
+
+            .view-btn {
+                flex: 1;
+            }
+
+            .filter {
+                flex: 1;
+                max-width: none;
+            }
+
+            .timeline-single-grid,
+            .timeline-allday-single {
+                min-width: 560px;
+                grid-template-columns: 50px minmax(0, 1fr);
+            }
+
+            .timeline-week-grid,
+            .timeline-allday-grid {
+                min-width: 900px;
+                grid-template-columns: 50px repeat(7, minmax(121px, 1fr));
+            }
+
+            .timeline-grid-body {
+                grid-template-columns: 50px minmax(0, 1fr);
+            }
+
+            .timeline-week-content {
+                min-width: 850px;
+            }
+
+            .timeline-day-cell {
+                padding: 8px 5px;
+                flex-direction: column;
+                gap: 1px;
+            }
+
+            .timeline-day-date {
+                font-size: 15px;
+            }
+
+            .timeline-event {
+                min-width: 65px;
+                padding: 6px;
+            }
+
+            .timeline-event-title {
+                font-size: 9px;
+            }
+
+            .timeline-event-time {
+                font-size: 7px;
+            }
+
+            .agenda-event {
+                grid-template-columns: 55px minmax(0, 1fr) auto;
+                gap: 8px;
+            }
+
+            .header-actions {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                width: 100%;
+            }
+
+            .header-actions .btn:last-child {
+                grid-column: 1 / -1;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                padding: 15px;
+            }
+
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .modal-actions .btn {
+                width: 100%;
+            }
+
+            .toast-container {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .toast {
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
 <header class="topbar">
+    <div class="topbar-inner">
 
-<div class="topbar-inner">
+        <a class="logo" href="index.html">
+            nox<span>!</span>314
+        </a>
 
-<a class="logo" href="index.html"> nox<span>!</span>314 </a>
+        <nav class="nav">
+            <a href="index.html">Start</a>
+            <a href="date.html" class="active">X!Planer Pro</a>
+            <a href="iss.html">Iss</a>
+            <a href="info.html">Info</a>
+        </nav>
 
-<nav class="nav">
-
-<a href="index.html"> Start </a>
-
-<a href="date.html" class="active"> X!Planer Pro </a>
-
-<a href="iss.html"> Iss </a>
-
-<a href="info.html"> Info </a>
-
-</nav>
-
-</div>
-
+    </div>
 </header>
 
 <main class="page">
 
-<!-- ===================================================== HEADER ====================================================== -->
-
-<section class="page-header">
-
-<div>
-
-<div class="eyebrow"> X!Planer Pro </div>
-
-<h1 class="page-title"> Mein Kalender </h1>
-
-<p class="page-subtitle"> Termine planen, importieren und organisieren. </p>
-
-</div>
-
-<div class="header-actions">
-
-<button type="button" class="btn secondary" onclick="openImport()" > 📥 <span>Import</span> </button>
-
-<button type="button" class="btn secondary" onclick="exportICS()" > 📤 <span>Export</span> </button>
-
-<button type="button" class="btn" onclick="focusNewEvent()" > + Neuer Termin </button>
-
-</div>
-
-</section>
-
-<!-- ===================================================== STATS ====================================================== -->
-
-<section class="stats-grid">
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<span class="stat-label"> Alle Termine </span>
-
-<span class="stat-icon purple"> 📅 </span>
-
-</div>
-
-<div class="stat-value" id="totalStat" > 0 </div>
-
-<div class="stat-description"> Gespeicherte Events </div>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<span class="stat-label"> Heute </span>
-
-<span class="stat-icon green"> ✓ </span>
-
-</div>
-
-<div class="stat-value" id="todayStat" > 0 </div>
-
-<div class="stat-description"> Termine am heutigen Tag </div>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<span class="stat-label"> Diese Woche </span>
-
-<span class="stat-icon orange"> ◷ </span>
-
-</div>
-
-<div class="stat-value" id="weekStat" > 0 </div>
-
-<div class="stat-description"> Termine in dieser Woche </div>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-top">
-
-<span class="stat-label"> Wichtig </span>
-
-<span class="stat-icon red"> ! </span>
-
-</div>
-
-<div class="stat-value" id="importantStat" > 0 </div>
-
-<div class="stat-description"> Markierte wichtige Termine </div>
-
-</div>
-
-</section>
-
-<!-- ===================================================== TOOLBAR ====================================================== -->
-
-<section class="calendar-toolbar">
-
-<div class="calendar-navigation">
-
-<button type="button" class="nav-arrow" onclick="navigate(-1)" aria-label="Zurück" > ‹ </button>
-
-<button type="button" class="btn secondary small" onclick="goToday()" > Heute </button>
-
-<button type="button" class="nav-arrow" onclick="navigate(1)" aria-label="Weiter" > › </button>
-
-<h2 class="period-title" id="periodTitle" > — </h2>
-
-</div>
-
-<div class="toolbar-right">
-
-<input class="search" id="search" type="search" placeholder="🔎 Termine suchen..." oninput="render()" >
-
-<select class="filter" id="categoryFilter" onchange="render()" >
-
-<option value="all"> Alle Kategorien </option>
-
-<option value="work"> Arbeit </option>
-
-<option value="personal"> Privat </option>
-
-<option value="sport"> Sport </option>
-
-<option value="important"> Wichtig </option>
-
-</select>
-
-<div class="view-switcher">
-
-<button type="button" class="view-btn active" data-view="month" onclick="setView('month')" > Monat </button>
-
-<button type="button" class="view-btn" data-view="week" onclick="setView('week')" > Woche </button>
-
-<button type="button" class="view-btn" data-view="day" onclick="setView('day')" > Tag </button>
-
-<button type="button" class="view-btn" data-view="agenda" onclick="setView('agenda')" > Agenda </button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- ===================================================== MAIN ====================================================== -->
-
-<section class="main-grid">
-
-<div class="calendar-panel" id="calendar" ></div>
-
-<aside class="sidebar-panel">
-
-<!-- ================================================= NEW EVENT ================================================== -->
-
-<section class="sidebar-section">
-
-<div class="sidebar-heading">
-
-<h2> Neuer Termin </h2>
-
-</div>
-
-<form id="eventForm" onsubmit="addEvent(event)" >
-
-<div class="form-group">
-
-<label for="title"> Titel </label>
-
-<input class="form-control" id="title" required placeholder="z.B. Projekt-Meeting" >
-
-</div>
-
-<div class="form-row">
-
-<div class="form-group">
-
-<label for="date"> Datum </label>
-
-<input class="form-control" id="date" type="date" required >
-
-</div>
-
-<div class="form-group">
-
-<label for="category"> Kategorie </label>
-
-<select class="form-control" id="category" >
-
-<option value="work"> Arbeit </option>
-
-<option value="personal"> Privat </option>
-
-<option value="sport"> Sport </option>
-
-<option value="important"> Wichtig </option>
-
-</select>
-
-</div>
-
-</div>
-
-<div class="form-group">
-
-<label for="location"> Ort </label>
-
-<input class="form-control" id="location" placeholder="z.B. Büro / Zoom" >
-
-</div>
-
-<label class="checkbox">
-
-<input id="allDay" type="checkbox" onchange="toggleTime()" >
-
-Ganztägiger Termin
-
-</label>
-
-<div class="form-row" id="timeFields" >
-
-<div class="form-group">
-
-<label for="startTime"> Von </label>
-
-<input class="form-control" id="startTime" type="time" value="09:00" >
-
-</div>
-
-<div class="form-group">
-
-<label for="endTime"> Bis </label>
-
-<input class="form-control" id="endTime" type="time" value="10:00" >
-
-</div>
-
-</div>
-
-<div class="form-group">
-
-<label for="description"> Beschreibung </label>
-
-<textarea class="form-control" id="description" placeholder="Weitere Informationen..." ></textarea>
-
-</div>
-
-<button type="submit" class="btn" > ✨ Termin speichern </button>
-
-</form>
-
-</section>
-
-<!-- ================================================= IMPORT ================================================== -->
-
-<section class="sidebar-section">
-
-<div class="sidebar-heading">
-
-<h2> Kalender importieren </h2>
-
-<span class="count-badge"> ICS </span>
-
-</div>
-
-<div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" >
-
-<div style=" font-size:26px; margin-bottom:5px; " > 📥 </div>
-
-<div style=" font-size:11px; font-weight:800; " > ICS-Datei hier ablegen </div>
-
-<div style=" margin:4px 0 10px; color:var(--text-3); font-size:9px; " > Google, Outlook, Apple Calendar usw. </div>
-
-<button type="button" class="btn secondary small" onclick=" event.stopPropagation(); document.getElementById('fileInput').click() " > Datei auswählen </button>
-
-</div>
-
-<input hidden id="fileInput" type="file" multiple accept=".ics,.ical,text/calendar" onchange="handleFiles(event)" >
-
-</section>
-
-<!-- ================================================= SAVED EVENTS ================================================== -->
-
-<section class="sidebar-section">
-
-<div class="sidebar-heading">
-
-<h2> Meine Termine </h2>
-
-<span class="count-badge" id="eventCount" > 0 </span>
-
-</div>
-
-<div class="saved-events" id="savedEvents" ></div>
-
-</section>
-
-</aside>
-
-</section>
+    <section class="page-header">
+        <div>
+            <div class="eyebrow">X!Planer Pro</div>
+            <h1 class="page-title">Mein Kalender</h1>
+            <p class="page-subtitle">
+                Termine planen, importieren und organisieren.
+            </p>
+        </div>
+
+        <div class="header-actions">
+            <button type="button" class="btn secondary" onclick="openImport()">
+                📥 <span>Import</span>
+            </button>
+
+            <button type="button" class="btn secondary" onclick="exportICS()">
+                📤 <span>Export</span>
+            </button>
+
+            <button type="button" class="btn" onclick="focusNewEvent()">
+                + Neuer Termin
+            </button>
+        </div>
+    </section>
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Alle Termine</span>
+                <span class="stat-icon purple">📅</span>
+            </div>
+            <div class="stat-value" id="totalStat">0</div>
+            <div class="stat-description">Gespeicherte Events</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Heute</span>
+                <span class="stat-icon green">✓</span>
+            </div>
+            <div class="stat-value" id="todayStat">0</div>
+            <div class="stat-description">Termine am heutigen Tag</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Diese Woche</span>
+                <span class="stat-icon orange">◷</span>
+            </div>
+            <div class="stat-value" id="weekStat">0</div>
+            <div class="stat-description">Termine in dieser Woche</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="stat-label">Wichtig</span>
+                <span class="stat-icon red">!</span>
+            </div>
+            <div class="stat-value" id="importantStat">0</div>
+            <div class="stat-description">Markierte wichtige Termine</div>
+        </div>
+
+    </section>
+
+    <section class="calendar-toolbar">
+
+        <div class="calendar-navigation">
+
+            <button
+                type="button"
+                class="nav-arrow"
+                onclick="navigate(-1)"
+                aria-label="Zurück"
+            >
+                ‹
+            </button>
+
+            <button
+                type="button"
+                class="btn secondary small"
+                onclick="goToday()"
+            >
+                Heute
+            </button>
+
+            <button
+                type="button"
+                class="nav-arrow"
+                onclick="navigate(1)"
+                aria-label="Weiter"
+            >
+                ›
+            </button>
+
+            <h2 class="period-title" id="periodTitle">—</h2>
+
+        </div>
+
+        <div class="toolbar-right">
+
+            <input
+                class="search"
+                id="search"
+                type="search"
+                placeholder="🔎 Termine suchen..."
+                oninput="render()"
+            >
+
+            <select
+                class="filter"
+                id="categoryFilter"
+                onchange="render()"
+            >
+                <option value="all">Alle Kategorien</option>
+                <option value="work">Arbeit</option>
+                <option value="personal">Privat</option>
+                <option value="sport">Sport</option>
+                <option value="important">Wichtig</option>
+            </select>
+
+            <div class="view-switcher">
+
+                <button
+                    type="button"
+                    class="view-btn active"
+                    data-view="month"
+                    onclick="setView('month')"
+                >
+                    Monat
+                </button>
+
+                <button
+                    type="button"
+                    class="view-btn"
+                    data-view="week"
+                    onclick="setView('week')"
+                >
+                    Woche
+                </button>
+
+                <button
+                    type="button"
+                    class="view-btn"
+                    data-view="day"
+                    onclick="setView('day')"
+                >
+                    Tag
+                </button>
+
+                <button
+                    type="button"
+                    class="view-btn"
+                    data-view="agenda"
+                    onclick="setView('agenda')"
+                >
+                    Agenda
+                </button>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="main-grid">
+
+        <div class="calendar-panel" id="calendar"></div>
+
+        <aside class="sidebar-panel">
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+                    <h2>Neuer Termin</h2>
+                </div>
+
+                <form id="eventForm" onsubmit="addEvent(event)">
+
+                    <div class="form-group">
+                        <label for="title">Titel</label>
+                        <input
+                            class="form-control"
+                            id="title"
+                            required
+                            placeholder="z.B. Projekt-Meeting"
+                        >
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="date">Datum</label>
+                            <input
+                                class="form-control"
+                                id="date"
+                                type="date"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Kategorie</label>
+
+                            <select class="form-control" id="category">
+                                <option value="work">Arbeit</option>
+                                <option value="personal">Privat</option>
+                                <option value="sport">Sport</option>
+                                <option value="important">Wichtig</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Ort</label>
+                        <input
+                            class="form-control"
+                            id="location"
+                            placeholder="z.B. Büro / Zoom"
+                        >
+                    </div>
+
+                    <label class="checkbox">
+                        <input
+                            id="allDay"
+                            type="checkbox"
+                            onchange="toggleTime()"
+                        >
+                        Ganztägiger Termin
+                    </label>
+
+                    <div class="form-row" id="timeFields">
+
+                        <div class="form-group">
+                            <label for="startTime">Von</label>
+                            <input
+                                class="form-control"
+                                id="startTime"
+                                type="time"
+                                value="09:00"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="endTime">Bis</label>
+                            <input
+                                class="form-control"
+                                id="endTime"
+                                type="time"
+                                value="10:00"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Beschreibung</label>
+
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            placeholder="Weitere Informationen..."
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">
+                        ✨ Termin speichern
+                    </button>
+
+                </form>
+
+            </section>
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+                    <h2>Kalender importieren</h2>
+                    <span class="count-badge">ICS</span>
+                </div>
+
+                <div
+                    class="drop-zone"
+                    id="dropZone"
+                    onclick="document.getElementById('fileInput').click()"
+                >
+                    <div style="font-size:26px; margin-bottom:5px;">
+                        📥
+                    </div>
+
+                    <div style="font-size:11px; font-weight:800;">
+                        ICS-Datei hier ablegen
+                    </div>
+
+                    <div
+                        style="margin:4px 0 10px; color:var(--text-3); font-size:9px;"
+                    >
+                        Google, Outlook, Apple Calendar usw.
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn secondary small"
+                        onclick="event.stopPropagation(); document.getElementById('fileInput').click()"
+                    >
+                        Datei auswählen
+                    </button>
+                </div>
+
+                <input
+                    hidden
+                    id="fileInput"
+                    type="file"
+                    multiple
+                    accept=".ics,.ical,text/calendar"
+                    onchange="handleFiles(event)"
+                >
+
+            </section>
+
+            <section class="sidebar-section">
+
+                <div class="sidebar-heading">
+                    <h2>Meine Termine</h2>
+                    <span class="count-badge" id="eventCount">0</span>
+                </div>
+
+                <div class="saved-events" id="savedEvents"></div>
+
+            </section>
+
+        </aside>
+
+    </section>
 
 </main>
 
-<footer> © 2026 nox!314 • X!Planer Pro </footer>
+<footer>
+    © 2026 nox!314 • X!Planer Pro
+</footer>
 
-<!-- ========================================================= IMPORT MODAL ========================================================= -->
+<!-- IMPORT MODAL -->
 
-<div class="modal-backdrop" id="modal" onclick="closeModalOutside(event)"
+<div
+    class="modal-backdrop"
+    id="modal"
+    onclick="closeModalOutside(event)"
+>
+    <div class="modal">
 
-<div class="modal">
+        <div class="modal-header">
+            <h2>📥 Termine importieren</h2>
 
-<div class="modal-header">
+            <button
+                type="button"
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+        </div>
 
-<h2> 📥 Termine importieren </h2>
+        <p
+            id="importInfo"
+            style="color:var(--text-2); font-size:11px; line-height:1.5;"
+        ></p>
 
-<button type="button" class="close" onclick="closeModal()" > × </button>
+        <div
+            class="import-preview"
+            id="importPreview"
+        ></div>
 
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn secondary"
+                onclick="closeModal()"
+            >
+                Abbrechen
+            </button>
+
+            <button
+                type="button"
+                class="btn"
+                id="importButton"
+                onclick="confirmImport()"
+            >
+                Termine importieren
+            </button>
+
+        </div>
+
+    </div>
 </div>
 
-<p id="importInfo" style=" color:var(--text-2); font-size:11px; line-height:1.5; " ></p>
+<div class="toast-container" id="toastContainer"></div>
 
-<div class="import-preview" id="importPreview" ></div>
+<script>
+"use strict";
 
-<div class="modal-actions">
+/* =========================================================
+   CONFIG / STATE
+========================================================= */
 
-<button type="button" class="btn secondary" onclick="closeModal()" > Abbrechen </button>
-
-<button type="button" class="btn" id="importButton" onclick="confirmImport()" > Termine importieren </button>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="toast-container" id="toastContainer"
-
-</div>
-<script> "use strict";
-
-/* ========================================================= CONFIG / STATE ========================================================= */
-
-const STORAGEKEY = "noxxplanerprov6";
+const STORAGE_KEY = "noxxplanerprov6";
 
 let currentDate = new Date();
-
 let currentView = "month";
-
 let pendingImport = [];
 
-/* ========================================================= INITIAL EVENTS ========================================================= */
+/* =========================================================
+   INITIAL EVENTS
+========================================================= */
 
 const initialEvents = [
-
-{ id: crypto.randomUUID(), title:"Release X!Secure", date:"2026-06-15", category:"work", location:"Online", allDay:true, startTime:"", endTime:"", description:"Beta-Launch des neuen Passwort-Managers." },
-
-{ id:crypto.randomUUID(), title:"Server Wartung", date:"2026-06-28", category:"important", location:"Serverraum", allDay:false, startTime:"14:00", endTime:"15:30", description:"Kurzer Downtime-Check." },
-
-{ id:crypto.randomUUID(), title:"Team Meeting", date:"2026-06-30", category:"work", location:"Zoom", allDay:false, startTime:"09:00", endTime:"10:00", description:"Weekly Team Meeting." },
-
-{ id:crypto.randomUUID(), title:"Sport", date:"2026-06-30", category:"sport", location:"Fitnessstudio", allDay:false, startTime:"09:30", endTime:"11:00", description:"Training." }
-
+    {
+        id: crypto.randomUUID(),
+        title: "Release X!Secure",
+        date: "2026-06-15",
+        category: "work",
+        location: "Online",
+        allDay: true,
+        startTime: "",
+        endTime: "",
+        description: "Beta-Launch des neuen Passwort-Managers."
+    },
+    {
+        id: crypto.randomUUID(),
+        title: "Server Wartung",
+        date: "2026-06-28",
+        category: "important",
+        location: "Serverraum",
+        allDay: false,
+        startTime: "14:00",
+        endTime: "15:30",
+        description: "Kurzer Downtime-Check."
+    },
+    {
+        id: crypto.randomUUID(),
+        title: "Team Meeting",
+        date: "2026-06-30",
+        category: "work",
+        location: "Zoom",
+        allDay: false,
+        startTime: "09:00",
+        endTime: "10:00",
+        description: "Weekly Team Meeting."
+    },
+    {
+        id: crypto.randomUUID(),
+        title: "Sport",
+        date: "2026-06-30",
+        category: "sport",
+        location: "Fitnessstudio",
+        allDay: false,
+        startTime: "09:30",
+        endTime: "11:00",
+        description: "Training."
+    }
 ];
 
 let events = loadEvents();
 
-/* ========================================================= INIT ========================================================= */
+/* =========================================================
+   INIT
+========================================================= */
 
 window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("date").value = dateString(new Date());
 
-document.getElementById("date").value = dateString(new Date());
-
-setupDragDrop();
-
-toggleTime();
-
-render();
-
-updateStats();
-
+    setupDragDrop();
+    toggleTime();
+    render();
 });
 
-/* ========================================================= STORAGE ========================================================= */
+/* =========================================================
+   STORAGE
+========================================================= */
 
 function loadEvents() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
 
-try {
+        if (!raw) {
+            return initialEvents;
+        }
 
-const raw = localStorage.getItem(STORAGE_KEY);
+        const data = JSON.parse(raw);
 
-if (!raw) { return initialEvents; }
+        if (!Array.isArray(data)) {
+            return initialEvents;
+        }
 
-const data = JSON.parse(raw);
+        return data.map(normalizeEvent);
 
-if (!Array.isArray(data)) { return initialEvents; }
-
-return data.map(normalizeEvent);
-
-} catch(error) {
-
-console.error( "Storage error:", error );
-
-return initialEvents; } }
+    } catch (error) {
+        console.error("Storage error:", error);
+        return initialEvents;
+    }
+}
 
 function saveEvents() {
-
-try {
-
-localStorage.setItem( STORAGE_KEY, JSON.stringify(events) );
-
-} catch(error) {
-
-console.error( "Save error:", error );
-
-toast( "Die Termine konnten nicht gespeichert werden.", "error" );
-
-} }
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(events)
+        );
+    } catch (error) {
+        console.error("Save error:", error);
+        toast(
+            "Die Termine konnten nicht gespeichert werden.",
+            "error"
+        );
+    }
+}
 
 function normalizeEvent(e) {
+    return {
+        id: e.id || crypto.randomUUID(),
+        title: e.title || "Ohne Titel",
+        date: e.date || dateString(new Date()),
+        category: e.category || "work",
+        location: e.location || "",
+        allDay: Boolean(e.allDay ?? e.isAllDay),
+        startTime: e.startTime || "",
+        endTime: e.endTime || "",
+        description: e.description ?? e.desc ?? ""
+    };
+}
 
-return {
-
-id: e.id || crypto.randomUUID(),
-
-title: e.title || "Ohne Titel",
-
-date: e.date || dateString(new Date()),
-
-category: e.category || "work",
-
-location: e.location || "",
-
-allDay: Boolean( e.allDay ?? e.isAllDay ),
-
-startTime: e.startTime || "",
-
-endTime: e.endTime || "",
-
-description: e.description ?? e.desc ?? ""
-
-}; }
-
-/* ========================================================= HELPERS ========================================================= */
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function dateString(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
 
-const y = date.getFullYear();
-
-const m = String( date.getMonth()+1 ).padStart(2,"0");
-
-const d = String( date.getDate() ).padStart(2,"0");
-
-return ${y}-${m}-${d}; }
+    return `${y}-${m}-${d}`;
+}
 
 function dateObject(str) {
-
-const [y,m,d] = str.split("-").map(Number);
-
-return new Date( y, m-1, d ); }
+    const [y, m, d] = str.split("-").map(Number);
+    return new Date(y, m - 1, d);
+}
 
 function escapeHTML(value) {
-
-return String(value ?? "") .replace(/&/g,"&") .replace(/</g,"<") .replace(/>/g,">") .replace(/"/g,""") .replace(/'/g,"'"); }
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 function escapeICS(value) {
-
-return String(value ?? "") .replace(/\/g,"\\") .replace(/\r?\n/g,"\n") .replace(/;/g,"\;") .replace(/,/g,"\,"); }
+    return String(value ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/\r?\n/g, "\\n")
+        .replace(/;/g, "\\;")
+        .replace(/,/g, "\\,");
+}
 
 function unescapeICS(value) {
-
-return String(value ?? "") .replace(/\n/gi,"\n") .replace(/\,/g,",") .replace(/\;/g,";") .replace(/\\/g,"\"); }
+    return String(value ?? "")
+        .replace(/\\n/gi, "\n")
+        .replace(/\\,/g, ",")
+        .replace(/\\;/g, ";")
+        .replace(/\\\\/g, "\\");
+}
 
 function formatDate(str) {
+    if (!str) {
+        return "";
+    }
 
-if (!str) { return ""; }
-
-return dateObject(str) .toLocaleDateString( "de-DE", { day:"2-digit", month:"2-digit", year:"numeric" } ); }
+    return dateObject(str).toLocaleDateString(
+        "de-DE",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+}
 
 function categoryName(category) {
-
-return {
-
-work:"Arbeit", personal:"Privat", sport:"Sport", important:"Wichtig"
-
-}[category] || "Arbeit"; }
+    return {
+        work: "Arbeit",
+        personal: "Privat",
+        sport: "Sport",
+        important: "Wichtig"
+    }[category] || "Arbeit";
+}
 
 function categoryColor(category) {
+    return {
+        work: "#624aff",
+        personal: "#00a884",
+        sport: "#f59e0b",
+        important: "#ef4444"
+    }[category] || "#624aff";
+}
 
-return {
-
-work:"#624aff", personal:"#00a884", sport:"#f59e0b", important:"#ef4444"
-
-}[category] || "#624aff"; }
-
-function compareEvents(a,b) {
-
-return ( ${a.date} ${a.startTime || "00:00"} ).localeCompare( ${b.date} ${b.startTime || "00:00"} ); }
+function compareEvents(a, b) {
+    return (
+        `${a.date} ${a.startTime || "00:00"}`
+    ).localeCompare(
+        `${b.date} ${b.startTime || "00:00"}`
+    );
+}
 
 function timeToMinutes(time) {
+    if (!time) {
+        return 0;
+    }
 
-if (!time) { return 0; }
+    const [h, m] = time.split(":").map(Number);
 
-const [h,m] = time.split(":").map(Number);
+    return h * 60 + m;
+}
 
-return ( h * 60 + m ); }
-
-/* ========================================================= FILTER ========================================================= */
+/* =========================================================
+   FILTER
+========================================================= */
 
 function filteredEvents() {
+    const query = document
+        .getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
 
-const query = document.getElementById("search") .value .trim() .toLowerCase();
+    const category = document
+        .getElementById("categoryFilter")
+        .value;
 
-const category = document.getElementById("categoryFilter") .value;
+    return events.filter(e => {
+        const text =
+            `${e.title} ${e.description} ${e.location}`
+                .toLowerCase();
 
-return events.filter(e => {
+        return (
+            (!query || text.includes(query)) &&
+            (category === "all" || e.category === category)
+        );
+    });
+}
 
-const text = ${e.title} ${e.description} ${e.location} .toLowerCase();
-
-return (
-
-(!query || text.includes(query) )
-
-&&
-
-( category === "all" || e.category === category )
-
-); }); }
-
-/* ========================================================= VIEW ========================================================= */
+/* =========================================================
+   VIEW
+========================================================= */
 
 function setView(view) {
+    currentView = view;
 
-currentView = view;
+    document
+        .querySelectorAll(".view-btn")
+        .forEach(btn => {
+            btn.classList.toggle(
+                "active",
+                btn.dataset.view === view
+            );
+        });
 
-document .querySelectorAll(".view-btn") .forEach(btn => {
-
-btn.classList.toggle( "active", btn.dataset.view === view );
-
-});
-
-render(); }
+    render();
+}
 
 function navigate(direction) {
+    if (currentView === "month") {
+        currentDate.setMonth(
+            currentDate.getMonth() + direction
+        );
+    } else if (currentView === "week") {
+        currentDate.setDate(
+            currentDate.getDate() + direction * 7
+        );
+    } else {
+        currentDate.setDate(
+            currentDate.getDate() + direction
+        );
+    }
 
-if (currentView === "month") {
-
-currentDate.setMonth( currentDate.getMonth() + direction );
-
-} else if (currentView === "week") {
-
-currentDate.setDate( currentDate.getDate() + direction * 7 );
-
-} else {
-
-currentDate.setDate( currentDate.getDate() + direction ); }
-
-render(); }
+    render();
+}
 
 function goToday() {
+    currentDate = new Date();
+    render();
+}
 
-currentDate = new Date();
-
-render(); }
-
-/* ========================================================= MAIN RENDER ========================================================= */
+/* =========================================================
+   MAIN RENDER
+========================================================= */
 
 function render() {
+    if (currentView === "month") {
+        renderMonth();
+    } else if (currentView === "week") {
+        renderWeekTimeline();
+    } else if (currentView === "day") {
+        renderDayTimeline();
+    } else {
+        renderAgenda();
+    }
 
-if (currentView === "month") { renderMonth(); }
+    renderSavedEvents();
+    updateStats();
+}
 
-else if (currentView === "week") { renderWeekTimeline(); }
-
-else if (currentView === "day") { renderDayTimeline(); }
-
-else if (currentView === "agenda") { renderAgenda(); }
-
-renderSavedEvents();
-
-updateStats(); }
-
-/* ========================================================= MONTH ========================================================= */
+/* =========================================================
+   MONTH
+========================================================= */
 
 function renderMonth() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-const year = currentDate.getFullYear();
+    const names = [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+    ];
 
-const month = currentDate.getMonth();
+    document.getElementById("periodTitle").textContent =
+        `${names[month]} ${year}`;
 
-const names = [ "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" ];
+    const first =
+        (new Date(year, month, 1).getDay() + 6) % 7;
 
-document.getElementById("periodTitle") .textContent = ${names[month]} ${year};
+    const days =
+        new Date(year, month + 1, 0).getDate();
 
-const first = ( new Date( year, month, 1 ).getDay() + 6 ) % 7;
+    const prevDays =
+        new Date(year, month, 0).getDate();
 
-const days = new Date( year, month + 1, 0 ).getDate();
+    const today = dateString(new Date());
+    const active = filteredEvents();
 
-const prevDays = new Date( year, month, 0 ).getDate();
+    let html = `
+        <div class="week-header">
+            <div class="weekday">Mo</div>
+            <div class="weekday">Di</div>
+            <div class="weekday">Mi</div>
+            <div class="weekday">Do</div>
+            <div class="weekday">Fr</div>
+            <div class="weekday">Sa</div>
+            <div class="weekday">So</div>
+        </div>
 
-const today = dateString(new Date());
+        <div class="month-grid">
+    `;
 
-const active = filteredEvents();
+    for (let i = first; i > 0; i--) {
+        html += `
+            <div class="day other">
+                <div class="day-number">
+                    ${prevDays - i + 1}
+                </div>
+            </div>
+        `;
+    }
 
-let html = `
+    for (let d = 1; d <= days; d++) {
+        const date = new Date(year, month, d);
+        const key = dateString(date);
 
-<div class="week-header">
+        const dayEvents = active.filter(
+            e => e.date === key
+        );
 
-<div class="weekday">Mo</div> <div class="weekday">Di</div> <div class="weekday">Mi</div> <div class="weekday">Do</div> <div class="weekday">Fr</div> <div class="weekday">Sa</div> <div class="weekday">So</div>
+        html += `
+            <div
+                class="day ${key === today ? "today" : ""}"
+                onclick="selectDay('${key}')"
+            >
+                <div class="day-number">${d}</div>
 
-</div>
+                <div class="event-list">
+        `;
 
-<div class="month-grid">
+        dayEvents.slice(0, 4).forEach(e => {
+            html += `
+                <div
+                    class="event-pill"
+                    style="background:${categoryColor(e.category)}"
+                    title="${escapeHTML(e.title)}"
+                >
+                    ${e.allDay
+                        ? ""
+                        : escapeHTML(e.startTime) + " "
+                    }
+                    ${escapeHTML(e.title)}
+                </div>
+            `;
+        });
 
-`;
+        if (dayEvents.length > 4) {
+            html += `
+                <div class="more-events">
+                    +${dayEvents.length - 4} weitere
+                </div>
+            `;
+        }
 
-for ( let i = first; i > 0; i-- ) {
+        html += `
+                </div>
+            </div>
+        `;
+    }
 
-html += `
+    html += `</div>`;
 
-<div class="day other">
+    document.getElementById("calendar").innerHTML = html;
+}
 
-<div class="day-number"> ${prevDays-i+1} </div>
-
-</div>
-
-`; }
-
-for ( let d = 1; d <= days; d++ ) {
-
-const date = new Date( year, month, d );
-
-const key = dateString(date);
-
-const dayEvents = active .filter( e => e.date === key );
-
-html += `
-
-<div class="day 
-k
-e
-y
-=
-=
-=
-t
-o
-d
-a
-y
-?
-"
-t
-o
-d
-a
-y
-"
-:
-"
-"
-"
-o
-n
-c
-l
-i
-c
-k
-=
-"
-s
-e
-l
-e
-c
-t
-D
-a
-y
-(
-′
-{key}')" >
-
-<div class="day-number"> ${d} </div>
-
-<div class="event-list">
-
-`;
-
-dayEvents .slice(0,4) .forEach(e => {
-
-html += `
-
-<div class="event-pill" style=" background:
-c
-a
-t
-e
-g
-o
-r
-y
-C
-o
-l
-o
-r
-(
-e
-.
-c
-a
-t
-e
-g
-o
-r
-y
-)
-"
-t
-i
-t
-l
-e
-=
-"
-{escapeHTML(e.title)}" > ${ e.allDay ? "" : escapeHTML(e.startTime) + " " } ${escapeHTML(e.title)} </div>
-
-`; });
-
-if (dayEvents.length > 4) {
-
-html += `
-
-<div class="more-events"> +${dayEvents.length-4} weitere </div>
-
-`; }
-
-html += `
-
-</div>
-
-</div>
-
-`; }
-
-html += </div> ;
-
-document.getElementById("calendar") .innerHTML = html; }
-
-/* ========================================================= TIMELINE HOURS ========================================================= */
+/* =========================================================
+   TIMELINE HOURS
+========================================================= */
 
 function timelineHours() {
+    let html = "";
 
-let html = "";
+    for (let h = 0; h < 24; h++) {
+        html += `
+            <div class="timeline-hour">
+                <span>${String(h).padStart(2, "0")}:00</span>
+            </div>
+        `;
+    }
 
-for ( let h = 0; h < 24; h++ ) {
+    return html;
+}
 
-html += `
-
-<div class="timeline-hour">
-
-<span> ${String(h).padStart(2,"0")}:00 </span>
-
-</div>
-
-`; }
-
-return html; }
-
-/* ========================================================= TIMELINE EVENT LAYOUT ========================================================= */
+/* =========================================================
+   TIMELINE EVENT LAYOUT
+========================================================= */
 
 function layoutTimelineEvents(dayEvents) {
+    const items = dayEvents
+        .filter(e => !e.allDay)
+        .map(e => {
+            const start = Math.max(
+                0,
+                Math.min(1439, timeToMinutes(e.startTime))
+            );
 
-const items = dayEvents .filter(e => !e.allDay) .map(e => {
+            let end = e.endTime
+                ? timeToMinutes(e.endTime)
+                : start + 60;
 
-const start = Math.max( 0, Math.min( 1439, timeToMinutes(e.startTime) ) );
+            if (!Number.isFinite(end)) {
+                end = start + 60;
+            }
 
-let end = e.endTime ? timeToMinutes(e.endTime) : start + 60;
+            if (end <= start) {
+                end = start + 60;
+            }
 
-if (!Number.isFinite(end)) { end = start + 60; }
+            end = Math.min(1440, end);
 
-if (end <= start) { end = start + 60; }
+            return {
+                event: e,
+                start,
+                end,
+                column: 0,
+                columns: 1
+            };
+        })
+        .sort((a, b) => {
+            if (a.start !== b.start) {
+                return a.start - b.start;
+            }
 
-end = Math.min( 1440, end );
+            return b.end - a.end;
+        });
 
-return {
+    const groups = [];
+    let group = [];
+    let groupEnd = -1;
 
-event:e,
+    for (const item of items) {
+        if (
+            group.length === 0 ||
+            item.start < groupEnd
+        ) {
+            group.push(item);
+            groupEnd = Math.max(
+                groupEnd,
+                item.end
+            );
+        } else {
+            groups.push(group);
+            group = [item];
+            groupEnd = item.end;
+        }
+    }
 
-start,
+    if (group.length) {
+        groups.push(group);
+    }
 
-end,
+    for (const currentGroup of groups) {
+        const columnEnds = [];
 
-column:0,
+        for (const item of currentGroup) {
+            let column = 0;
 
-columns:1
+            while (
+                columnEnds[column] !== undefined &&
+                columnEnds[column] > item.start
+            ) {
+                column++;
+            }
 
-}; }) .sort((a,b) => {
+            item.column = column;
+            columnEnds[column] = item.end;
+        }
 
-if ( a.start !== b.start ) { return a.start - b.start; }
+        const columnCount =
+            Math.max(1, columnEnds.length);
 
-return b.end - a.end; });
+        currentGroup.forEach(item => {
+            item.columns = columnCount;
+        });
+    }
 
-const groups = [];
+    return items;
+}
 
-let group = [];
-
-let groupEnd = -1;
-
-for (const item of items) {
-
-if ( group.length === 0 || item.start < groupEnd ) {
-
-group.push(item);
-
-groupEnd = Math.max( groupEnd, item.end );
-
-} else {
-
-groups.push(group);
-
-group = [item];
-
-groupEnd = item.end; } }
-
-if (group.length) { groups.push(group); }
-
-/* * Spalten für parallele Events berechnen. */ for (const currentGroup of groups) {
-
-const columnEnds = [];
-
-for ( const item of currentGroup ) {
-
-let column = 0;
-
-while ( columnEnds[column] !== undefined && columnEnds[column] > item.start ) { column++; }
-
-item.column = column;
-
-columnEnds[column] = item.end; }
-
-const columnCount = Math.max( 1, columnEnds.length );
-
-currentGroup.forEach(item => {
-
-item.columns = columnCount;
-
-}); }
-
-return items; }
-
-/* ========================================================= TIMELINE EVENTS HTML ========================================================= */
+/* =========================================================
+   TIMELINE EVENTS HTML
+========================================================= */
 
 function renderTimelineEvents(dayEvents) {
+    const layout =
+        layoutTimelineEvents(dayEvents);
 
-const layout = layoutTimelineEvents( dayEvents );
+    const hourHeight =
+        parseInt(
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--hour-height")
+        ) || 64;
 
-const hourHeight = parseInt( getComputedStyle( document.documentElement ).getPropertyValue( "--hour-height" ) ) || 64;
+    return layout.map(item => {
+        const top =
+            item.start / 60 * hourHeight;
 
-return layout .map(item => {
+        const height =
+            Math.max(
+                28,
+                (item.end - item.start) /
+                    60 *
+                    hourHeight
+            );
 
-const top = item.start / 60 * hourHeight;
+        const gap = 5;
+        const columnWidth =
+            100 / item.columns;
 
-const height = Math.max( 28, ( item.end - item.start ) / 60 * hourHeight );
+        const left =
+            `calc(${item.column * columnWidth}% + ${gap / 2}px)`;
 
-const gap = 5;
+        const width =
+            `calc(${columnWidth}% - ${gap}px)`;
 
-const columnWidth = 100 / item.columns;
+        const e = item.event;
 
-const left = calc( ${item.column * columnWidth}% + ${gap/2}px );
+        return `
+            <div
+                class="timeline-event"
+                style="
+                    top:${top}px;
+                    height:${height}px;
+                    left:${left};
+                    width:${width};
+                    background:${categoryColor(e.category)};
+                "
+                onclick="event.stopPropagation(); selectDay('${e.date}')"
+                title="${escapeHTML(e.title)}"
+            >
+                <div class="timeline-event-title">
+                    ${escapeHTML(e.title)}
+                </div>
 
-const width = calc( ${columnWidth}% - ${gap}px );
+                <div class="timeline-event-time">
+                    ${escapeHTML(e.startTime || "--:--")}
+                    ${e.endTime
+                        ? " – " + escapeHTML(e.endTime)
+                        : ""
+                    }
+                </div>
 
-const e = item.event;
+                ${
+                    height >= 58 && e.location
+                        ? `
+                            <div class="timeline-event-location">
+                                📍 ${escapeHTML(e.location)}
+                            </div>
+                        `
+                        : ""
+                }
+            </div>
+        `;
+    }).join("");
+}
 
-return `
-
-<div class="timeline-event" style=" top:
-t
-o
-p
-p
-x
-;
-h
-e
-i
-g
-h
-t
-:
-{height}px; left:
-l
-e
-f
-t
-;
-w
-i
-d
-t
-h
-:
-{width}; background:
-c
-a
-t
-e
-g
-o
-r
-y
-C
-o
-l
-o
-r
-(
-e
-.
-c
-a
-t
-e
-g
-o
-r
-y
-)
-;
-"
-o
-n
-c
-l
-i
-c
-k
-=
-"
-e
-v
-e
-n
-t
-.
-s
-t
-o
-p
-P
-r
-o
-p
-a
-g
-a
-t
-i
-o
-n
-(
-)
-;
-s
-e
-l
-e
-c
-t
-D
-a
-y
-(
-′
-{e.date}') " title="${escapeHTML(e.title)}" >
-
-<div class="timeline-event-title"> ${escapeHTML(e.title)} </div>
-
-<div class="timeline-event-time"> ${escapeHTML( e.startTime || "--:--" )}
-
-${ e.endTime ? " – " + escapeHTML(e.endTime) : "" } </div>
-
-${ height >= 58 && e.location ? <div class="timeline-event-location"> 📍 ${escapeHTML(e.location)} </div> : "" }
-
-</div>
-
-`; }) .join(""); }
-
-/* ========================================================= CURRENT TIME ========================================================= */
+/* =========================================================
+   NOW LINE
+========================================================= */
 
 function renderNowLine(key) {
+    if (key !== dateString(new Date())) {
+        return "";
+    }
 
-if ( key !== dateString(new Date()) ) { return ""; }
+    const now = new Date();
 
-const now = new Date();
+    const minutes =
+        now.getHours() * 60 +
+        now.getMinutes();
 
-const minutes = now.getHours() * 60 + now.getMinutes();
+    const hourHeight =
+        parseInt(
+            getComputedStyle(document.documentElement)
+                .getPropertyValue("--hour-height")
+        ) || 64;
 
-const hourHeight = parseInt( getComputedStyle( document.documentElement ).getPropertyValue( "--hour-height" ) ) || 64;
+    const top =
+        minutes / 60 * hourHeight;
 
-const top = minutes / 60 * hourHeight;
+    return `
+        <div
+            class="timeline-now"
+            style="top:${top}px;"
+        >
+            <span class="timeline-now-label">
+                Jetzt
+            </span>
+        </div>
+    `;
+}
 
-return `
-
-<div class="timeline-now" style="top:${top}px;" >
-
-<span class="timeline-now-label"> Jetzt </span>
-
-</div>
-
-`; }
-
-/* ========================================================= DAY VIEW ========================================================= */
+/* =========================================================
+   DAY VIEW
+========================================================= */
 
 function renderDayTimeline() {
+    const key = dateString(currentDate);
 
-const key = dateString(currentDate);
+    document.getElementById("periodTitle").textContent =
+        currentDate.toLocaleDateString(
+            "de-DE",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
 
-document.getElementById("periodTitle") .textContent = currentDate.toLocaleDateString( "de-DE", { weekday:"long", day:"numeric", month:"long", year:"numeric" } );
+    const dayEvents = filteredEvents()
+        .filter(e => e.date === key)
+        .sort(compareEvents);
 
-const dayEvents = filteredEvents() .filter( e => e.date === key ) .sort(compareEvents);
+    const allDayEvents =
+        dayEvents.filter(e => e.allDay);
 
-const allDayEvents = dayEvents.filter( e => e.allDay );
+    const timedEvents =
+        dayEvents.filter(e => !e.allDay);
 
-const timedEvents = dayEvents.filter( e => !e.allDay );
+    const isToday =
+        key === dateString(new Date());
 
-const isToday = key === dateString(new Date());
+    const header = `
+        <div class="timeline-grid-header timeline-single-grid">
 
-const header = `
+            <div class="timeline-header-time"></div>
 
-<div class=" timeline-grid-header timeline-single-grid ">
+            <div class="timeline-day-cell">
 
-<div class="timeline-header-time"></div>
+                <div class="timeline-day-date ${
+                    isToday ? "today" : ""
+                }">
+                    ${currentDate.getDate()}
+                </div>
 
-<div class="timeline-day-cell">
+                <div class="timeline-day-name">
+                    ${currentDate.toLocaleDateString(
+                        "de-DE",
+                        { weekday: "long" }
+                    )}
+                </div>
 
-<div class=" timeline-day-date ${isToday ? "today" : ""} " > ${currentDate.getDate()} </div>
+            </div>
 
-<div class="timeline-day-name">
+        </div>
+    `;
 
-${currentDate.toLocaleDateString( "de-DE", { weekday:"long" } )}
+    const allDay = allDayEvents.length
+        ? `
+            <div class="timeline-allday">
 
-</div>
+                <div class="timeline-allday-single">
 
-</div>
+                    <div class="timeline-allday-time"></div>
 
-</div>
+                    <div class="timeline-allday-cell">
 
-`;
+                        ${
+                            allDayEvents.map(e => `
+                                <div
+                                    class="timeline-allday-event"
+                                    style="background:${categoryColor(e.category)}"
+                                    title="${escapeHTML(e.title)}"
+                                    onclick="event.stopPropagation(); selectDay('${key}')"
+                                >
+                                    ${escapeHTML(e.title)}
+                                </div>
+                            `).join("")
+                        }
 
-const allDay = allDayEvents.length ? `
+                    </div>
 
-<div class="timeline-allday">
+                </div>
 
-<div class="timeline-allday-single">
+            </div>
+        `
+        : "";
 
-<div class="timeline-allday-time"></div>
+    const empty = !dayEvents.length
+        ? `
+            <div class="timeline-empty empty">
+                <div class="empty-icon">📅</div>
+                <strong>Keine Termine</strong>
+                <span>Für diesen Tag ist noch nichts geplant.</span>
+            </div>
+        `
+        : "";
 
-<div class="timeline-allday-cell">
+    document.getElementById("calendar").innerHTML = `
+        <div class="timeline-shell">
 
-${ allDayEvents .map(e => `
+            <div class="timeline-scroll">
 
-<div class="timeline-allday-event" style=" background:
-c
-a
-t
-e
-g
-o
-r
-y
-C
-o
-l
-o
-r
-(
-e
-.
-c
-a
-t
-e
-g
-o
-r
-y
-)
-"
-t
-i
-t
-l
-e
-=
-"
-{escapeHTML(e.title)}" onclick=" event.stopPropagation(); selectDay('${key}') " > ${escapeHTML(e.title)} </div>
+                <div class="timeline-inner">
 
-`) .join("") }
+                    ${header}
+                    ${allDay}
 
-</div>
+                    <div class="timeline-grid-body">
 
-</div>
+                        <div class="timeline-hours">
+                            ${timelineHours()}
+                        </div>
 
-</div>
+                        <div class="timeline-single-content">
 
-` : "";
+                            ${renderTimelineEvents(timedEvents)}
 
-const empty = !dayEvents.length ? `
+                            ${isToday ? renderNowLine(key) : ""}
 
-<div class="timeline-empty empty">
+                            ${empty}
 
-<div class="empty-icon"> 📅 </div>
+                        </div>
 
-<strong> Keine Termine </strong>
+                    </div>
 
-<span> Für diesen Tag ist noch nichts geplant. </span>
+                </div>
 
-</div>
+            </div>
 
-` : "";
+        </div>
+    `;
 
-const html = `
+    scrollTimelineToCurrentTime();
+}
 
-<div class="timeline-shell">
-
-<div class="timeline-scroll">
-
-<div class="timeline-inner">
-
-${header}
-
-${allDay}
-
-<div class="timeline-grid-body">
-
-<div class="timeline-hours"> ${timelineHours()} </div>
-
-<div class="timeline-single-content">
-
-${renderTimelineEvents( timedEvents )}
-
-${ isToday ? renderNowLine(key) : "" }
-
-${empty}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-document.getElementById("calendar") .innerHTML = html;
-
-scrollTimelineToCurrentTime(); }
-
-/* ========================================================= WEEK VIEW ========================================================= */
+/* =========================================================
+   WEEK VIEW
+========================================================= */
 
 function renderWeekTimeline() {
+    const base = new Date(currentDate);
 
-const base = new Date(currentDate);
+    const weekday = base.getDay();
 
-const weekday = base.getDay();
+    const monday = new Date(base);
 
-const monday = new Date(base);
+    monday.setDate(
+        base.getDate() -
+        (weekday === 0 ? 6 : weekday - 1)
+    );
 
-monday.setDate( base.getDate() - ( weekday === 0 ? 6 : weekday - 1 ) );
+    monday.setHours(0, 0, 0, 0);
 
-monday.setHours( 0,0,0,0 );
+    const sunday = new Date(monday);
 
-const sunday = new Date(monday);
+    sunday.setDate(
+        monday.getDate() + 6
+    );
 
-sunday.setDate( monday.getDate() + 6 );
+    document.getElementById("periodTitle").textContent =
+        `${formatDate(dateString(monday))} – ${formatDate(dateString(sunday))}`;
 
-document.getElementById("periodTitle") .textContent = ${formatDate( dateString(monday) )} – ${formatDate( dateString(sunday) )};
+    let header = `
+        <div class="timeline-grid-header timeline-week-grid">
 
-/* ===================================================== HEADER ====================================================== */
+            <div class="timeline-header-time"></div>
+    `;
 
-let header = `
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(monday);
 
-<div class=" timeline-grid-header timeline-week-grid ">
+        day.setDate(
+            monday.getDate() + i
+        );
 
-<div class="timeline-header-time"></div>
+        const key = dateString(day);
 
-`;
+        const today =
+            key === dateString(new Date());
 
-for ( let i = 0; i < 7; i++ ) {
+        header += `
+            <div class="timeline-day-cell">
 
-const day = new Date(monday);
+                <div class="timeline-day-date ${
+                    today ? "today" : ""
+                }">
+                    ${day.getDate()}
+                </div>
 
-day.setDate( monday.getDate() + i );
+                <div class="timeline-day-name">
+                    ${day.toLocaleDateString(
+                        "de-DE",
+                        { weekday: "short" }
+                    )}
+                </div>
 
-const key = dateString(day);
+            </div>
+        `;
+    }
 
-const today = key === dateString(new Date());
+    header += `</div>`;
 
-header += `
+    let allDayCells = `
+        <div class="timeline-allday">
 
-<div class="timeline-day-cell">
+            <div class="timeline-allday-grid">
 
-<div class=" timeline-day-date ${today ? "today" : ""} " > ${day.getDate()} </div>
+                <div class="timeline-allday-time"></div>
+    `;
 
-<div class="timeline-day-name">
+    let hasAllDayEvents = false;
 
-${day.toLocaleDateString( "de-DE", { weekday:"short" } )}
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(monday);
 
-</div>
+        day.setDate(
+            monday.getDate() + i
+        );
 
-</div>
+        const key = dateString(day);
 
-`; }
+        const allDayEvents =
+            filteredEvents().filter(
+                e =>
+                    e.date === key &&
+                    e.allDay
+            );
 
-header += </div> ;
+        if (allDayEvents.length) {
+            hasAllDayEvents = true;
+        }
 
-/* ===================================================== ALL-DAY EVENTS ====================================================== */
+        allDayCells += `
+            <div class="timeline-allday-cell">
 
-let allDayCells = `
+                ${
+                    allDayEvents.map(e => `
+                        <div
+                            class="timeline-allday-event"
+                            style="background:${categoryColor(e.category)}"
+                            title="${escapeHTML(e.title)}"
+                            onclick="event.stopPropagation(); selectDay('${key}')"
+                        >
+                            ${escapeHTML(e.title)}
+                        </div>
+                    `).join("")
+                }
 
-<div class="timeline-allday">
+            </div>
+        `;
+    }
 
-<div class="timeline-allday-grid">
+    allDayCells += `
+            </div>
+        </div>
+    `;
 
-<div class="timeline-allday-time"></div>
+    const allDay =
+        hasAllDayEvents ? allDayCells : "";
 
-`;
+    let body = `
+        <div class="timeline-grid-body">
 
-let hasAllDayEvents = false;
+            <div class="timeline-hours">
+                ${timelineHours()}
+            </div>
 
-for ( let i = 0; i < 7; i++ ) {
+            <div class="timeline-week-content">
+    `;
 
-const day = new Date(monday);
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(monday);
 
-day.setDate( monday.getDate() + i );
+        day.setDate(
+            monday.getDate() + i
+        );
 
-const key = dateString(day);
+        const key = dateString(day);
 
-const allDayEvents = filteredEvents() .filter( e => e.date === key && e.allDay );
+        const dayEvents =
+            filteredEvents().filter(
+                e => e.date === key
+            );
 
-if ( allDayEvents.length ) { hasAllDayEvents = true; }
+        const timedEvents =
+            dayEvents.filter(
+                e => !e.allDay
+            );
 
-allDayCells += `
+        body += `
+            <div
+                class="timeline-day-column"
+                onclick="selectDay('${key}')"
+            >
 
-<div class="timeline-allday-cell">
+                ${renderTimelineEvents(timedEvents)}
 
-${ allDayEvents .map(e => `
+                ${
+                    key === dateString(new Date())
+                        ? renderNowLine(key)
+                        : ""
+                }
 
-<div class="timeline-allday-event" style=" background:
-c
-a
-t
-e
-g
-o
-r
-y
-C
-o
-l
-o
-r
-(
-e
-.
-c
-a
-t
-e
-g
-o
-r
-y
-)
-"
-t
-i
-t
-l
-e
-=
-"
-{escapeHTML(e.title)}" onclick=" event.stopPropagation(); selectDay('${key}') " > ${escapeHTML(e.title)} </div>
+            </div>
+        `;
+    }
 
-`) .join("") }
+    body += `
+            </div>
+        </div>
+    `;
 
-</div>
+    document.getElementById("calendar").innerHTML = `
+        <div class="timeline-shell">
 
-`; }
+            <div class="timeline-scroll">
 
-allDayCells += `
+                <div class="timeline-inner">
 
-</div>
+                    ${header}
+                    ${allDay}
+                    ${body}
 
-</div>
+                </div>
 
-`;
+            </div>
 
-const allDay = hasAllDayEvents ? allDayCells : "";
+        </div>
+    `;
 
-/* ===================================================== HOURS + EVENTS ====================================================== */
+    scrollTimelineToCurrentTime();
+}
 
-let body = `
-
-<div class="timeline-grid-body">
-
-<div class="timeline-hours">
-
-${timelineHours()}
-
-</div>
-
-<div class="timeline-week-content">
-
-`;
-
-for ( let i = 0; i < 7; i++ ) {
-
-const day = new Date(monday);
-
-day.setDate( monday.getDate() + i );
-
-const key = dateString(day);
-
-const dayEvents = filteredEvents() .filter( e => e.date === key );
-
-const timedEvents = dayEvents .filter( e => !e.allDay );
-
-body += `
-
-<div class="timeline-day-column" onclick="selectDay('${key}')" >
-
-${renderTimelineEvents( timedEvents )}
-
-${ key === dateString(new Date()) ? renderNowLine(key) : "" }
-
-</div>
-
-`; }
-
-body += `
-
-</div>
-
-</div>
-
-`;
-
-document.getElementById("calendar") .innerHTML = `
-
-<div class="timeline-shell">
-
-<div class="timeline-scroll">
-
-<div class="timeline-inner">
-
-${header}
-
-${allDay}
-
-${body}
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-scrollTimelineToCurrentTime(); }
-
-/* ========================================================= TIMELINE SCROLL TO NOW ========================================================= */
+/* =========================================================
+   SCROLL TO NOW
+========================================================= */
 
 function scrollTimelineToCurrentTime() {
+    if (
+        currentView !== "day" &&
+        currentView !== "week"
+    ) {
+        return;
+    }
 
-if ( currentView !== "day" && currentView !== "week" ) { return; }
+    const today = dateString(new Date());
 
-const today = dateString(new Date());
+    let shouldScroll = false;
 
-let shouldScroll = false;
+    if (currentView === "day") {
+        shouldScroll =
+            dateString(currentDate) === today;
+    } else {
+        const d = new Date(currentDate);
+        const day = d.getDay();
 
-if ( currentView === "day" ) {
+        const monday = new Date(d);
 
-shouldScroll = dateString(currentDate) === today;
+        monday.setDate(
+            d.getDate() -
+            (day === 0 ? 6 : day - 1)
+        );
 
-} else {
+        const sunday = new Date(monday);
 
-const d = new Date(currentDate);
+        sunday.setDate(
+            monday.getDate() + 6
+        );
 
-const day = d.getDay();
+        shouldScroll =
+            today >= dateString(monday) &&
+            today <= dateString(sunday);
+    }
 
-const monday = new Date(d);
+    if (!shouldScroll) {
+        return;
+    }
 
-monday.setDate( d.getDate() - ( day === 0 ? 6 : day - 1 ) );
+    setTimeout(() => {
+        const scroll =
+            document.querySelector(".timeline-scroll");
 
-const sunday = new Date(monday);
+        if (!scroll) {
+            return;
+        }
 
-sunday.setDate( monday.getDate() + 6 );
+        const now = new Date();
 
-shouldScroll = today >= dateString(monday) && today <= dateString(sunday); }
+        const hourHeight =
+            parseInt(
+                getComputedStyle(document.documentElement)
+                    .getPropertyValue("--hour-height")
+            ) || 64;
 
-if (!shouldScroll) { return; }
+        const target =
+            (now.getHours() + 1) *
+            hourHeight;
 
-setTimeout(() => {
+        scroll.scrollTop =
+            Math.max(0, target - 180);
+    }, 50);
+}
 
-const scroll = document.querySelector( ".timeline-scroll" );
-
-if (!scroll) { return; }
-
-const now = new Date();
-
-const hourHeight = parseInt( getComputedStyle( document.documentElement ).getPropertyValue( "--hour-height" ) ) || 64;
-
-const target = ( now.getHours() + 1 ) * hourHeight;
-
-scroll.scrollTop = Math.max( 0, target - 180 );
-
-},50); }
-
-/* ========================================================= AGENDA ========================================================= */
+/* =========================================================
+   AGENDA
+========================================================= */
 
 function renderAgenda() {
+    document.getElementById("periodTitle").textContent =
+        "Alle Termine";
 
-document.getElementById("periodTitle") .textContent = "Alle Termine";
+    const list =
+        [...filteredEvents()].sort(compareEvents);
 
-const list = filteredEvents() .sort(compareEvents);
+    if (!list.length) {
+        document.getElementById("calendar").innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔎</div>
+                <strong>Keine Termine gefunden</strong>
+                <span>Passe deine Suche oder den Filter an.</span>
+            </div>
+        `;
 
-if (!list.length) {
+        return;
+    }
 
-document.getElementById("calendar") .innerHTML = `
-
-<div class="empty">
-
-<div class="empty-icon"> 🔎 </div>
-
-<strong> Keine Termine gefunden </strong>
-
-<span> Passe deine Suche oder den Filter an. </span>
-
-</div>
-
-`;
-
-return; }
-
-document.getElementById("calendar") .innerHTML = `
-
-<div class="agenda">
-
-${list .map(eventHTML) .join("") }
-
-</div>
-
-`; }
+    document.getElementById("calendar").innerHTML = `
+        <div class="agenda">
+            ${list.map(eventHTML).join("")}
+        </div>
+    `;
+}
 
 function eventHTML(e) {
+    const time = e.allDay
+        ? "Ganztägig"
+        : `${e.startTime || "--:--"} – ${e.endTime || "--:--"}`;
 
-const time = e.allDay ? "Ganztägig" : ${e.startTime || "--:--"} – ${ e.endTime || "--:--" };
+    return `
+        <article class="agenda-event">
 
-return `
+            <div class="agenda-time">
+                ${escapeHTML(time)}
+            </div>
 
-<article class="agenda-event">
+            <div class="agenda-content">
 
-<div class="agenda-time"> ${escapeHTML(time)} </div>
+                <h3>
+                    ${escapeHTML(e.title)}
+                </h3>
 
-<div class="agenda-content">
+                ${
+                    e.description
+                        ? `<p>${escapeHTML(e.description)}</p>`
+                        : ""
+                }
 
-<h3> ${escapeHTML(e.title)} </h3>
+                <div class="event-meta">
 
-${ e.description ? <p> ${escapeHTML( e.description )} </p> : "" }
+                    <span
+                        class="category-badge"
+                        style="background:${categoryColor(e.category)}"
+                    >
+                        ${categoryName(e.category)}
+                    </span>
 
-<div class="event-meta">
+                    <span>
+                        📅 ${formatDate(e.date)}
+                    </span>
 
-<span class="category-badge" style=" background:${categoryColor(e.category)} " > ${categoryName(e.category)} </span>
+                    ${
+                        e.location
+                            ? `<span>📍 ${escapeHTML(e.location)}</span>`
+                            : ""
+                    }
 
-<span> 📅 ${formatDate(e.date)} </span>
+                </div>
 
-${ e.location ? <span> 📍 ${escapeHTML(e.location)} </span> : "" }
+            </div>
 
-</div>
+            <button
+                type="button"
+                class="delete-icon"
+                onclick="deleteEvent('${e.id}')"
+                title="Löschen"
+                aria-label="Termin löschen"
+            >
+                ×
+            </button>
 
-</div>
+        </article>
+    `;
+}
 
-<button type="button" class="delete-icon" onclick="deleteEvent('${e.id}')" title="Löschen" aria-label="Termin löschen" > × </button>
-
-</article>
-
-`; }
-
-/* ========================================================= SELECT DAY ========================================================= */
+/* =========================================================
+   SELECT DAY
+========================================================= */
 
 function selectDay(date) {
+    document.getElementById("date").value = date;
 
-document.getElementById("date") .value = date;
+    currentDate = dateObject(date);
 
-currentDate = dateObject(date);
+    render();
+}
 
-render(); }
-
-/* ========================================================= NEW EVENT ========================================================= */
+/* =========================================================
+   NEW EVENT
+========================================================= */
 
 function addEvent(event) {
+    event.preventDefault();
 
-event.preventDefault();
+    const title =
+        document.getElementById("title")
+            .value
+            .trim();
 
-const title = document.getElementById("title") .value .trim();
+    const date =
+        document.getElementById("date").value;
 
-const date = document.getElementById("date") .value;
+    if (!title || !date) {
+        toast(
+            "Bitte Titel und Datum eingeben.",
+            "error"
+        );
+        return;
+    }
 
-if (!title || !date) {
+    const allDay =
+        document.getElementById("allDay").checked;
 
-toast( "Bitte Titel und Datum eingeben.", "error" );
+    const startTime =
+        document.getElementById("startTime").value;
 
-return; }
+    const endTime =
+        document.getElementById("endTime").value;
 
-const allDay = document.getElementById("allDay") .checked;
+    if (
+        !allDay &&
+        startTime &&
+        endTime &&
+        timeToMinutes(endTime) <=
+            timeToMinutes(startTime)
+    ) {
+        toast(
+            "Die Endzeit muss nach der Startzeit liegen.",
+            "error"
+        );
+        return;
+    }
 
-const startTime = document.getElementById("startTime") .value;
+    const newEvent = {
+        id: crypto.randomUUID(),
+        title,
+        date,
+        category:
+            document.getElementById("category").value,
+        location:
+            document.getElementById("location")
+                .value
+                .trim(),
+        allDay,
+        startTime: allDay ? "" : startTime,
+        endTime: allDay ? "" : endTime,
+        description:
+            document.getElementById("description")
+                .value
+                .trim()
+    };
 
-const endTime = document.getElementById("endTime") .value;
+    events.push(newEvent);
 
-if ( !allDay && startTime && endTime && timeToMinutes(endTime) <= timeToMinutes(startTime) ) {
+    saveEvents();
 
-toast( "Die Endzeit muss nach der Startzeit liegen.", "error" );
+    document.getElementById("eventForm").reset();
 
-return; }
+    document.getElementById("date").value = date;
+    document.getElementById("startTime").value = "09:00";
+    document.getElementById("endTime").value = "10:00";
 
-const newEvent = {
+    toggleTime();
 
-id: crypto.randomUUID(),
+    currentDate = dateObject(date);
 
-title,
+    render();
 
-date,
-
-category: document.getElementById("category") .value,
-
-location: document.getElementById("location") .value .trim(),
-
-allDay,
-
-startTime: allDay ? "" : startTime,
-
-endTime: allDay ? "" : endTime,
-
-description: document.getElementById("description") .value .trim()
-
-};
-
-events.push(newEvent);
-
-saveEvents();
-
-document.getElementById("eventForm") .reset();
-
-document.getElementById("date") .value = date;
-
-document.getElementById("startTime") .value = "09:00";
-
-document.getElementById("endTime") .value = "10:00";
-
-toggleTime();
-
-currentDate = dateObject(date);
-
-render();
-
-toast( "Termin gespeichert.", "success" ); }
+    toast(
+        "Termin gespeichert.",
+        "success"
+    );
+}
 
 function focusNewEvent() {
+    const title =
+        document.getElementById("title");
 
-const title = document.getElementById("title");
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
 
-window.scrollTo({ top: document.body.scrollHeight, behavior:"smooth" });
-
-setTimeout(() => {
-
-title.focus();
-
-},300); }
+    setTimeout(() => {
+        title.focus();
+    }, 300);
+}
 
 function toggleTime() {
+    const checkbox =
+        document.getElementById("allDay");
 
-const checkbox = document.getElementById("allDay");
+    const fields =
+        document.getElementById("timeFields");
 
-const fields = document.getElementById("timeFields");
+    fields.style.display =
+        checkbox.checked ? "none" : "grid";
+}
 
-fields.style.display = checkbox.checked ? "none" : "grid"; }
-
-/* ========================================================= DELETE ========================================================= */
+/* =========================================================
+   DELETE
+========================================================= */
 
 function deleteEvent(id) {
+    const e =
+        events.find(x => x.id === id);
 
-const e = events.find( x => x.id === id );
+    if (!e) {
+        return;
+    }
 
-if (!e) { return; }
+    if (
+        !confirm(
+            `„${e.title}“ wirklich löschen?`
+        )
+    ) {
+        return;
+    }
 
-if ( !confirm( „${e.title}“ wirklich löschen? ) ) { return; }
+    events =
+        events.filter(x => x.id !== id);
 
-events = events.filter( x => x.id !== id );
+    saveEvents();
+    render();
 
-saveEvents();
+    toast(
+        "Termin gelöscht.",
+        "success"
+    );
+}
 
-render();
-
-toast( "Termin gelöscht.", "success" ); }
-
-/* ========================================================= SAVED EVENTS ========================================================= */
+/* =========================================================
+   SAVED EVENTS
+========================================================= */
 
 function renderSavedEvents() {
+    const container =
+        document.getElementById("savedEvents");
 
-const container = document.getElementById( "savedEvents" );
+    document.getElementById("eventCount")
+        .textContent = events.length;
 
-document.getElementById( "eventCount" ).textContent = events.length;
+    const sorted =
+        [...events]
+            .sort(compareEvents)
+            .slice(0, 30);
 
-const sorted = [...events] .sort(compareEvents) .slice(0,30);
+    if (!sorted.length) {
+        container.innerHTML = `
+            <div
+                style="
+                    padding:18px 5px;
+                    text-align:center;
+                    color:var(--text-3);
+                    font-size:10px;
+                "
+            >
+                Noch keine Termine.
+            </div>
+        `;
 
-if (!sorted.length) {
+        return;
+    }
 
-container.innerHTML = `
+    container.innerHTML =
+        sorted.map(e => `
+            <div class="saved-event">
 
-<div style=" padding:18px 5px; text-align:center; color:var(--text-3); font-size:10px; " > Noch keine Termine. </div>
+                <div
+                    class="saved-event-color"
+                    style="background:${categoryColor(e.category)}"
+                ></div>
 
-`;
+                <div class="saved-event-main">
 
-return; }
+                    <div class="saved-event-title">
+                        ${escapeHTML(e.title)}
+                    </div>
 
-container.innerHTML = sorted .map(e => `
+                    <div class="saved-event-date">
+                        ${formatDate(e.date)}
+                        ·
+                        ${
+                            e.allDay
+                                ? "Ganztägig"
+                                : escapeHTML(
+                                    e.startTime || "--:--"
+                                )
+                        }
+                    </div>
 
-<div class="saved-event">
+                </div>
 
-<div class="saved-event-color" style=" background:${categoryColor( e.category )} " ></div>
+                <button
+                    type="button"
+                    class="delete-icon"
+                    onclick="deleteEvent('${e.id}')"
+                    title="Löschen"
+                >
+                    ×
+                </button>
 
-<div class="saved-event-main">
+            </div>
+        `).join("");
+}
 
-<div class="saved-event-title"> ${escapeHTML(e.title)} </div>
-
-<div class="saved-event-date">
-
-${formatDate(e.date)}
-
-·
-
-${ e.allDay ? "Ganztägig" : escapeHTML( e.startTime || "--:--" ) }
-
-</div>
-
-</div>
-
-<button type="button" class="delete-icon" onclick="deleteEvent('${e.id}')" title="Löschen" > × </button>
-
-</div>
-
-`) .join(""); }
-
-/* ========================================================= STATS ========================================================= */
+/* =========================================================
+   STATS
+========================================================= */
 
 function updateStats() {
+    const today = dateString(new Date());
 
-const today = dateString(new Date());
+    const now = new Date();
 
-const now = new Date();
+    const day = now.getDay();
 
-const day = now.getDay();
+    const monday = new Date(now);
 
-const monday = new Date(now);
+    monday.setDate(
+        now.getDate() -
+        (day === 0 ? 6 : day - 1)
+    );
 
-monday.setDate( now.getDate() - ( day === 0 ? 6 : day - 1 ) );
+    monday.setHours(0, 0, 0, 0);
 
-monday.setHours( 0,0,0,0 );
+    const sunday = new Date(monday);
 
-const sunday = new Date(monday);
+    sunday.setDate(
+        monday.getDate() + 6
+    );
 
-sunday.setDate( monday.getDate() + 6 );
+    sunday.setHours(
+        23,
+        59,
+        59,
+        999
+    );
 
-sunday.setHours( 23,59,59,999 );
+    document.getElementById("totalStat")
+        .textContent = events.length;
 
-document.getElementById( "totalStat" ).textContent = events.length;
+    document.getElementById("todayStat")
+        .textContent =
+            events.filter(
+                e => e.date === today
+            ).length;
 
-document.getElementById( "todayStat" ).textContent = events.filter( e => e.date === today ).length;
+    document.getElementById("weekStat")
+        .textContent =
+            events.filter(
+                e =>
+                    e.date >= dateString(monday) &&
+                    e.date <= dateString(sunday)
+            ).length;
 
-document.getElementById( "weekStat" ).textContent = events.filter( e => e.date >= dateString(monday) && e.date <= dateString(sunday) ).length;
+    document.getElementById("importantStat")
+        .textContent =
+            events.filter(
+                e => e.category === "important"
+            ).length;
+}
 
-document.getElementById( "importantStat" ).textContent = events.filter( e => e.category === "important" ).length; }
-
-/* ========================================================= ICS EXPORT ========================================================= */
+/* =========================================================
+   ICS EXPORT
+========================================================= */
 
 function exportICS() {
+    const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//nox!314//X!Planer Pro//DE",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH"
+    ];
 
-const lines = [
+    events.forEach(e => {
+        lines.push("BEGIN:VEVENT");
 
-"BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//nox!314//X!Planer Pro//DE", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"
+        lines.push(
+            `UID:${escapeICS(e.id)}@nox314`
+        );
 
-];
+        lines.push(
+            `DTSTAMP:${icsNow()}`
+        );
 
-events.forEach(e => {
+        lines.push(
+            `SUMMARY:${escapeICS(e.title)}`
+        );
 
-lines.push( "BEGIN:VEVENT" );
+        if (e.description) {
+            lines.push(
+                `DESCRIPTION:${escapeICS(e.description)}`
+            );
+        }
 
-lines.push( UID:${escapeICS( e.id )}@nox314 );
+        if (e.location) {
+            lines.push(
+                `LOCATION:${escapeICS(e.location)}`
+            );
+        }
 
-lines.push( DTSTAMP:${icsNow()} );
+        if (e.allDay) {
+            lines.push(
+                `DTSTART;VALUE=DATE:${e.date.replace(/-/g, "")}`
+            );
 
-lines.push( SUMMARY:${escapeICS( e.title )} );
+            const next = dateObject(e.date);
 
-if (e.description) {
+            next.setDate(
+                next.getDate() + 1
+            );
 
-lines.push( DESCRIPTION:${escapeICS( e.description )} ); }
+            lines.push(
+                `DTEND;VALUE=DATE:${dateString(next).replace(/-/g, "")}`
+            );
 
-if (e.location) {
+        } else {
+            lines.push(
+                `DTSTART:${icsDateTime(
+                    e.date,
+                    e.startTime || "00:00"
+                )}`
+            );
 
-lines.push( LOCATION:${escapeICS( e.location )} ); }
+            lines.push(
+                `DTEND:${icsDateTime(
+                    e.date,
+                    e.endTime ||
+                    e.startTime ||
+                    "01:00"
+                )}`
+            );
+        }
 
-if (e.allDay) {
+        lines.push("END:VEVENT");
+    });
 
-lines.push( DTSTART;VALUE=DATE:${ e.date.replace(/-/g,"") } );
+    lines.push("END:VCALENDAR");
 
-/* * Für Ganztagstermine setzen wir zusätzlich * DTEND auf den Folgetag. */ const next = dateObject(e.date);
+    const blob = new Blob(
+        [
+            lines.join("\r\n") +
+            "\r\n"
+        ],
+        {
+            type: "text/calendar;charset=utf-8"
+        }
+    );
 
-next.setDate( next.getDate() + 1 );
+    const url =
+        URL.createObjectURL(blob);
 
-lines.push( DTEND;VALUE=DATE:${ dateString(next) .replace(/-/g,"") } );
+    const a =
+        document.createElement("a");
 
-} else {
+    a.href = url;
 
-lines.push( DTSTART:${icsDateTime( e.date, e.startTime || "00:00" )} );
+    a.download =
+        `xplaner-${dateString(new Date())}.ics`;
 
-lines.push( DTEND:${icsDateTime( e.date, e.endTime || e.startTime || "01:00" )} ); }
+    document.body.appendChild(a);
 
-lines.push( "END:VEVENT" );
+    a.click();
 
-});
+    a.remove();
 
-lines.push( "END:VCALENDAR" );
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+    }, 1000);
 
-const blob = new Blob( [ lines.join( "\r\n" ) + "\r\n" ], { type: "text/calendar;charset=utf-8" } );
+    toast(
+        "Kalender exportiert.",
+        "success"
+    );
+}
 
-const url = URL.createObjectURL( blob );
-
-const a = document.createElement( "a" );
-
-a.href = url;
-
-a.download = xplaner-${dateString( new Date() )}.ics;
-
-document.body.appendChild(a);
-
-a.click();
-
-a.remove();
-
-setTimeout( () => URL.revokeObjectURL( url ), 1000 );
-
-toast( "Kalender exportiert.", "success" ); }
-
-function icsDateTime( date, time ) {
-
-return ( date.replace(/-/g,"") + "T" + time.replace(/:/g,"") + "00" ); }
+function icsDateTime(date, time) {
+    return (
+        date.replace(/-/g, "") +
+        "T" +
+        time.replace(/:/g, "") +
+        "00"
+    );
+}
 
 function icsNow() {
+    const d = new Date();
 
-const d = new Date();
+    return (
+        d.getUTCFullYear() +
+        String(d.getUTCMonth() + 1).padStart(2, "0") +
+        String(d.getUTCDate()).padStart(2, "0") +
+        "T" +
+        String(d.getUTCHours()).padStart(2, "0") +
+        String(d.getUTCMinutes()).padStart(2, "0") +
+        String(d.getUTCSeconds()).padStart(2, "0") +
+        "Z"
+    );
+}
 
-return (
-
-d.getUTCFullYear() +
-
-String( d.getUTCMonth()+1 ).padStart(2,"0") +
-
-String( d.getUTCDate() ).padStart(2,"0") +
-
-"T" +
-
-String( d.getUTCHours() ).padStart(2,"0") +
-
-String( d.getUTCMinutes() ).padStart(2,"0") +
-
-String( d.getUTCSeconds() ).padStart(2,"0") +
-
-"Z"
-
-); }
-
-/* ========================================================= DRAG & DROP ========================================================= */
+/* =========================================================
+   DRAG & DROP
+========================================================= */
 
 function setupDragDrop() {
+    const zone =
+        document.getElementById("dropZone");
 
-const zone = document.getElementById( "dropZone" );
+    ["dragenter", "dragover"]
+        .forEach(type => {
+            zone.addEventListener(
+                type,
+                e => {
+                    e.preventDefault();
 
-[ "dragenter", "dragover" ].forEach(type => {
+                    zone.style.borderColor =
+                        "var(--primary)";
 
-zone.addEventListener( type, e => {
+                    zone.style.background =
+                        "var(--primary-soft)";
+                }
+            );
+        });
 
-e.preventDefault();
+    ["dragleave", "drop"]
+        .forEach(type => {
+            zone.addEventListener(
+                type,
+                e => {
+                    e.preventDefault();
 
-zone.style.borderColor = "var(--primary)";
+                    zone.style.borderColor =
+                        "var(--border-strong)";
 
-zone.style.background = "var(--primary-soft)";
+                    zone.style.background =
+                        "var(--surface)";
+                }
+            );
+        });
 
-} ); });
+    zone.addEventListener(
+        "drop",
+        e => {
+            const files =
+                [...e.dataTransfer.files];
 
-[ "dragleave", "drop" ].forEach(type => {
-
-zone.addEventListener( type, e => {
-
-e.preventDefault();
-
-zone.style.borderColor = "var(--border-strong)";
-
-zone.style.background = "var(--surface)";
-
-} ); });
-
-zone.addEventListener( "drop", e => {
-
-const files = [...e.dataTransfer.files];
-
-processFiles(files); } ); }
+            processFiles(files);
+        }
+    );
+}
 
 function openImport() {
-
-document.getElementById( "fileInput" ).click(); }
+    document
+        .getElementById("fileInput")
+        .click();
+}
 
 async function handleFiles(event) {
+    const files =
+        [...event.target.files];
 
-const files = [...event.target.files];
+    event.target.value = "";
 
-event.target.value = "";
-
-await processFiles(files); }
+    await processFiles(files);
+}
 
 async function processFiles(files) {
+    if (!files.length) {
+        return;
+    }
 
-if (!files.length) { return; }
+    let imported = [];
 
-let imported = [];
+    for (const file of files) {
+        const filename =
+            file.name.toLowerCase();
 
-for ( const file of files ) {
+        if (
+            !filename.endsWith(".ics") &&
+            !filename.endsWith(".ical")
+        ) {
+            continue;
+        }
 
-const filename = file.name.toLowerCase();
+        try {
+            const text =
+                await file.text();
 
-if ( !filename.endsWith(".ics") && !filename.endsWith(".ical") ) { continue; }
+            imported =
+                imported.concat(
+                    parseICS(text)
+                );
 
-try {
+        } catch (error) {
+            console.error(
+                "Import error:",
+                error
+            );
 
-const text = await file.text();
+            toast(
+                `Fehler beim Import von ${file.name}.`,
+                "error"
+            );
+        }
+    }
 
-imported = imported.concat( parseICS(text) );
+    imported =
+        uniqueEvents(imported);
 
-} catch(error) {
+    const newEvents =
+        imported.filter(
+            importedEvent =>
+                !events.some(
+                    existing =>
+                        sameEvent(
+                            existing,
+                            importedEvent
+                        )
+                )
+        );
 
-console.error( "Import error:", error );
+    pendingImport = newEvents;
 
-toast( Fehler beim Import von ${file.name}., "error" ); } }
+    showImportPreview(
+        newEvents,
+        imported.length -
+        newEvents.length
+    );
+}
 
-imported = uniqueEvents(imported);
-
-const newEvents = imported.filter( importedEvent => !events.some( existing => sameEvent( existing, importedEvent ) ) );
-
-pendingImport = newEvents;
-
-showImportPreview( newEvents, imported.length - newEvents.length ); }
-
-/* ========================================================= ICS PARSER ========================================================= */
+/* =========================================================
+   ICS PARSER
+========================================================= */
 
 function parseICS(text) {
+    text = text
+        .replace(/^\uFEFF/, "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n");
 
-text = text .replace(/^\uFEFF/,"") .replace(/\r\n/g,"\n") .replace(/\r/g,"\n");
+    const raw =
+        text.split("\n");
 
-const raw = text.split("\n");
+    const lines = [];
 
-const lines = [];
+    for (const line of raw) {
+        if (
+            (
+                line.startsWith(" ") ||
+                line.startsWith("\t")
+            ) &&
+            lines.length
+        ) {
+            lines[lines.length - 1] +=
+                line.slice(1);
+        } else {
+            lines.push(line);
+        }
+    }
 
-for ( const line of raw ) {
+    const result = [];
+    let event = null;
 
-if ( ( line.startsWith(" ") || line.startsWith("\t") ) && lines.length ) {
+    for (const line of lines) {
+        const upper =
+            line.toUpperCase();
 
-lines[ lines.length - 1 ] += line.slice(1);
+        if (upper === "BEGIN:VEVENT") {
+            event = {};
+            continue;
+        }
 
-} else {
+        if (upper === "END:VEVENT") {
+            if (event) {
+                const converted =
+                    convertICS(event);
 
-lines.push(line); } }
+                if (converted) {
+                    result.push(converted);
+                }
+            }
 
-const result = [];
+            event = null;
+            continue;
+        }
 
-let event = null;
+        if (!event) {
+            continue;
+        }
 
-for ( const line of lines ) {
+        const index =
+            line.indexOf(":");
 
-const upper = line.toUpperCase();
+        if (index < 0) {
+            continue;
+        }
 
-if ( upper === "BEGIN:VEVENT" ) {
+        const left =
+            line.slice(0, index);
 
-event = {};
+        const value =
+            line.slice(index + 1);
 
-continue; }
+        const parts =
+            left.split(";");
 
-if ( upper === "END:VEVENT" ) {
+        const name =
+            parts.shift().toUpperCase();
 
-if (event) {
+        const params = {};
 
-const converted = convertICS(event);
+        parts.forEach(part => {
+            const equal =
+                part.indexOf("=");
 
-if (converted) { result.push( converted ); } }
+            if (equal < 0) {
+                return;
+            }
 
-event = null;
+            params[
+                part.slice(0, equal).toUpperCase()
+            ] =
+                part
+                    .slice(equal + 1)
+                    .replace(
+                        /^"(.*)"$/,
+                        "$1"
+                    );
+        });
 
-continue; }
+        event[name] = {
+            value,
+            params
+        };
+    }
 
-if (!event) { continue; }
-
-const index = line.indexOf(":");
-
-if (index < 0) { continue; }
-
-const left = line.slice( 0, index );
-
-const value = line.slice( index + 1 );
-
-const parts = left.split(";");
-
-const name = parts .shift() .toUpperCase();
-
-const params = {};
-
-parts.forEach( part => {
-
-const equal = part.indexOf("=");
-
-if (equal < 0) { return; }
-
-params[ part .slice( 0, equal ) .toUpperCase() ] = part .slice( equal + 1 ) .replace( /^"(.*)"$/, "$1" ); } );
-
-event[name] = { value, params }; }
-
-return result; }
+    return result;
+}
 
 function convertICS(data) {
+    if (!data.DTSTART) {
+        return null;
+    }
 
-if (!data.DTSTART) { return null; }
+    const start =
+        parseICSDate(
+            data.DTSTART.value
+        );
 
-const start = parseICSDate( data.DTSTART.value );
+    if (!start) {
+        return null;
+    }
 
-if (!start) { return null; }
+    const end =
+        data.DTEND
+            ? parseICSDate(data.DTEND.value)
+            : null;
 
-const end = data.DTEND ? parseICSDate( data.DTEND.value ) : null;
+    const allDay =
+        data.DTSTART.params.VALUE === "DATE" ||
+        /^\d{8}$/.test(
+            data.DTSTART.value
+        );
 
-const allDay = data.DTSTART.params.VALUE === "DATE" ||
+    const title =
+        unescapeICS(
+            data.SUMMARY?.value ||
+            "Ohne Titel"
+        ).trim();
 
-/^\d{8}$/.test( data.DTSTART.value );
+    const description =
+        unescapeICS(
+            data.DESCRIPTION?.value ||
+            ""
+        ).trim();
 
-const title = unescapeICS( data.SUMMARY?.value || "Ohne Titel" ).trim();
+    const location =
+        unescapeICS(
+            data.LOCATION?.value ||
+            ""
+        ).trim();
 
-const description = unescapeICS( data.DESCRIPTION?.value || "" ).trim();
-
-const location = unescapeICS( data.LOCATION?.value || "" ).trim();
-
-return {
-
-id: crypto.randomUUID(),
-
-title,
-
-date: start.date,
-
-allDay,
-
-startTime: allDay ? "" : start.time,
-
-endTime: allDay ? "" : end?.time || start.time,
-
-location,
-
-description,
-
-category: detectCategory( title, description ) }; }
+    return {
+        id: crypto.randomUUID(),
+        title,
+        date: start.date,
+        allDay,
+        startTime: allDay
+            ? ""
+            : start.time,
+        endTime: allDay
+            ? ""
+            : end?.time || start.time,
+        location,
+        description,
+        category:
+            detectCategory(
+                title,
+                description
+            )
+    };
+}
 
 function parseICSDate(value) {
+    value =
+        String(value).trim();
 
-value = String(value) .trim();
+    if (/^\d{8}$/.test(value)) {
+        return {
+            date:
+                `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`,
+            time: ""
+        };
+    }
 
-if ( /^\d{8}$/.test(value) ) {
+    const match =
+        value.match(
+            /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/
+        );
 
-return {
+    if (!match) {
+        return null;
+    }
 
-date: ${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)},
+    return {
+        date:
+            `${match[1]}-${match[2]}-${match[3]}`,
+        time:
+            `${match[4]}:${match[5]}`
+    };
+}
 
-time:""
+/* =========================================================
+   IMPORT PREVIEW
+========================================================= */
 
-}; }
+function showImportPreview(
+    list,
+    duplicates
+) {
+    const modal =
+        document.getElementById("modal");
 
-const match = value.match( /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/ );
+    const info =
+        document.getElementById("importInfo");
 
-if (!match) { return null; }
+    const preview =
+        document.getElementById("importPreview");
 
-return {
+    const button =
+        document.getElementById("importButton");
 
-date: ${match[1]}-${match[2]}-${match[3]},
+    info.textContent =
+        `${list.length} neue Termine gefunden.` +
+        (
+            duplicates
+                ? ` ${duplicates} Duplikate werden übersprungen.`
+                : ""
+        );
 
-time: ${match[4]}:${match[5]} }; }
+    if (!list.length) {
+        preview.innerHTML = `
+            <div
+                class="empty"
+                style="min-height:180px;"
+            >
+                <div class="empty-icon">✓</div>
 
-/* ========================================================= IMPORT PREVIEW ========================================================= */
+                <strong>
+                    Keine neuen Termine
+                </strong>
 
-function showImportPreview( list, duplicates ) {
+                <span>
+                    Alle Termine sind bereits vorhanden.
+                </span>
+            </div>
+        `;
 
-const modal = document.getElementById( "modal" );
+        button.disabled = true;
 
-const info = document.getElementById( "importInfo" );
+    } else {
+        preview.innerHTML =
+            list.map(e => `
+                <div class="import-item">
 
-const preview = document.getElementById( "importPreview" );
+                    <div class="import-item-title">
+                        ${escapeHTML(e.title)}
+                    </div>
 
-const button = document.getElementById( "importButton" );
+                    <div class="import-item-meta">
 
-info.innerHTML = ${list.length} neue Termine gefunden. + ( duplicates ? ${duplicates} Duplikate werden übersprungen. : "" );
+                        ${formatDate(e.date)}
+                        ·
 
-if (!list.length) {
+                        ${
+                            e.allDay
+                                ? "Ganztägig"
+                                : escapeHTML(
+                                    e.startTime
+                                )
+                        }
 
-preview.innerHTML = `
+                        ${
+                            e.location
+                                ? ` · 📍 ${escapeHTML(e.location)}`
+                                : ""
+                        }
 
-<div class="empty" style="min-height:180px;" >
+                    </div>
 
-<div class="empty-icon"> ✓ </div>
+                </div>
+            `).join("");
 
-<strong> Keine neuen Termine </strong>
+        button.disabled = false;
+    }
 
-<span> Alle Termine sind bereits vorhanden. </span>
-
-</div>
-
-`;
-
-button.disabled = true;
-
-} else {
-
-preview.innerHTML = list .map(e => `
-
-<div class="import-item">
-
-<div class="import-item-title"> ${escapeHTML(e.title)} </div>
-
-<div class="import-item-meta">
-
-${formatDate(e.date)}
-
-·
-
-${ e.allDay ? "Ganztägig" : escapeHTML( e.startTime ) }
-
-${ e.location ? · 📍 ${escapeHTML( e.location )} : "" }
-
-</div>
-
-</div>
-
-`) .join("");
-
-button.disabled = false; }
-
-modal.classList.add("show"); }
+    modal.classList.add("show");
+}
 
 function confirmImport() {
+    if (!pendingImport.length) {
+        return;
+    }
 
-if ( !pendingImport.length ) { return; }
+    const count =
+        pendingImport.length;
 
-const count = pendingImport.length;
+    events =
+        events.concat(pendingImport);
 
-events = events.concat( pendingImport );
+    saveEvents();
 
-saveEvents();
+    pendingImport = [];
 
-pendingImport = [];
+    closeModal();
 
-closeModal();
+    render();
 
-render();
-
-toast( ${count} Termin(e) importiert., "success" ); }
+    toast(
+        `${count} Termin(e) importiert.`,
+        "success"
+    );
+}
 
 function closeModal() {
+    document
+        .getElementById("modal")
+        .classList.remove("show");
 
-document.getElementById( "modal" ).classList.remove( "show" );
-
-pendingImport = []; }
+    pendingImport = [];
+}
 
 function closeModalOutside(event) {
+    if (event.target.id === "modal") {
+        closeModal();
+    }
+}
 
-if ( event.target.id === "modal" ) { closeModal(); } }
+/* =========================================================
+   DUPLICATES
+========================================================= */
 
-/* ========================================================= DUPLICATES ========================================================= */
-
-function sameEvent(a,b) {
-
-return (
-
-a.date === b.date &&
-
-a.startTime === b.startTime &&
-
-a.title .trim() .toLowerCase() === b.title .trim() .toLowerCase() &&
-
-a.location .trim() .toLowerCase() === b.location .trim() .toLowerCase()
-
-); }
+function sameEvent(a, b) {
+    return (
+        a.date === b.date &&
+        a.startTime === b.startTime &&
+        a.title.trim().toLowerCase() ===
+            b.title.trim().toLowerCase() &&
+        a.location.trim().toLowerCase() ===
+            b.location.trim().toLowerCase()
+    );
+}
 
 function uniqueEvents(list) {
+    const output = [];
 
-const output = [];
+    for (const e of list) {
+        if (
+            !output.some(
+                existing =>
+                    sameEvent(existing, e)
+            )
+        ) {
+            output.push(e);
+        }
+    }
 
-for ( const e of list ) {
+    return output;
+}
 
-if ( !output.some( existing => sameEvent( existing, e ) ) ) {
+/* =========================================================
+   CATEGORY DETECTION
+========================================================= */
 
-output.push(e); } }
+function detectCategory(
+    title,
+    description
+) {
+    const text =
+        `${title} ${description}`.toLowerCase();
 
-return output; }
+    if (
+        /deadline|dringend|wichtig|prüfung|arzt|urgent|exam/
+            .test(text)
+    ) {
+        return "important";
+    }
 
-/* ========================================================= CATEGORY DETECTION ========================================================= */
+    if (
+        /sport|gym|fitness|training|laufen|fußball|fussball|tennis/
+            .test(text)
+    ) {
+        return "sport";
+    }
 
-function detectCategory( title, description ) {
+    if (
+        /familie|privat|urlaub|geburtstag|party|freunde/
+            .test(text)
+    ) {
+        return "personal";
+    }
 
-const text = ${title} ${description} .toLowerCase();
+    return "work";
+}
 
-if ( /deadline|dringend|wichtig|prüfung|arzt|urgent|exam/ .test(text) ) { return "important"; }
+/* =========================================================
+   TOAST
+========================================================= */
 
-if ( /sport|gym|fitness|training|laufen|fußball|fussball|tennis/ .test(text) ) { return "sport"; }
+function toast(
+    message,
+    type = ""
+) {
+    const container =
+        document.getElementById(
+            "toastContainer"
+        );
 
-if ( /familie|privat|urlaub|geburtstag|party|freunde/ .test(text) ) { return "personal"; }
+    const el =
+        document.createElement("div");
 
-return "work"; }
+    el.className =
+        `toast ${type}`;
 
-/* ========================================================= TOAST ========================================================= */
+    el.textContent = message;
 
-function toast( message, type = "" ) {
+    container.appendChild(el);
 
-const container = document.getElementById( "toastContainer" );
+    setTimeout(() => {
+        el.style.opacity = "0";
 
-const el = document.createElement( "div" );
+        setTimeout(() => {
+            el.remove();
+        }, 200);
+    }, 3000);
+}
 
-el.className = toast ${type};
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
-el.textContent = message;
+document.addEventListener(
+    "keydown",
+    event => {
+        if (event.key === "Escape") {
+            closeModal();
+        }
 
-container.appendChild(el);
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "k"
+        ) {
+            event.preventDefault();
 
-setTimeout(() => {
+            document
+                .getElementById("search")
+                .focus();
+        }
+    }
+);
 
-el.style.opacity = "0";
+/* =========================================================
+   UPDATE CURRENT TIME
+========================================================= */
 
-setTimeout( () => el.remove(), 200 );
-
-},3000); }
-
-/* ========================================================= KEYBOARD ========================================================= */
-
-document.addEventListener( "keydown", event => {
-
-if ( event.key === "Escape" ) {
-
-closeModal(); }
-
-if ( event.ctrlKey && event.key.toLowerCase() === "k" ) {
-
-event.preventDefault();
-
-document.getElementById( "search" ).focus(); } } );
-
-/* ========================================================= UPDATE CURRENT TIME ========================================================= */
-
-/*
-
-Die "Jetzt"-Linie wird automatisch aktualisiert,
-solange die Seite geöffnet bleibt.
-*/ setInterval(() => {
-
-if ( currentView === "day" || currentView === "week" ) {
-
-render(); }
-
-},60000);
+setInterval(() => {
+    if (
+        currentView === "day" ||
+        currentView === "week"
+    ) {
+        render();
+    }
+}, 60000);
 
 </script>
 
-</body> </html>
+</body>
+</html>

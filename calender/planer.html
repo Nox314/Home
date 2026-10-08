@@ -89,7 +89,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: white;
             padding: 20px 30px;
             border-radius: var(--radius);
@@ -100,8 +100,34 @@
 
         .calendar-header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px;
             color: var(--proton-dark);
+        }
+
+        .view-switchers {
+            display: flex;
+            background: var(--proton-light);
+            padding: 4px;
+            border-radius: 8px;
+            gap: 4px;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--proton-text);
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: white;
+            color: var(--proton-blue);
+            box-shadow: var(--shadow-sm);
         }
 
         .calendar-nav-btns, .action-btns {
@@ -144,11 +170,11 @@
 
         .calendar-layout {
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 340px;
             gap: 30px;
         }
 
-        @media(max-width: 900px) {
+        @media(max-width: 950px) {
             .calendar-layout {
                 grid-template-columns: 1fr;
             }
@@ -161,6 +187,7 @@
             box-shadow: var(--shadow-sm);
         }
 
+        /* Month View */
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -179,17 +206,18 @@
         }
 
         .day-cell {
-            aspect-ratio: 1;
+            min-height: 85px;
             background: #fafbfc;
             border: 1px solid var(--proton-border);
             border-radius: 8px;
             padding: 8px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            overflow: hidden;
         }
 
         .day-cell:hover {
@@ -205,26 +233,72 @@
 
         .day-cell.today {
             border-color: var(--proton-blue);
-            font-weight: bold;
             background: rgba(98, 74, 255, 0.03);
         }
 
         .day-number {
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--proton-dark);
+            margin-bottom: 4px;
+        }
+
+        .day-events-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 11px;
+        }
+
+        .preview-badge {
+            background: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
+            padding: 2px 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+
+        /* Week View Styles */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .week-column {
+            background: #fafbfc;
+            border: 1px solid var(--proton-border);
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .week-column.today {
+            border-color: var(--proton-blue);
+            background: rgba(98, 74, 255, 0.03);
+        }
+
+        .week-col-header {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--proton-border);
             color: var(--proton-dark);
         }
 
-        .day-events-indicator {
+        /* Agenda View Styles */
+        .agenda-container {
             display: flex;
-            gap: 3px;
-            flex-wrap: wrap;
-        }
-
-        .event-dot {
-            width: 6px;
-            height: 6px;
-            background-color: var(--proton-blue);
-            border-radius: 50%;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 350px;
         }
 
         /* Sidebar / Event Manager */
@@ -235,7 +309,8 @@
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
+            height: fit-content;
         }
 
         .sidebar-card h3 {
@@ -246,31 +321,54 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 15px;
+            gap: 5px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #666;
         }
 
-        .form-group input, .form-group textarea {
-            padding: 10px;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 9px;
             border: 1px solid var(--proton-border);
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: var(--proton-blue);
         }
 
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--proton-blue);
+            cursor: pointer;
+        }
+
         .events-list {
-            max-height: 280px;
+            max-height: 250px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -290,16 +388,24 @@
         }
 
         .event-info h4 {
-            margin: 0 0 4px 0;
-            font-size: 14px;
+            margin: 0 0 3px 0;
+            font-size: 13px;
             color: var(--proton-dark);
         }
 
         .event-info p {
-            margin: 0;
+            margin: 0 0 4px 0;
             color: #666;
             font-size: 12px;
             word-break: break-word;
+        }
+
+        .event-meta {
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .delete-btn {
@@ -344,12 +450,20 @@
         <div class="wrap">
             
             <div class="calendar-header">
-                <h1 id="monthYearDisplay">Monat Jahr</h1>
-                <div class="calendar-nav-btns">
-                    <button class="btn btn-secondary" onclick="changeMonth(-1)">← Zurück</button>
-                    <button class="btn btn-secondary" onclick="goToToday()">Heute</button>
-                    <button class="btn btn-secondary" onclick="changeMonth(1)">Weiter →</button>
+                <h1 id="headerTitle">Monat Jahr</h1>
+                
+                <div class="view-switchers">
+                    <button class="view-btn active" id="btnMonthView" onclick="switchView('month')">Monat</button>
+                    <button class="view-btn" id="btnWeekView" onclick="switchView('week')">Woche</button>
+                    <button class="view-btn" id="btnAgendaView" onclick="switchView('agenda')">Agenda</button>
                 </div>
+
+                <div class="calendar-nav-btns">
+                    <button class="btn btn-secondary" onclick="navigate(-1)">← Zurück</button>
+                    <button class="btn btn-secondary" onclick="goToToday()">Heute</button>
+                    <button class="btn btn-secondary" onclick="navigate(1)">Weiter →</button>
+                </div>
+                
                 <div class="action-btns">
                     <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import</button>
                     <input type="file" id="fileInput" style="display:none" accept=".txt,.ics" onchange="importEvents(event)">
@@ -358,14 +472,9 @@
             </div>
 
             <div class="calendar-layout">
-                <!-- Kalender Grid -->
-                <div class="calendar-card">
-                    <div class="weekdays">
-                        <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
-                    </div>
-                    <div class="days-grid" id="daysGrid">
-                        <!-- Generiert via JS -->
-                    </div>
+                <!-- Kalender Content -->
+                <div class="calendar-card" id="calendarCard">
+                    <!-- Dynamic View Render Target -->
                 </div>
 
                 <!-- Sidebar / Event Ersteller & Liste -->
@@ -373,23 +482,58 @@
                     <h3>Termin hinzufügen</h3>
                     <form id="eventForm" onsubmit="addEvent(event)">
                         <div class="form-group">
-                            <label for="eventDate">Datum</label>
-                            <input type="date" id="eventDate" required>
-                        </div>
-                        <div class="form-group">
                             <label for="eventTitle">Titel</label>
                             <input type="text" id="eventTitle" placeholder="z.B. Projekt-Meeting" required>
                         </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDate">Datum</label>
+                                <input type="date" id="eventDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="eventLocation">Ort (optional)</label>
+                                <input type="text" id="eventLocation" placeholder="z.B. Büro / Zoom">
+                            </div>
+                        </div>
+
+                        <label class="checkbox-group">
+                            <input type="checkbox" id="isAllDay" onchange="toggleAllDay(this)"> Ganztägig
+                        </label>
+
+                        <div class="form-row" id="timeRow">
+                            <div class="form-group">
+                                <label for="eventStartTime">Von</label>
+                                <input type="time" id="eventStartTime" value="09:00">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventEndTime">Bis</label>
+                                <input type="time" id="eventEndTime" value="10:00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventReminder">Benachrichtigung</label>
+                            <select id="eventReminder">
+                                <option value="none">Keine</option>
+                                <option value="0">Zum Termin</option>
+                                <option value="10">10 Minuten vorher</option>
+                                <option value="60">1 Stunde vorher</option>
+                                <option value="1440">1 Tag vorher</option>
+                            </select>
+                        </div>
+
                         <div class="form-group">
                             <label for="eventDesc">Beschreibung</label>
                             <textarea id="eventDesc" rows="2" placeholder="Details..."></textarea>
                         </div>
+
                         <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern</button>
                     </form>
 
                     <hr style="border:0; border-top:1px solid var(--proton-border); margin: 5px 0;">
 
-                    <h3>Anstehende Events</h3>
+                    <h3>Gespeicherte Events</h3>
                     <div class="events-list" id="eventsList">
                         <!-- Dynamische Liste -->
                     </div>
@@ -405,31 +549,81 @@
 
     <script>
         let currentDate = new Date();
+        let currentView = 'month'; // 'month', 'week', 'agenda'
+        
         let events = JSON.parse(localStorage.getItem('nox_events')) || [
-            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers' },
-            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check' }
+            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true, startTime: '', endTime: '', location: 'Online', reminder: '60' },
+            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check', isAllDay: false, startTime: '14:00', endTime: '15:30', location: 'Serverraum', reminder: '10' }
         ];
 
-        function initCalendar() {
+        function initApp() {
+            renderView();
+            renderEventsList();
+            // Set default date picker value to today's string
+            if(!document.getElementById('eventDate').value) {
+                document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function switchView(view) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn${view.charAt(0).toUpperCase() + view.slice(1)}View`).classList.add('active');
+            renderView();
+        }
+
+        function renderView() {
+            if (currentView === 'month') renderMonthView();
+            else if (currentView === 'week') renderWeekView();
+            else if (currentView === 'agenda') renderAgendaView();
+        }
+
+        function navigate(dir) {
+            if (currentView === 'month') {
+                currentDate.setMonth(currentDate.getMonth() + dir);
+            } else if (currentView === 'week') {
+                currentDate.setDate(currentDate.getDate() + (dir * 7));
+            } else if (currentView === 'agenda') {
+                currentDate.setMonth(currentDate.getMonth() + dir);
+            }
+            renderView();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderView();
+        }
+
+        function toggleAllDay(checkbox) {
+            const timeRow = document.getElementById('timeRow');
+            timeRow.style.display = checkbox.checked ? 'none' : 'grid';
+        }
+
+        // --- MONTH VIEW ---
+        function renderMonthView() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
-
             const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-            document.getElementById('monthYearDisplay').innerText = `${monthNames[month]} ${year}`;
+            document.getElementById('headerTitle').innerText = `${monthNames[month]} ${year}`;
 
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; // Montag als Start
+            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
             const totalDays = new Date(year, month + 1, 0).getDate();
             const prevTotalDays = new Date(year, month, 0).getDate();
 
-            let gridHTML = '';
+            let gridHTML = `
+                <div class="weekdays">
+                    <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+                </div>
+                <div class="days-grid">
+            `;
 
-            // Vorheriger Monat Fülltage
+            // Previous month fill days
             for (let i = firstDayIndex; i > 0; i--) {
                 const dayNum = prevTotalDays - i + 1;
                 gridHTML += `<div class="day-cell other-month"><div class="day-number">${dayNum}</div></div>`;
             }
 
-            // Aktueller Monat Tage
+            // Current month days
             const todayStr = new Date().toISOString().split('T')[0];
             for (let i = 1; i <= totalDays; i++) {
                 const formattedMonth = String(month + 1).padStart(2, '0');
@@ -439,32 +633,100 @@
                 const isToday = dateStr === todayStr ? 'today' : '';
                 const dayEvents = events.filter(e => e.date === dateStr);
                 
-                let dotsHTML = '<div class="day-events-indicator">';
-                dayEvents.forEach(() => {
-                    dotsHTML += '<div class="event-dot"></div>';
+                let badgesHTML = '<div class="day-events-preview">';
+                dayEvents.slice(0, 2).forEach(ev => {
+                    let timeStr = ev.isAllDay ? '' : `${ev.startTime} `;
+                    badgesHTML += `<div class="preview-badge">${timeStr}${ev.title}</div>`;
                 });
-                dotsHTML += '</div>';
+                if(dayEvents.length > 2) {
+                    badgesHTML += `<span style="font-size:10px; color:#666;">+${dayEvents.length - 2} weitere</span>`;
+                }
+                badgesHTML += '</div>';
 
                 gridHTML += `
                     <div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')">
                         <div class="day-number">${i}</div>
-                        ${dotsHTML}
+                        ${badgesHTML}
                     </div>
                 `;
             }
-
-            document.getElementById('daysGrid').innerHTML = gridHTML;
-            renderEventsList();
+            gridHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = gridHTML;
         }
 
-        function changeMonth(direction) {
-            currentDate.setMonth(currentDate.getMonth() + direction);
-            initCalendar();
+        // --- WEEK VIEW ---
+        function renderWeekView() {
+            // Find start of the week (Monday)
+            let curr = new Date(currentDate);
+            let day = curr.getDay();
+            let diff = curr.getDate() - day + (day === 0 ? -6 : 1);
+            let monday = new Date(curr.setDate(diff));
+
+            document.getElementById('headerTitle').innerText = `Woche ab ${monday.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'})}`;
+
+            let weekHTML = `<div class="week-grid">`;
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            for(let i=0; i<7; i++) {
+                let loopDate = new Date(monday);
+                loopDate.setDate(monday.getDate() + i);
+                let dateStr = loopDate.toISOString().split('T')[0];
+                let isToday = dateStr === todayStr ? 'today' : '';
+                let dayName = loopDate.toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'});
+
+                let dayEvents = events.filter(e => e.date === dateStr);
+
+                weekHTML += `
+                    <div class="week-column ${isToday}" onclick="selectDate('${dateStr}')">
+                        <div class="week-col-header">${dayName}</div>
+                        <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+                `;
+
+                dayEvents.forEach(ev => {
+                    let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime} - ${ev.endTime}`;
+                    weekHTML += `
+                        <div style="background:white; border:1px solid var(--proton-border); border-radius:6px; padding:6px; font-size:12px;">
+                            <strong style="color:var(--proton-blue);">${ev.title}</strong>
+                            <div style="font-size:10px; color:#666;">${timeStr}</div>
+                        </div>
+                    `;
+                });
+
+                weekHTML += `</div></div>`;
+            }
+
+            weekHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = weekHTML;
         }
 
-        function goToToday() {
-            currentDate = new Date();
-            initCalendar();
+        // --- AGENDA VIEW ---
+        function renderAgendaView() {
+            document.getElementById('headerTitle').innerText = `Komplette Agenda`;
+            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            
+            let agendaHTML = `<div class="agenda-container">`;
+            if(sorted.length === 0) {
+                agendaHTML += `<p style="color:#888;">Keine Termine eingetragen.</p>`;
+            } else {
+                sorted.forEach((ev, idx) => {
+                    let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime} Uhr - ${ev.endTime} Uhr`;
+                    agendaHTML += `
+                        <div class="event-item" style="align-items:center;">
+                            <div class="event-info">
+                                <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                                <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
+                                <div class="event-meta">
+                                    <span>🕒 ${timeStr}</span>
+                                    ${ev.location ? `<span>📍 ${ev.location}</span>` : ''}
+                                </div>
+                            </div>
+                            <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
+                        </div>
+                    `;
+                });
+            }
+            agendaHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = agendaHTML;
         }
 
         function selectDate(dateStr) {
@@ -474,27 +736,34 @@
 
         function addEvent(e) {
             e.preventDefault();
-            const date = document.getElementById('eventDate').value;
             const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const location = document.getElementById('eventLocation').value;
+            const isAllDay = document.getElementById('isAllDay').checked;
+            const startTime = document.getElementById('eventStartTime').value;
+            const endTime = document.getElementById('eventEndTime').value;
+            const reminder = document.getElementById('eventReminder').value;
             const desc = document.getElementById('eventDesc').value;
 
-            events.push({ date, title, desc });
+            events.push({ title, date, location, isAllDay, startTime, endTime, reminder, desc });
             saveAndRefresh();
             document.getElementById('eventForm').reset();
+            document.getElementById('timeRow').style.display = 'grid';
+            document.getElementById('eventDate').value = date; // retain date selection
         }
 
         function deleteEvent(index) {
-            // Sortierung beachten beim Löschen aus der gefilterten/sortierten Ansicht
             let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
             const target = sorted[index];
             
-            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title && ev.desc === target.desc));
+            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title && ev.startTime === target.startTime));
             saveAndRefresh();
         }
 
         function saveAndRefresh() {
             localStorage.setItem('nox_events', JSON.stringify(events));
-            initCalendar();
+            renderView();
+            renderEventsList();
         }
 
         function renderEventsList() {
@@ -507,11 +776,13 @@
             let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
             let html = '';
             sorted.forEach((ev, idx) => {
+                let timeStr = ev.isAllDay ? 'Ganztägig' : `${ev.startTime}`;
                 html += `
                     <div class="event-item">
                         <div class="event-info">
                             <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
                             <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
+                            <div class="event-meta"><span>${timeStr}</span> ${ev.location ? `<span>&bull; ${ev.location}</span>` : ''}</div>
                         </div>
                         <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
                     </div>
@@ -525,16 +796,16 @@
         }
 
         function exportEvents() {
-            let fileContent = "# nox!314 events.txt format\n";
+            let fileContent = "# nox!314 advanced events format\n";
             events.forEach(e => {
-                fileContent += `${e.date} | ${e.title} | ${e.desc || ''}\n`;
+                fileContent += `${e.date} | ${e.title} | ${e.isAllDay ? 'ALLDAY' : e.startTime+'-'+e.endTime} | ${e.location || ''} | ${e.reminder || 'none'} | ${e.desc || ''}\n`;
             });
 
             const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'events.txt';
+            a.download = 'advanced_events.txt';
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -548,55 +819,45 @@
                 const content = e.target.result;
                 let importedCount = 0;
 
-                if (file.name.endsWith('.ics')) {
-                    // Einfacher ICS Parser
-                    const eventsRaw = content.split('BEGIN:VEVENT');
-                    eventsRaw.shift();
-                    eventsRaw.forEach(evBlock => {
-                        const summaryMatch = evBlock.match(/SUMMARY:(.*)/);
-                        const descMatch = evBlock.match(/DESCRIPTION:(.*)/);
-                        const dtStartMatch = evBlock.match(/DTSTART(?:;[^:]*)?:(\d{4})(\d{2})(\d{2})/);
+                const lines = content.split('\n');
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line || line.startsWith('#')) return;
 
-                        if (summaryMatch && dtStartMatch) {
-                            const date = `${dtStartMatch[1]}-${dtStartMatch[2]}-${dtStartMatch[3]}`;
-                            const title = summaryMatch[1].trim();
-                            const desc = descMatch ? descMatch[1].trim() : '';
+                    const parts = line.split('|');
+                    if (parts.length >= 2) {
+                        const date = parts[0].trim();
+                        const title = parts[1].trim();
+                        let timePart = parts[2] ? parts[2].trim() : 'ALLDAY';
+                        const location = parts[3] ? parts[3].trim() : '';
+                        const reminder = parts[4] ? parts[4].trim() : 'none';
+                        const desc = parts[5] ? parts[5].trim() : '';
+                        
+                        let isAllDay = timePart === 'ALLDAY';
+                        let startTime = '';
+                        let endTime = '';
 
-                            if (!events.some(ev => ev.date === date && ev.title === title)) {
-                                events.push({ date, title, desc });
-                                importedCount++;
-                            }
+                        if (!isAllDay && timePart.includes('-')) {
+                            const times = timePart.split('-');
+                            startTime = times[0].trim();
+                            endTime = times[1].trim();
                         }
-                    });
-                } else {
-                    // Standard Pipe-Format (.txt)
-                    const lines = content.split('\n');
-                    lines.forEach(line => {
-                        line = line.trim();
-                        if (!line || line.startsWith('#')) return;
 
-                        const parts = line.split('|');
-                        if (parts.length >= 2) {
-                            const date = parts[0].trim();
-                            const title = parts[1].trim();
-                            const desc = parts[2] ? parts[2].trim() : '';
-                            
-                            if (!events.some(ev => ev.date === date && ev.title === title)) {
-                                events.push({ date, title, desc });
-                                importedCount++;
-                            }
+                        if (!events.some(ev => ev.date === date && ev.title === title)) {
+                            events.push({ date, title, isAllDay, startTime, endTime, location, reminder, desc });
+                            importedCount++;
                         }
-                    });
-                }
+                    }
+                });
 
                 saveAndRefresh();
                 alert(`${importedCount} Event(s) erfolgreich importiert!`);
-                event.target.value = ''; // Reset file input
+                event.target.value = '';
             };
             reader.readAsText(file);
         }
 
-        window.onload = initCalendar;
+        window.onload = initApp;
     </script>
 </body>
 </html>

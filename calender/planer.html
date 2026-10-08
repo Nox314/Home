@@ -2,485 +2,432 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#624aff">
-    <title>X!Planer Pro - nox!314</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X!Planer (Beta) - nox!314</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --blue: #624aff;
-            --blue-hover: #4f37e0;
-            --dark: #1c1c1c;
-            --page: #f5f7fa;
-            --border: #e0e4eb;
-            --text: #333;
-            --muted: #777;
-            --card: #fff;
-            --cell: #fafbfc;
-            --shadow: 0 5px 18px rgba(49, 39, 112, .07);
-            --radius: 16px;
+            --proton-blue: #624aff;
+            --proton-blue-hover: #4f37e0;
+            --proton-dark: #1c1c1c;
+            --proton-light: #f5f7fa;
+            --proton-border: #e0e4eb;
+            --proton-text: #333333;
+            --card-bg: #ffffff;
+            --cell-bg: #fafbfc;
+            --shadow-sm: 0 4px 12px rgba(98, 74, 255, 0.06);
+            --shadow-md: 0 12px 32px rgba(0,0,0,0.08);
+            --radius: 14px;
         }
-
-        * { box-sizing: border-box; }
 
         body {
             margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--proton-light);
+            color: var(--proton-text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: var(--text);
-            background: var(--page);
-            font-family: Inter, system-ui, sans-serif;
-        }
-
-        button, input, textarea, select { font: inherit; }
-        button { -webkit-tap-highlight-color: transparent; }
-
-        .wrap {
-            width: min(1240px, 100%);
-            margin-inline: auto;
-            padding-inline: 20px;
         }
 
         #topMenu {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
-            z-index: 10;
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            z-index: 100;
+            border-bottom: 1px solid var(--proton-border);
+        }
+
+        .wrap {
+            margin: 0 auto;
+            padding: 0 20px;
+            max-width: 1200px;
         }
 
         #topMenu .wrap {
-            min-height: 68px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            align-items: center;
+            height: 70px;
         }
 
         .logo {
-            color: var(--dark);
-            text-decoration: none;
-            font-size: 23px;
             font-weight: 700;
-            letter-spacing: -.6px;
-            white-space: nowrap;
+            font-size: 24px;
+            color: var(--proton-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
         }
-
-        .logo span { color: var(--blue); }
+        .logo span { color: var(--proton-blue); }
 
         .nav-links {
             display: flex;
+            gap: 20px;
             align-items: center;
-            gap: 6px;
-            overflow-x: auto;
         }
 
         .nav-links a {
-            padding: 9px 12px;
-            border-radius: 9px;
-            color: var(--text);
             text-decoration: none;
-            font-size: 14px;
+            color: var(--proton-text);
             font-weight: 500;
-            white-space: nowrap;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--blue);
-            background: rgba(98, 74, 255, .09);
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(98, 74, 255, 0.1);
+            color: var(--proton-blue);
         }
 
-        .main-container { flex: 1; padding: 30px 0 42px; }
+        .main-container {
+            flex: 1;
+            padding: 40px 0;
+        }
 
         .calendar-header {
-            display: grid;
-            grid-template-columns: minmax(150px, 1fr) auto auto;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding: 18px 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 20px 30px;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .calendar-header h1 {
             margin: 0;
-            color: var(--dark);
-            font-size: 21px;
-            line-height: 1.3;
-        }
-
-        .view-switchers, .button-row, .action-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 7px;
+            font-size: 22px;
+            color: var(--proton-dark);
         }
 
         .view-switchers {
+            display: flex;
+            background: var(--proton-light);
             padding: 4px;
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            background: var(--page);
+            border-radius: 10px;
+            gap: 4px;
+            border: 1px solid var(--proton-border);
         }
 
         .view-btn {
-            border: 0;
-            border-radius: 8px;
-            padding: 8px 11px;
-            color: var(--text);
             background: transparent;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            color: var(--proton-text);
+            transition: all 0.2s;
         }
 
         .view-btn.active {
-            color: var(--blue);
-            background: var(--card);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+            background: var(--card-bg);
+            color: var(--proton-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calendar-nav-btns, .action-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
-            min-height: 39px;
+            background-color: var(--proton-blue);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 6px;
-            padding: 9px 13px;
-            border: 1px solid transparent;
-            border-radius: 10px;
-            color: #fff;
-            background: var(--blue);
-            box-shadow: 0 4px 12px rgba(98, 74, 255, .18);
-            font-size: 13px;
-            font-weight: 600;
             text-decoration: none;
-            cursor: pointer;
-            transition: .18s ease;
+            box-shadow: 0 4px 12px rgba(98, 74, 255, 0.2);
         }
 
-        .btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+        .btn:hover {
+            background-color: var(--proton-blue-hover);
+            transform: translateY(-1px);
+        }
 
         .btn-secondary {
-            color: var(--text);
-            background: var(--card);
-            border-color: var(--border);
+            background-color: var(--card-bg);
+            color: var(--proton-text);
+            border: 1px solid var(--proton-border);
             box-shadow: none;
         }
 
         .btn-secondary:hover {
-            color: var(--blue);
-            background: rgba(98, 74, 255, .04);
-            border-color: var(--blue);
-        }
-
-        .action-row {
-            grid-column: 1 / -1;
-            padding-top: 13px;
-            border-top: 1px solid var(--border);
-        }
-
-        .toolbar-input {
-            min-height: 39px;
-            width: 170px;
-            padding: 8px 11px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            background: var(--cell);
-        }
-
-        .toolbar-input:focus,
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: 3px solid rgba(98, 74, 255, .14);
-            border-color: var(--blue);
+            background-color: rgba(98, 74, 255, 0.05);
+            color: var(--proton-blue);
+            border-color: var(--proton-blue);
         }
 
         .calendar-layout {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 355px;
-            align-items: start;
-            gap: 20px;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
         }
 
-        .calendar-card, .sidebar-card {
-            min-width: 0;
-            padding: 20px;
-            border: 1px solid var(--border);
+        @media(max-width: 950px) {
+            .calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-card {
+            background: var(--card-bg);
             border-radius: var(--radius);
-            background: var(--card);
-            box-shadow: var(--shadow);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
         }
 
-        .weekdays, .days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-        }
-
+        /* Month View */
         .weekdays {
-            margin-bottom: 9px;
-            color: var(--muted);
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: .04em;
+            font-weight: 600;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 15px;
             text-transform: uppercase;
         }
 
-        .days-grid { gap: 7px; }
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
 
         .day-cell {
-            min-width: 0;
-            min-height: 108px;
+            min-height: 105px;
+            background: var(--cell-bg);
+            border: 1px solid var(--proton-border);
+            border-radius: 10px;
             padding: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            background: var(--cell);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
             cursor: pointer;
-            transition: .16s ease;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
         .day-cell:hover {
-            border-color: var(--blue);
-            background: #fff;
-            transform: translateY(-1px);
+            border-color: var(--proton-blue);
+            background: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
         }
 
-        .day-cell.other-month { opacity: .43; }
-        .day-cell.today { border-color: var(--blue); background: rgba(98, 74, 255, .055); }
+        .day-cell.other-month {
+            opacity: 0.3;
+        }
+
+        .day-cell.today {
+            border-color: var(--proton-blue);
+            background: rgba(98, 74, 255, 0.04);
+        }
 
         .day-number {
-            margin-bottom: 7px;
-            color: var(--dark);
             font-size: 13px;
             font-weight: 700;
+            color: var(--proton-dark);
+            margin-bottom: 6px;
         }
 
-        .day-events-preview { display: grid; gap: 4px; }
-
-        .preview-badge {
-            overflow: hidden;
-            padding: 4px 6px;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 600;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .cat-work { background: #624aff; }
-        .cat-personal { background: #00a884; }
-        .cat-sport { background: #e88921; }
-        .cat-important { background: #e94d58; }
-
-        .sidebar-card {
+        .day-events-preview {
             display: flex;
             flex-direction: column;
-            gap: 13px;
+            gap: 3px;
+            font-size: 11px;
         }
 
-        .sidebar-card h2, .sidebar-card h3 {
-            margin: 0;
-            color: var(--dark);
+        .preview-badge {
+            padding: 2px 6px;
+            border-radius: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+            color: white;
         }
 
-        .sidebar-card h2 { font-size: 18px; }
-        .sidebar-card h3 { font-size: 15px; }
+        /* Kategorien Farben */
+        .cat-work { background-color: #624aff; }
+        .cat-personal { background-color: #00b894; }
+        .cat-sport { background-color: #ff9f43; }
+        .cat-important { background-color: #ff5252; }
 
-        .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-        .form-group label { color: #666; font-size: 12px; font-weight: 600; }
+        /* Sidebar / Event Manager */
+        .sidebar-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--proton-border);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: fit-content;
+        }
+
+        .sidebar-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: var(--proton-dark);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
 
         .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            min-height: 39px;
-            padding: 9px 10px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            color: var(--text);
-            background: var(--cell);
+            padding: 10px;
+            border: 1px solid var(--proton-border);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
             font-size: 13px;
+            background: var(--cell-bg);
+            color: var(--proton-text);
+            transition: border-color 0.2s;
         }
 
-        .form-group textarea { resize: vertical; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--proton-blue);
+            background: var(--card-bg);
+        }
 
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 2px 0 10px;
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
+            margin-bottom: 12px;
         }
 
-        .checkbox-group input { width: 17px; height: 17px; accent-color: var(--blue); }
+        .checkbox-group input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--proton-blue);
+            cursor: pointer;
+        }
 
         .events-list {
+            max-height: 220px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 280px;
-            overflow: auto;
+            gap: 10px;
+            padding-right: 4px;
         }
 
         .event-item {
+            background: var(--cell-bg);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--proton-border);
+            font-size: 13px;
             display: flex;
-            align-items: flex-start;
             justify-content: space-between;
-            gap: 10px;
-            padding: 11px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--cell);
+            align-items: flex-start;
+            transition: border-color 0.2s;
+        }
+        .event-item:hover {
+            border-color: var(--proton-blue);
         }
 
-        .event-info { min-width: 0; }
-        .event-info h4 { margin: 0 0 4px; color: var(--dark); font-size: 13px; overflow-wrap: anywhere; }
-        .event-info p { margin: 0 0 5px; color: #666; font-size: 12px; overflow-wrap: anywhere; }
-        .event-meta { display: flex; flex-wrap: wrap; gap: 7px; color: var(--muted); font-size: 11px; }
-
-        .event-actions { display: flex; flex: 0 0 auto; gap: 3px; }
-        .icon-btn {
-            width: 30px;
-            height: 30px;
-            border: 0;
-            border-radius: 7px;
-            color: var(--blue);
-            background: transparent;
-            font-size: 16px;
-            cursor: pointer;
+        .event-info h4 {
+            margin: 0 0 3px 0;
+            font-size: 13px;
+            color: var(--proton-dark);
         }
-        .icon-btn:hover { background: rgba(98, 74, 255, .1); }
-        .icon-btn.delete { color: #e94d58; }
 
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 11px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--cell);
+        .event-info p {
+            margin: 0 0 4px 0;
+            color: #666;
             font-size: 12px;
-            font-weight: 600;
+            word-break: break-word;
         }
 
-        .section-divider { width: 100%; border: 0; border-top: 1px solid var(--border); }
-
-        .week-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
-        .week-day {
-            min-height: 270px;
-            padding: 9px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--cell);
-            cursor: pointer;
-        }
-        .week-day.today { border-color: var(--blue); }
-        .week-day-heading {
-            margin-bottom: 9px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
+        .event-meta {
             font-size: 11px;
+            color: #888;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 4px;
             font-weight: 700;
         }
-        .week-event {
-            margin-bottom: 6px;
-            padding: 7px;
-            border-left: 3px solid var(--blue);
-            border-radius: 6px;
-            background: white;
-            font-size: 11px;
-            overflow-wrap: anywhere;
-        }
-        .week-event strong { display: block; margin-bottom: 3px; }
+        .delete-btn:hover { color: #ff0000; }
 
-        .empty-state { padding: 36px 12px; color: var(--muted); text-align: center; }
+        .stats-badge-box {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            background: var(--cell-bg);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--proton-border);
+            font-size: 12px;
+            font-weight: 500;
+        }
 
         footer {
+            background-color: var(--card-bg);
+            padding: 25px 0;
             margin-top: auto;
-            padding: 22px 0;
-            border-top: 1px solid var(--border);
-            background: var(--card);
-            color: #888;
+            border-top: 1px solid var(--proton-border);
             text-align: center;
-            font-size: 12px;
-        }
-
-        .toast {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 30;
-            max-width: min(380px, calc(100vw - 40px));
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: #fff;
-            background: #25232f;
-            box-shadow: var(--shadow);
-            font-size: 13px;
-            opacity: 0;
-            transform: translateY(8px);
-            pointer-events: none;
-            transition: .2s ease;
-        }
-        .toast.show { opacity: 1; transform: translateY(0); }
-
-        @media (max-width: 980px) {
-            .calendar-layout { grid-template-columns: 1fr; }
-            .sidebar-card { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
-            .sidebar-card > h2, .sidebar-card > form, .sidebar-card > .section-divider,
-            .sidebar-card > div[style], .sidebar-card > .events-list, .sidebar-card > .stats { grid-column: 1 / -1; }
-        }
-
-        @media (max-width: 720px) {
-            .wrap { padding-inline: 12px; }
-            #topMenu .wrap { min-height: 60px; flex-wrap: wrap; padding-block: 8px; }
-            .nav-links { max-width: 100%; }
-            .main-container { padding-top: 18px; }
-            .calendar-header { grid-template-columns: 1fr; padding: 15px; }
-            .calendar-header h1 { font-size: 19px; }
-            .action-row { grid-column: auto; }
-            .toolbar-input { flex: 1 1 130px; width: auto; }
-            .calendar-card, .sidebar-card { padding: 12px; }
-            .days-grid { gap: 4px; }
-            .day-cell { min-height: 74px; padding: 5px; border-radius: 8px; }
-            .day-number { margin-bottom: 4px; font-size: 11px; }
-            .preview-badge { padding: 3px 4px; font-size: 9px; }
-            .week-grid { grid-template-columns: 1fr; }
-            .week-day { min-height: 80px; }
-            .sidebar-card { display: flex; }
-            .view-btn { padding: 8px 9px; }
-        }
-
-        @media (max-width: 390px) {
-            .weekdays { font-size: 9px; }
-            .day-cell { min-height: 62px; }
-            .preview-badge { font-size: 8px; }
-            .btn { padding-inline: 10px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+            color: #888;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+
     <nav id="topMenu">
         <div class="wrap">
             <a href="index.html" class="logo">nox<span>!</span>314</a>
@@ -493,51 +440,55 @@
         </div>
     </nav>
 
-    <main class="main-container">
+    <div class="main-container">
         <div class="wrap">
-            <section class="calendar-header" aria-label="Kalender-Steuerung">
-                <h1 id="headerTitle">Kalender</h1>
-
-                <div class="view-switchers" role="group" aria-label="Kalenderansicht">
+            
+            <div class="calendar-header">
+                <h1 id="headerTitle">Monat Jahr</h1>
+                
+                <div class="view-switchers">
                     <button class="view-btn active" id="btnMonthView" onclick="switchView('month')">Monat</button>
                     <button class="view-btn" id="btnWeekView" onclick="switchView('week')">Woche</button>
                     <button class="view-btn" id="btnDayView" onclick="switchView('day')">Tag</button>
                     <button class="view-btn" id="btnAgendaView" onclick="switchView('agenda')">Agenda</button>
                 </div>
 
-                <div class="button-row">
-                    <button class="btn btn-secondary" onclick="navigate(-1)" aria-label="Zurück">← Zurück</button>
+                <div class="calendar-nav-btns">
+                    <button class="btn btn-secondary" onclick="navigate(-1)">← Zurück</button>
                     <button class="btn btn-secondary" onclick="goToToday()">Heute</button>
-                    <button class="btn btn-secondary" onclick="navigate(1)" aria-label="Weiter">Weiter →</button>
+                    <button class="btn btn-secondary" onclick="navigate(1)">Weiter →</button>
                 </div>
-
-                <div class="action-row">
-                    <input class="toolbar-input" type="search" id="searchInput" placeholder="Termine suchen…" aria-label="Termine suchen" oninput="renderView()">
-                    <select class="toolbar-input" id="categoryFilter" aria-label="Kategorie filtern" onchange="renderView()">
+                
+                <div class="action-btns">
+                    <input type="text" id="searchInput" placeholder="Suche..." oninput="renderView()" style="padding: 9px 12px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px; width:130px;">
+                    
+                    <select id="categoryFilter" onchange="renderView()" style="padding: 9px; border-radius:10px; border:1px solid var(--proton-border); background:var(--cell-bg); color:var(--proton-text); font-size:13px;">
                         <option value="all">Alle Kategorien</option>
                         <option value="work">Arbeit</option>
                         <option value="personal">Privat</option>
                         <option value="sport">Sport</option>
                         <option value="important">Wichtig</option>
                     </select>
+
                     <button class="btn" onclick="document.getElementById('fileInput').click()">📥 Import</button>
-                    <input type="file" id="fileInput" hidden accept=".ics,.txt,text/calendar,text/plain" onchange="importEvents(event)">
+                    <input type="file" id="fileInput" style="display:none" accept=".ics,.txt" onchange="importEvents(event)">
                     <button class="btn btn-secondary" onclick="exportEvents()">📤 Export iCal</button>
                 </div>
-            </section>
+            </div>
 
             <div class="calendar-layout">
-                <section class="calendar-card" id="calendarCard" aria-live="polite"></section>
+                <div class="calendar-card" id="calendarCard">
+                    <!-- Dynamischer Content -->
+                </div>
 
-                <aside class="sidebar-card">
-                    <h2 id="formHeading">Termin hinzufügen</h2>
-
+                <div class="sidebar-card">
+                    <h3>Termin hinzufügen</h3>
                     <form id="eventForm" onsubmit="addEvent(event)">
                         <div class="form-group">
                             <label for="eventTitle">Titel</label>
-                            <input type="text" id="eventTitle" maxlength="160" placeholder="z. B. Projekt-Meeting" required>
+                            <input type="text" id="eventTitle" placeholder="z.B. Projekt-Meeting" required>
                         </div>
-
+                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="eventDate">Datum</label>
@@ -556,12 +507,11 @@
 
                         <div class="form-group">
                             <label for="eventLocation">Ort (optional)</label>
-                            <input type="text" id="eventLocation" maxlength="160" placeholder="z. B. Büro / Zoom">
+                            <input type="text" id="eventLocation" placeholder="z.B. Büro / Zoom">
                         </div>
 
                         <label class="checkbox-group">
-                            <input type="checkbox" id="isAllDay" onchange="toggleAllDay(this)">
-                            Ganztägig
+                            <input type="checkbox" id="isAllDay" onchange="toggleAllDay(this)"> Ganztägig
                         </label>
 
                         <div class="form-row" id="timeRow">
@@ -577,720 +527,348 @@
 
                         <div class="form-group">
                             <label for="eventDesc">Beschreibung</label>
-                            <textarea id="eventDesc" rows="3" maxlength="2000" placeholder="Details…"></textarea>
+                            <textarea id="eventDesc" rows="2" placeholder="Details..."></textarea>
                         </div>
 
-                        <div class="button-row">
-                            <button type="submit" class="btn" id="saveButton">Speichern ✨</button>
-                            <button type="button" class="btn btn-secondary" id="cancelEditButton" onclick="cancelEdit()" hidden>Abbrechen</button>
-                        </div>
+                        <button type="submit" class="btn" style="width:100%; justify-content:center;">Speichern ✨</button>
                     </form>
 
-                    <hr class="section-divider">
+                    <hr style="border:0; border-top:1px solid var(--proton-border); margin: 5px 0;">
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h3>Gespeicherte Events</h3>
-                        <span id="eventCountBadge" style="font-size:11px;background:rgba(98,74,255,.1);color:var(--blue);padding:4px 9px;border-radius:20px;font-weight:700">0 Events</span>
+                        <span id="eventCountBadge" style="font-size: 11px; background: rgba(98, 74, 255, 0.1); color: var(--proton-blue); padding: 2px 8px; border-radius: 20px; font-weight: 600;">0 Events</span>
                     </div>
 
                     <div class="events-list" id="eventsList"></div>
 
-                    <div class="stats">
+                    <div class="stats-badge-box" id="statsBox">
                         <div>📊 Gesamt: <span id="statTotal">0</span></div>
                         <div>⚡ Wichtig: <span id="statImportant">0</span></div>
                     </div>
-                </aside>
+                </div>
             </div>
-        </div>
-    </main>
 
-    <footer><div class="wrap">© 2026 nox!314 · X!Planer Pro</div></footer>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap">&copy; 2026 nox!314 &bull; Advanced X!Planer Pro (Clean Light Edition)</div>
+    </footer>
 
     <script>
-        'use strict';
-
-        const STORAGE_KEY = 'nox_events_clean_pro';
-        const CATEGORY_NAMES = {
-            work: 'Arbeit',
-            personal: 'Privat',
-            sport: 'Sport',
-            important: 'Wichtig'
-        };
-
-        let currentDate = startOfDay(new Date());
-        let currentView = 'month';
-        let editingId = null;
-        let toastTimer = null;
-
-        const starterEvents = [
-            {
-                id: createId(), date: '2026-06-15', title: 'Release X!Secure',
-                desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true,
-                startTime: '', endTime: '', location: 'Online', category: 'work'
-            },
-            {
-                id: createId(), date: '2026-06-28', title: 'Server Wartung',
-                desc: 'Kurzer Downtime-Check', isAllDay: false,
-                startTime: '14:00', endTime: '15:30', location: 'Serverraum', category: 'important'
-            }
+        let currentDate = new Date();
+        let currentView = 'month'; 
+        
+        let events = JSON.parse(localStorage.getItem('nox_events_clean_pro')) || [
+            { date: '2026-06-15', title: 'Release X!Secure', desc: 'Beta-Launch des neuen Passwort-Managers', isAllDay: true, startTime: '', endTime: '', location: 'Online', category: 'work' },
+            { date: '2026-06-28', title: 'Server Wartung', desc: 'Kurzer Downtime-Check', isAllDay: false, startTime: '14:00', endTime: '15:30', location: 'Serverraum', category: 'important' }
         ];
 
-        let events = loadEvents();
-
-        function createId() {
-            if (globalThis.crypto?.randomUUID) return crypto.randomUUID();
-            return 'evt-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
-        }
-
-        function startOfDay(date) {
-            return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        }
-
-        // Lokale Datumsformatierung verhindert UTC-/Zeitzonen-Verschiebungen.
-        function toDateKey(date) {
-            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-        }
-
-        function fromDateKey(key) {
-            const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key || '');
-            if (!match) return null;
-            const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-            return toDateKey(date) === key ? date : null;
-        }
-
-        function loadEvents() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEY);
-                if (!saved) return starterEvents;
-                const parsed = JSON.parse(saved);
-                if (!Array.isArray(parsed)) return starterEvents;
-                return parsed.map(normalizeEvent).filter(Boolean);
-            } catch (error) {
-                console.warn('Gespeicherte Termine konnten nicht gelesen werden:', error);
-                return starterEvents;
-            }
-        }
-
-        function normalizeEvent(event) {
-            if (!event || typeof event !== 'object') return null;
-            const date = String(event.date || '');
-            if (!fromDateKey(date)) return null;
-
-            const category = Object.hasOwn(CATEGORY_NAMES, event.category) ? event.category : 'work';
-            return {
-                id: String(event.id || createId()),
-                date,
-                title: String(event.title || 'Ohne Titel').slice(0, 160),
-                desc: String(event.desc || '').slice(0, 2000),
-                location: String(event.location || '').slice(0, 160),
-                category,
-                isAllDay: Boolean(event.isAllDay),
-                startTime: validTime(event.startTime) ? event.startTime : '',
-                endTime: validTime(event.endTime) ? event.endTime : ''
-            };
-        }
-
-        function validTime(value) {
-            return typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
-        }
-
         function initApp() {
-            const dateInput = document.getElementById('eventDate');
-            if (!dateInput.value) dateInput.value = toDateKey(new Date());
             renderView();
             renderEventsList();
+            if(!document.getElementById('eventDate').value) {
+                document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+            }
         }
 
         function switchView(view) {
-            if (!['month', 'week', 'day', 'agenda'].includes(view)) return;
             currentView = view;
-            document.querySelectorAll('.view-btn').forEach(button => button.classList.remove('active'));
-            document.getElementById(`btn${view[0].toUpperCase()}${view.slice(1)}View`).classList.add('active');
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn${view.charAt(0).toUpperCase() + view.slice(1)}View`).classList.add('active');
             renderView();
         }
 
-        function navigate(direction) {
+        function renderView() {
+            if (currentView === 'month') renderMonthView();
+            else if (currentView === 'week') renderWeekView();
+            else if (currentView === 'day') renderDayView();
+            else if (currentView === 'agenda') renderAgendaView();
+            updateStats();
+        }
+
+        function navigate(dir) {
             if (currentView === 'month' || currentView === 'agenda') {
-                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1);
+                currentDate.setMonth(currentDate.getMonth() + dir);
             } else if (currentView === 'week') {
-                currentDate.setDate(currentDate.getDate() + direction * 7);
-            } else {
-                currentDate.setDate(currentDate.getDate() + direction);
+                currentDate.setDate(currentDate.getDate() + (dir * 7));
+            } else if (currentView === 'day') {
+                currentDate.setDate(currentDate.getDate() + dir);
             }
             renderView();
         }
 
         function goToToday() {
-            currentDate = startOfDay(new Date());
+            currentDate = new Date();
             renderView();
         }
 
         function toggleAllDay(checkbox) {
-            document.getElementById('timeRow').hidden = checkbox.checked;
+            document.getElementById('timeRow').style.display = checkbox.checked ? 'none' : 'grid';
         }
 
         function getFilteredEvents() {
-            const query = document.getElementById('searchInput').value.trim().toLocaleLowerCase('de');
-            const category = document.getElementById('categoryFilter').value;
-
-            return events.filter(event => {
-                const text = `${event.title} ${event.desc} ${event.location}`.toLocaleLowerCase('de');
-                return (!query || text.includes(query)) &&
-                    (category === 'all' || event.category === category);
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const catFilter = document.getElementById('categoryFilter').value;
+            
+            return events.filter(e => {
+                const matchesQuery = !query || e.title.toLowerCase().includes(query) || (e.desc && e.desc.toLowerCase().includes(query));
+                const matchesCat = catFilter === 'all' || e.category === catFilter;
+                return matchesQuery && matchesCat;
             });
         }
 
-        function renderView() {
-            const renderers = {
-                month: renderMonthView,
-                week: renderWeekView,
-                day: renderDayView,
-                agenda: renderAgendaView
-            };
-            renderers[currentView]();
-            updateStats();
-        }
-
+        // --- MONTH VIEW ---
         function renderMonthView() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
-            const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-            document.getElementById('headerTitle').textContent = `${monthNames[month]} ${year}`;
+            const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+            document.getElementById('headerTitle').innerText = `${monthNames[month]} ${year}`;
 
-            const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7;
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const previousMonthDays = new Date(year, month, 0).getDate();
-            const today = toDateKey(new Date());
-            const filtered = getFilteredEvents();
-            const parts = [
-                '<div class="weekdays"><div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div></div>',
-                '<div class="days-grid">'
-            ];
+            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const prevTotalDays = new Date(year, month, 0).getDate();
+            const activeEvents = getFilteredEvents();
 
-            for (let i = firstWeekday - 1; i >= 0; i--) {
-                parts.push(`<div class="day-cell other-month" aria-hidden="true"><div class="day-number">${previousMonthDays - i}</div></div>`);
+            let gridHTML = `<div class="weekdays"><div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div></div><div class="days-grid">`;
+
+            for (let i = firstDayIndex; i > 0; i--) {
+                gridHTML += `<div class="day-cell other-month"><div class="day-number">${prevTotalDays - i + 1}</div></div>`;
             }
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayEvents = filtered.filter(event => event.date === dateKey);
-                const badges = dayEvents.slice(0, 3).map(event => {
-                    const time = event.isAllDay ? '' : `${event.startTime ? escapeHtml(event.startTime) + ' ' : ''}`;
-                    return `<div class="preview-badge cat-${event.category}" title="${escapeHtml(event.title)}">${time}${escapeHtml(event.title)}</div>`;
-                }).join('');
-                const more = dayEvents.length > 3
-                    ? `<span style="font-size:10px;color:#777;font-weight:600">+${dayEvents.length - 3} weitere</span>`
-                    : '';
-
-                parts.push(
-                    `<div class="day-cell ${dateKey === today ? 'today' : ''}" data-date="${dateKey}" role="button" tabindex="0" aria-label="${day}. ${monthNames[month]}: ${dayEvents.length} Termine">
-                        <div class="day-number">${day}</div>
-                        <div class="day-events-preview">${badges}${more}</div>
-                    </div>`
-                );
-            }
-
-            const totalCells = firstWeekday + daysInMonth;
-            const trailing = (7 - totalCells % 7) % 7;
-            for (let day = 1; day <= trailing; day++) {
-                parts.push(`<div class="day-cell other-month" aria-hidden="true"><div class="day-number">${day}</div></div>`);
-            }
-            parts.push('</div>');
-
-            const card = document.getElementById('calendarCard');
-            card.innerHTML = parts.join('');
-            card.querySelectorAll('.day-cell[data-date]').forEach(cell => {
-                cell.addEventListener('click', () => selectDate(cell.dataset.date));
-                cell.addEventListener('keydown', event => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        selectDate(cell.dataset.date);
-                    }
+            const todayStr = new Date().toISOString().split('T')[0];
+            for (let i = 1; i <= totalDays; i++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const isToday = dateStr === todayStr ? 'today' : '';
+                const dayEvents = activeEvents.filter(e => e.date === dateStr);
+                
+                let badgesHTML = '<div class="day-events-preview">';
+                dayEvents.slice(0, 2).forEach(ev => {
+                    let timeStr = ev.isAllDay ? '' : `${ev.startTime} `;
+                    badgesHTML += `<div class="preview-badge cat-${ev.category || 'work'}">${timeStr}${ev.title}</div>`;
                 });
-            });
+                if(dayEvents.length > 2) badgesHTML += `<span style="font-size:10px; color:#888; font-weight:600;">+${dayEvents.length - 2} weitere</span>`;
+                badgesHTML += '</div>';
+
+                gridHTML += `<div class="day-cell ${isToday}" onclick="selectDate('${dateStr}')"><div class="day-number">${i}</div>${badgesHTML}</div>`;
+            }
+            gridHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = gridHTML;
         }
 
-        function getMonday(date) {
-            const monday = startOfDay(date);
-            const offset = (monday.getDay() + 6) % 7;
-            monday.setDate(monday.getDate() - offset);
-            return monday;
-        }
-
+        // --- WEEK VIEW ---
         function renderWeekView() {
-            const monday = getMonday(currentDate);
-            const sunday = new Date(monday);
-            sunday.setDate(monday.getDate() + 6);
-            document.getElementById('headerTitle').textContent =
-                `Woche: ${monday.toLocaleDateString('de-DE')} – ${sunday.toLocaleDateString('de-DE')}`;
+            let curr = new Date(currentDate);
+            let day = curr.getDay();
+            let diff = curr.getDate() - day + (day === 0 ? -6 : 1);
+            let monday = new Date(curr.setDate(diff));
+            document.getElementById('headerTitle').innerText = `Woche ab ${monday.toLocaleDateString('de-DE')}`;
 
-            const today = toDateKey(new Date());
-            const filtered = getFilteredEvents();
-            const html = ['<div class="week-grid">'];
+            let weekHTML = `<div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:10px;">`;
+            const todayStr = new Date().toISOString().split('T')[0];
+            const activeEvents = getFilteredEvents();
 
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(monday);
-                date.setDate(monday.getDate() + i);
-                const dateKey = toDateKey(date);
-                const dayEvents = filtered.filter(event => event.date === dateKey);
+            for(let i=0; i<7; i++) {
+                let loopDate = new Date(monday);
+                loopDate.setDate(monday.getDate() + i);
+                let dateStr = loopDate.toISOString().split('T')[0];
+                let isToday = dateStr === todayStr ? 'border-color:var(--proton-blue); background:rgba(98, 74, 255, 0.02);' : '';
+                let dayEvents = activeEvents.filter(e => e.date === dateStr);
 
-                html.push(`<div class="week-day ${dateKey === today ? 'today' : ''}" data-date="${dateKey}" role="button" tabindex="0">
-                    <div class="week-day-heading">${escapeHtml(date.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' }))}</div>`);
+                weekHTML += `<div style="background:var(--cell-bg); border:1px solid var(--proton-border); border-radius:10px; padding:10px; min-height:400px; ${isToday}" onclick="selectDate('${dateStr}')">
+                    <div style="font-size:13px; font-weight:600; text-align:center; padding-bottom:8px; border-bottom:1px solid var(--proton-border);">${loopDate.toLocaleDateString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit'})}</div>
+                    <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">`;
 
-                if (!dayEvents.length) {
-                    html.push('<div style="color:#999;font-size:11px">Keine Termine</div>');
-                } else {
-                    for (const event of dayEvents) {
-                        html.push(`<div class="week-event cat-${event.category}">
-                            <strong>${escapeHtml(event.title)}</strong>
-                            <span>${event.isAllDay ? 'Ganztägig' : escapeHtml(event.startTime || 'Uhrzeit offen')}</span>
-                        </div>`);
-                    }
-                }
-                html.push('</div>');
-            }
-
-            html.push('</div>');
-            const card = document.getElementById('calendarCard');
-            card.innerHTML = html.join('');
-            card.querySelectorAll('.week-day').forEach(cell => {
-                cell.addEventListener('click', () => selectDate(cell.dataset.date));
-                cell.addEventListener('keydown', event => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        selectDate(cell.dataset.date);
-                    }
+                dayEvents.forEach(ev => {
+                    weekHTML += `<div style="background:var(--card-bg); border:1px solid var(--proton-border); border-radius:8px; padding:6px; font-size:12px;">
+                        <strong style="color:var(--proton-blue);">${ev.title}</strong>
+                        <div style="font-size:10px; color:#888;">${ev.isAllDay ? 'Ganztägig' : ev.startTime}</div>
+                    </div>`;
                 });
-            });
+                weekHTML += `</div></div>`;
+            }
+            weekHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = weekHTML;
         }
 
+        // --- DAY VIEW ---
         function renderDayView() {
-            const dateKey = toDateKey(currentDate);
-            document.getElementById('headerTitle').textContent =
-                currentDate.toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const dateStr = currentDate.toISOString().split('T')[0];
+            document.getElementById('headerTitle').innerText = currentDate.toLocaleDateString('de-DE', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+            const activeEvents = getFilteredEvents().filter(e => e.date === dateStr);
 
-            const dayEvents = getFilteredEvents()
-                .filter(event => event.date === dateKey)
-                .sort(compareEvents);
-
-            if (!dayEvents.length) {
-                document.getElementById('calendarCard').innerHTML = '<div class="empty-state">Keine Termine an diesem Tag.</div>';
-                return;
-            }
-
-            document.getElementById('calendarCard').innerHTML =
-                `<div style="display:grid;gap:10px">${dayEvents.map(eventCardHTML).join('')}</div>`;
-        }
-
-        function renderAgendaView() {
-            document.getElementById('headerTitle').textContent = 'Komplette Agenda';
-            const sorted = [...getFilteredEvents()].sort(compareEvents);
-
-            if (!sorted.length) {
-                document.getElementById('calendarCard').innerHTML = '<div class="empty-state">Keine Termine gefunden.</div>';
-                return;
-            }
-
-            document.getElementById('calendarCard').innerHTML =
-                `<div style="display:grid;gap:10px">${sorted.map(event => eventCardHTML(event, true)).join('')}</div>`;
-            attachEventActions(document.getElementById('calendarCard'));
-        }
-
-        function compareEvents(a, b) {
-            return a.date.localeCompare(b.date) ||
-                (a.isAllDay ? '' : a.startTime).localeCompare(b.isAllDay ? '' : b.startTime) ||
-                a.title.localeCompare(b.title, 'de');
-        }
-
-        function eventCardHTML(event, showDate = false) {
-            const date = showDate ? ` <span style="font-weight:400;color:#888">(${escapeHtml(event.date)})</span>` : '';
-            const time = event.isAllDay ? 'Ganztägig' :
-                `${escapeHtml(event.startTime || 'Uhrzeit offen')}${event.endTime ? ' – ' + escapeHtml(event.endTime) : ''}`;
-            return `<article class="event-item">
-                <div class="event-info">
-                    <h4>${escapeHtml(event.title)}${date}</h4>
-                    ${event.desc ? `<p>${escapeHtml(event.desc)}</p>` : ''}
-                    <div class="event-meta">
-                        <span>🕒 ${time}</span>
-                        ${event.location ? `<span>📍 ${escapeHtml(event.location)}</span>` : ''}
-                        <span>${escapeHtml(CATEGORY_NAMES[event.category] || 'Arbeit')}</span>
-                    </div>
-                </div>
-                <div class="event-actions">
-                    <button class="icon-btn" data-edit="${escapeHtml(event.id)}" aria-label="Termin bearbeiten" title="Bearbeiten">✎</button>
-                    <button class="icon-btn delete" data-delete="${escapeHtml(event.id)}" aria-label="Termin löschen" title="Löschen">×</button>
-                </div>
-            </article>`;
-        }
-
-        function attachEventActions(container) {
-            container.querySelectorAll('[data-edit]').forEach(button =>
-                button.addEventListener('click', () => editEvent(button.dataset.edit)));
-            container.querySelectorAll('[data-delete]').forEach(button =>
-                button.addEventListener('click', () => deleteEvent(button.dataset.delete)));
-        }
-
-        function selectDate(dateKey) {
-            document.getElementById('eventDate').value = dateKey;
-            document.getElementById('eventTitle').focus();
-            showToast(`Datum ausgewählt: ${dateKey}`);
-        }
-
-        function addEvent(event) {
-            event.preventDefault();
-
-            const title = document.getElementById('eventTitle').value.trim();
-            const date = document.getElementById('eventDate').value;
-            const allDay = document.getElementById('isAllDay').checked;
-            const startTime = document.getElementById('eventStartTime').value;
-            const endTime = document.getElementById('eventEndTime').value;
-
-            if (!title || !fromDateKey(date)) {
-                showToast('Bitte Titel und gültiges Datum eingeben.');
-                return;
-            }
-            if (!allDay && startTime && endTime && endTime < startTime) {
-                showToast('Die Endzeit liegt vor der Startzeit.');
-                return;
-            }
-
-            const data = {
-                id: editingId || createId(),
-                title,
-                date,
-                category: document.getElementById('eventCategory').value,
-                location: document.getElementById('eventLocation').value.trim(),
-                isAllDay: allDay,
-                startTime: allDay ? '' : startTime,
-                endTime: allDay ? '' : endTime,
-                desc: document.getElementById('eventDesc').value.trim()
-            };
-
-            if (editingId) {
-                events = events.map(item => item.id === editingId ? data : item);
-                showToast('Termin aktualisiert.');
+            let dayHTML = `<div style="display:flex; flex-direction:column; gap:10px;">`;
+            if(activeEvents.length === 0) {
+                dayHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine an diesem Tag.</p>`;
             } else {
-                events.push(data);
-                showToast('Termin gespeichert.');
+                activeEvents.forEach(ev => {
+                    dayHTML += `<div class="event-item">
+                        <div class="event-info">
+                            <h4>${ev.title}</h4>
+                            <p>${ev.desc || ''}</p>
+                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' - ' + ev.endTime}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
+                        </div>
+                    </div>`;
+                });
             }
-
-            persistAndRefresh();
-            resetForm();
+            dayHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = dayHTML;
         }
 
-        function editEvent(id) {
-            const event = events.find(item => item.id === id);
-            if (!event) return;
+        // --- AGENDA VIEW ---
+        function renderAgendaView() {
+            document.getElementById('headerTitle').innerText = `Komplette Agenda`;
+            let sorted = [...getFilteredEvents()].sort((a,b) => new Date(a.date) - new Date(b.date));
+            
+            let agendaHTML = `<div style="display:flex; flex-direction:column; gap:12px;">`;
+            if(sorted.length === 0) {
+                agendaHTML += `<p style="color:#888; text-align:center; padding: 40px;">Keine Termine gefunden.</p>`;
+            } else {
+                sorted.forEach((ev, idx) => {
+                    agendaHTML += `<div class="event-item" style="align-items:center;">
+                        <div class="event-info">
+                            <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                            <p>${ev.desc ? escapeHtml(ev.desc) : 'Keine Beschreibung'}</p>
+                            <div class="event-meta"><span>🕒 ${ev.isAllDay ? 'Ganztägig' : ev.startTime + ' Uhr'}</span> ${ev.location ? '<span>📍 ' + ev.location + '</span>' : ''}</div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteEvent(${idx})" title="Löschen">&times;</button>
+                    </div>`;
+                });
+            }
+            agendaHTML += `</div>`;
+            document.getElementById('calendarCard').innerHTML = agendaHTML;
+        }
 
-            editingId = id;
-            document.getElementById('eventTitle').value = event.title;
-            document.getElementById('eventDate').value = event.date;
-            document.getElementById('eventCategory').value = event.category;
-            document.getElementById('eventLocation').value = event.location;
-            document.getElementById('isAllDay').checked = event.isAllDay;
-            document.getElementById('eventStartTime').value = event.startTime || '09:00';
-            document.getElementById('eventEndTime').value = event.endTime || '10:00';
-            document.getElementById('eventDesc').value = event.desc;
-            toggleAllDay(document.getElementById('isAllDay'));
-
-            document.getElementById('formHeading').textContent = 'Termin bearbeiten';
-            document.getElementById('saveButton').textContent = 'Änderungen speichern';
-            document.getElementById('cancelEditButton').hidden = false;
+        function selectDate(dateStr) {
+            document.getElementById('eventDate').value = dateStr;
             document.getElementById('eventTitle').focus();
-            document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        function cancelEdit() {
-            resetForm();
-            showToast('Bearbeiten abgebrochen.');
-        }
-
-        function resetForm() {
-            editingId = null;
+        function addEvent(e) {
+            e.preventDefault();
+            events.push({
+                title: document.getElementById('eventTitle').value,
+                date: document.getElementById('eventDate').value,
+                category: document.getElementById('eventCategory').value,
+                location: document.getElementById('eventLocation').value,
+                isAllDay: document.getElementById('isAllDay').checked,
+                startTime: document.getElementById('eventStartTime').value,
+                endTime: document.getElementById('eventEndTime').value,
+                desc: document.getElementById('eventDesc').value
+            });
+            saveAndRefresh();
             document.getElementById('eventForm').reset();
-            document.getElementById('eventStartTime').value = '09:00';
-            document.getElementById('eventEndTime').value = '10:00';
-            document.getElementById('timeRow').hidden = false;
-            document.getElementById('formHeading').textContent = 'Termin hinzufügen';
-            document.getElementById('saveButton').textContent = 'Speichern ✨';
-            document.getElementById('cancelEditButton').hidden = true;
-            document.getElementById('eventDate').value = toDateKey(new Date());
+            document.getElementById('timeRow').style.display = 'grid';
         }
 
-        function deleteEvent(id) {
-            const event = events.find(item => item.id === id);
-            if (!event) return;
-            if (!confirm(`„${event.title}“ wirklich löschen?`)) return;
-
-            events = events.filter(item => item.id !== id);
-            if (editingId === id) resetForm();
-            persistAndRefresh();
-            showToast('Termin gelöscht.');
+        function deleteEvent(index) {
+            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const target = sorted[index];
+            events = events.filter(ev => !(ev.date === target.date && ev.title === target.title));
+            saveAndRefresh();
         }
 
-        function persistAndRefresh() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-            } catch (error) {
-                console.error('Speichern fehlgeschlagen:', error);
-                showToast('Speichern fehlgeschlagen. Ist der Browserspeicher voll?');
-            }
+        function saveAndRefresh() {
+            localStorage.setItem('nox_events_clean_pro', JSON.stringify(events));
             renderView();
             renderEventsList();
         }
 
         function renderEventsList() {
-            const sorted = [...events].sort(compareEvents);
-            document.getElementById('eventCountBadge').textContent =
-                `${events.length} ${events.length === 1 ? 'Event' : 'Events'}`;
-
-            const container = document.getElementById('eventsList');
-            if (!sorted.length) {
-                container.innerHTML = '<p class="empty-state" style="padding:16px 4px;font-size:13px">Keine Events vorhanden.</p>';
+            const listContainer = document.getElementById('eventsList');
+            document.getElementById('eventCountBadge').innerText = `${events.length} Events`;
+            if (events.length === 0) {
+                listContainer.innerHTML = '<p style="color:#888; font-size:13px; text-align:center;">Keine Events vorhanden.</p>';
                 return;
             }
-
-            container.innerHTML = sorted.map(event => `
-                <article class="event-item">
+            let sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let html = '';
+            sorted.forEach((ev, idx) => {
+                html += `<div class="event-item">
                     <div class="event-info">
-                        <h4>${escapeHtml(event.title)}</h4>
-                        <p>${escapeHtml(event.date)}${event.isAllDay ? ' · Ganztägig' : event.startTime ? ' · ' + escapeHtml(event.startTime) : ''}</p>
-                        ${event.desc ? `<p>${escapeHtml(event.desc)}</p>` : ''}
+                        <h4>${ev.title} <span style="font-weight:400; color:#888;">(${ev.date})</span></h4>
+                        <p>${ev.desc ? escapeHtml(ev.desc) : ''}</p>
                     </div>
-                    <div class="event-actions">
-                        <button class="icon-btn" data-edit="${escapeHtml(event.id)}" aria-label="Termin bearbeiten" title="Bearbeiten">✎</button>
-                        <button class="icon-btn delete" data-delete="${escapeHtml(event.id)}" aria-label="Termin löschen" title="Löschen">×</button>
-                    </div>
-                </article>
-            `).join('');
-
-            attachEventActions(container);
+                    <button class="delete-btn" onclick="deleteEvent(${idx})">&times;</button>
+                </div>`;
+            });
+            listContainer.innerHTML = html;
         }
 
         function updateStats() {
-            document.getElementById('statTotal').textContent = events.length;
-            document.getElementById('statImportant').textContent =
-                events.filter(event => event.category === 'important').length;
+            document.getElementById('statTotal').innerText = events.length;
+            document.getElementById('statImportant').innerText = events.filter(e => e.category === 'important').length;
         }
 
-        function escapeHtml(value) {
-            return String(value).replace(/[&<>"']/g, character => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-            })[character]);
-        }
-
-        function escapeICal(value) {
-            return String(value || '')
-                .replace(/\\/g, '\\\\')
-                .replace(/\r?\n/g, '\\n')
-                .replace(/,/g, '\\,')
-                .replace(/;/g, '\\;');
-        }
-
-        function unescapeICal(value) {
-            return String(value || '')
-                .replace(/\\n/gi, '\n')
-                .replace(/\\,/g, ',')
-                .replace(/\\;/g, ';')
-                .replace(/\\\\/g, '\\');
-        }
-
-        function foldICalLine(line) {
-            const chunks = [];
-            while (line.length > 73) {
-                chunks.push(line.slice(0, 73));
-                line = ' ' + line.slice(73);
-            }
-            chunks.push(line);
-            return chunks.join('\r\n');
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
         function exportEvents() {
-            const lines = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//nox!314//X!Planer Pro//DE',
-                'CALSCALE:GREGORIAN'
-            ];
-
-            for (const event of events) {
-                lines.push('BEGIN:VEVENT');
-                lines.push(`UID:${escapeICal(event.id)}@nox314`);
-                lines.push(`DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`);
-                lines.push(`SUMMARY:${escapeICal(event.title)}`);
-                if (event.desc) lines.push(`DESCRIPTION:${escapeICal(event.desc)}`);
-                if (event.location) lines.push(`LOCATION:${escapeICal(event.location)}`);
-
-                const compactDate = event.date.replace(/-/g, '');
-                if (event.isAllDay) {
-                    lines.push(`DTSTART;VALUE=DATE:${compactDate}`);
-                    const nextDay = fromDateKey(event.date);
-                    nextDay.setDate(nextDay.getDate() + 1);
-                    lines.push(`DTEND;VALUE=DATE:${toDateKey(nextDay).replace(/-/g, '')}`);
+            let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//nox!314//X!Planer Pro//DE\n";
+            events.forEach(e => {
+                icsContent += "BEGIN:VEVENT\n";
+                icsContent += `SUMMARY:${e.title}\n`;
+                icsContent += `DESCRIPTION:${e.desc || ''}\n`;
+                icsContent += `LOCATION:${e.location || ''}\n`;
+                if(e.isAllDay) {
+                    let dClean = e.date.replace(/-/g, '');
+                    icsContent += `DTSTART;VALUE=DATE:${dClean}\n`;
                 } else {
-                    const start = event.startTime || '09:00';
-                    const end = event.endTime || start;
-                    lines.push(`DTSTART:${compactDate}T${start.replace(':', '')}00`);
-                    lines.push(`DTEND:${compactDate}T${end.replace(':', '')}00`);
+                    let stClean = e.date.replace(/-/g, '') + 'T' + e.startTime.replace(/:/g, '') + '00';
+                    let etClean = e.date.replace(/-/g, '') + 'T' + e.endTime.replace(/:/g, '') + '00';
+                    icsContent += `DTSTART:${stClean}\nDTEND:${etClean}\n`;
                 }
+                icsContent += "END:VEVENT\n";
+            });
+            icsContent += "END:VCALENDAR";
 
-                lines.push(`CATEGORIES:${escapeICal(CATEGORY_NAMES[event.category] || 'Arbeit')}`);
-                lines.push('END:VEVENT');
-            }
-
-            lines.push('END:VCALENDAR');
-            const content = lines.map(foldICalLine).join('\r\n') + '\r\n';
-            downloadFile(content, 'xplaner-export.ics', 'text/calendar;charset=utf-8');
-            showToast(`${events.length} Termine exportiert.`);
-        }
-
-        function downloadFile(content, filename, type) {
-            const blob = new Blob([content], { type });
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
             const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        }
-
-        function unfoldICal(text) {
-            return text.replace(/\r?\n[ \t]/g, '');
-        }
-
-        function parseICalDate(value) {
-            const datePart = value.split('T')[0];
-            const match = /^(\d{4})(\d{2})(\d{2})$/.exec(datePart);
-            if (!match) return null;
-            const key = `${match[1]}-${match[2]}-${match[3]}`;
-            return fromDateKey(key) ? key : null;
-        }
-
-        function parseICal(text) {
-            const lines = unfoldICal(text).split(/\r?\n/);
-            const parsed = [];
-            let current = null;
-
-            for (const line of lines) {
-                if (line.toUpperCase() === 'BEGIN:VEVENT') {
-                    current = {};
-                    continue;
-                }
-                if (line.toUpperCase() === 'END:VEVENT') {
-                    if (current) {
-                        const startValue = current.DTSTART || '';
-                        const date = parseICalDate(startValue);
-                        if (date && current.SUMMARY) {
-                            const isAllDay = /VALUE=DATE/i.test(current.DTSTART_PARAM || '') || !startValue.includes('T');
-                            const timeMatch = /T(\d{2})(\d{2})/.exec(startValue);
-                            const endMatch = /T\d{2}\d{2}.*?(\d{2})(\d{2})/.exec(current.DTEND || '');
-
-                            parsed.push(normalizeEvent({
-                                id: createId(),
-                                date,
-                                title: unescapeICal(current.SUMMARY),
-                                desc: unescapeICal(current.DESCRIPTION || ''),
-                                location: unescapeICal(current.LOCATION || ''),
-                                category: categoryFromICal(current.CATEGORIES || ''),
-                                isAllDay,
-                                startTime: !isAllDay && timeMatch ? `${timeMatch[1]}:${timeMatch[2]}` : '',
-                                endTime: !isAllDay && endMatch ? `${endMatch[1]}:${endMatch[2]}` : ''
-                            }));
-                        }
-                    }
-                    current = null;
-                    continue;
-                }
-
-                if (!current) continue;
-                const separator = line.indexOf(':');
-                if (separator < 0) continue;
-                const property = line.slice(0, separator);
-                const value = line.slice(separator + 1);
-                const key = property.split(';')[0].toUpperCase();
-
-                if (key === 'DTSTART') current.DTSTART_PARAM = property;
-                current[key] = value;
-            }
-
-            return parsed.filter(Boolean);
-        }
-
-        function categoryFromICal(value) {
-            const category = unescapeICal(value).toLocaleLowerCase('de');
-            if (category.includes('privat') || category.includes('personal')) return 'personal';
-            if (category.includes('sport')) return 'sport';
-            if (category.includes('wichtig') || category.includes('important')) return 'important';
-            return 'work';
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'calendar_export.ics';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function importEvents(event) {
-            const file = event.target.files?.[0];
+            const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    const imported = parseICal(String(reader.result || ''));
-                    if (!imported.length) {
-                        showToast('Keine gültigen Termine in der Datei gefunden.');
-                        return;
-                    }
+            reader.onload = function(e) {
+                const text = e.target.result;
+                // Einfacher Parser für SUMMARY und DTSTART im .ics Format
+                const summaryMatch = text.match(/SUMMARY:(.*)/);
+                const dateMatch = text.match(/DTSTART(?:;VALUE=DATE)?:([0-9]{8})/);
 
-                    events.push(...imported);
-                    persistAndRefresh();
-                    showToast(`${imported.length} ${imported.length === 1 ? 'Termin importiert' : 'Termine importiert'}.`);
-                } catch (error) {
-                    console.error('Import fehlgeschlagen:', error);
-                    showToast('Die Datei konnte nicht importiert werden.');
-                } finally {
-                    event.target.value = '';
+                if (summaryMatch && dateMatch) {
+                    const title = summaryMatch[1].trim();
+                    const rawDate = dateMatch[1];
+                    const formattedDate = `${rawDate.slice(0,4)}-${rawDate.slice(4,6)}-${rawDate.slice(6,8)}`;
+                    
+                    events.push({
+                        title: title,
+                        date: formattedDate,
+                        category: 'work',
+                        location: 'Importiert',
+                        isAllDay: true,
+                        startTime: '',
+                        endTime: '',
+                        desc: 'Aus .ics Datei importiert'
+                    });
+                    saveAndRefresh();
+                    alert("Termin erfolgreich aus iCal-Datei importiert! 🚀");
+                } else {
+                    alert("Konnte keine gültigen Event-Daten in der .ics finden.");
                 }
-            };
-            reader.onerror = () => {
-                showToast('Die Datei konnte nicht gelesen werden.');
                 event.target.value = '';
             };
             reader.readAsText(file);
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
-        }
-
-        document.addEventListener('keydown', event => {
-            const tag = document.activeElement?.tagName;
-            if (event.altKey && tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') {
-                if (event.key === 'ArrowLeft') navigate(-1);
-                if (event.key === 'ArrowRight') navigate(1);
-                if (event.key.toLowerCase() === 't') goToToday();
-            }
-            if (event.key === 'Escape' && editingId) cancelEdit();
-        });
-
-        window.addEventListener('storage', event => {
-            if (event.key !== STORAGE_KEY || !event.newValue) return;
-            try {
-                const updated = JSON.parse(event.newValue);
-                if (Array.isArray(updated)) {
-                    events = updated.map(normalizeEvent).filter(Boolean);
-                    renderView();
-                    renderEventsList();
-                    showToast('Kalender in einem anderen Tab aktualisiert.');
-                }
-            } catch (error) {
-                console.warn('Synchronisierung zwischen Tabs fehlgeschlagen:', error);
-            }
-        });
-
-        window.addEventListener('load', initApp);
+        window.onload = initApp;
     </script>
 </body>
 </html>

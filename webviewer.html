@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0e1320" />
+  <meta name="theme-color" content="#0d1320" />
   <title>Browser View</title>
   <style>
     :root {
       color-scheme: dark;
       --bg1: #0d1320;
-      --bg2: #171f2d;
-      --panel: rgba(18, 23, 33, 0.96);
-      --panel-2: rgba(25, 31, 44, 0.96);
+      --bg2: #161e2c;
+      --panel: rgba(17, 22, 32, 0.97);
+      --panel-2: rgba(25, 31, 42, 0.97);
       --line: rgba(255,255,255,0.08);
       --text: #edf2ff;
       --muted: #9aa7bc;
@@ -28,7 +28,7 @@
     body {
       min-width: 320px;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 50% -15%, #2a3959 0%, var(--bg1) 42%);
+      background: radial-gradient(ellipse at 50% -18%, #2a3959 0%, var(--bg1) 42%);
       color: var(--text);
       font-family: Inter, "Segoe UI", sans-serif;
     }
@@ -37,190 +37,143 @@
     button { color: inherit; }
 
     .page {
-      width: min(1220px, calc(100% - 36px));
+      width: min(1240px, calc(100% - 36px));
       margin: 0 auto;
-      padding: 42px 0 40px;
+      padding: 22px 0 40px;
     }
 
-    .topline {
+    .browser-shell {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(16, 21, 30, 0.9);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+
+    .browser-bar {
       display: flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(22, 28, 39, 0.94);
     }
 
-    .logo {
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .nav-btn,
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.015);
+      border-radius: 10px;
+      color: #dfe8ff;
+      cursor: pointer;
       display: grid;
       place-items: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: linear-gradient(145deg, #8d86ff, #5f5ae8);
-      box-shadow: 0 14px 30px rgba(110, 99, 255, 0.38);
-      font-size: 24px;
+      user-select: none;
     }
 
-    h1 {
-      margin: 0;
-      letter-spacing: -0.04em;
-      font-size: clamp(25px, 4vw, 34px);
+    .nav-btn:hover,
+    .action-btn:hover,
+    .toolbar-button:hover { background: rgba(255,255,255,0.05); }
+
+    .nav-btn[disabled],
+    .action-btn[disabled] {
+      cursor: not-allowed;
+      opacity: 0.38;
     }
 
-    .subtitle {
-      margin: 4px 0 0;
-      font-size: 14px;
-      color: #a8b2c7;
-    }
-
-    .searchbar {
+    .omnibox {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(15, 20, 29, 0.9);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+      flex: 1;
+      min-width: 0;
+      height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      background: rgba(19, 26, 34, 0.9);
     }
 
-    .search-icon {
-      padding-left: 10px;
-      font-size: 18px;
-      color: #8f9bb3;
+    .address-lock {
+      font-size: 14px;
+      color: #a7afc7;
+      flex: 0 0 auto;
     }
 
     #urlInput {
       flex: 1;
       min-width: 0;
       width: 0;
-      padding: 10px 4px;
-      border: 0;
       background: transparent;
+      border: 0;
       outline: none;
       color: var(--text);
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    #urlInput::placeholder {
-      color: #77829a;
-    }
+    #urlInput::placeholder { color: #78839a; }
 
-    .button {
+    .toolbar-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      background: rgba(39,46,63,0.96);
-      color: #eef3ff;
-      padding: 0 15px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+      color: #edf3ff;
       cursor: pointer;
       transition: transform 0.12s ease, background 0.12s ease;
       white-space: nowrap;
     }
 
-    .button:hover { background: rgba(52,62,82,0.96); }
-    .button:active { transform: scale(0.98); }
-    .button.primary {
+    .toolbar-button:active { transform: scale(0.98); }
+    .toolbar-button.primary {
       background: linear-gradient(180deg, var(--primary-2), var(--primary));
       border-color: transparent;
       font-weight: 700;
     }
 
-    .button.primary:hover {
-      background: linear-gradient(180deg, #968eff, #7e79ff);
+    .toolbar-button.primary:hover {
+      background: linear-gradient(180deg, #978eff, #7d79ff);
     }
 
-    .button:focus-visible,
-    input:focus-visible,
-    .history-item:focus-visible,
-    .delete-entry:focus-visible {
-      outline: 2px solid #a9a2ff;
-      outline-offset: 2px;
-    }
-
-    .workspace {
+    .browser-body {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 280px;
-      gap: 18px;
-      margin-top: 22px;
+      gap: 0;
+      min-height: 760px;
     }
 
-    .viewer-card,
-    .history-card {
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      overflow: hidden;
-      box-shadow: 0 18px 46px rgba(0,0,0,0.2);
-    }
-
-    .viewer-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 54px;
-      padding: 8px 12px 8px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .viewer-status {
-      display: flex;
-      align-items: center;
-      gap: 9px;
+    .viewer-pane {
       min-width: 0;
-      font-size: 13px;
-      color: #b0bbce;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #717d95;
-      flex: 0 0 auto;
-    }
-
-    .status-dot.active {
-      background: var(--success);
-      box-shadow: 0 0 12px rgba(90, 215, 154, 0.7);
-    }
-
-    #currentAddress {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: var(--text);
-    }
-
-    .toolbar-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .button.compact {
-      min-height: 34px;
-      padding: 0 11px;
-      font-size: 13px;
+      background: rgba(9, 14, 20, 0.88);
+      border-right: 1px solid var(--line);
     }
 
     .frame-wrap {
       position: relative;
       width: 100%;
-      height: min(71vh, 720px);
-      min-height: 350px;
+      height: calc(100vh - 220px);
+      min-height: 500px;
       background: white;
     }
 
     #webFrame {
-      display: block;
       width: 100%;
       height: 100%;
       border: 0;
+      display: block;
       background: white;
     }
 
@@ -229,21 +182,25 @@
       inset: 0;
       display: grid;
       place-content: center;
-      gap: 10px;
-      padding: 24px;
+      gap: 12px;
       text-align: center;
-      background: rgba(10, 15, 21, 0.98);
+      background: rgba(12, 18, 27, 0.97);
+      padding: 24px;
     }
 
     .empty-state[hidden] { display: none; }
     .empty-icon { font-size: 38px; }
-    .empty-state strong { font-size: 17px; }
+    .empty-state strong { font-size: 18px; }
     .empty-state p {
       max-width: 380px;
-      margin: 0;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.55;
+      margin: 0;
+    }
+
+    .sidebar {
+      background: rgba(19, 25, 36, 0.97);
     }
 
     .history-heading {
@@ -252,6 +209,7 @@
       justify-content: space-between;
       gap: 10px;
       padding: 15px 15px 12px;
+      border-bottom: 1px solid var(--line);
     }
 
     .history-heading h2 {
@@ -261,9 +219,9 @@
 
     .clear-button {
       border: 0;
-      background: transparent;
-      color: #a8b2c9;
       border-radius: 8px;
+      background: transparent;
+      color: #a9afc3;
       padding: 5px 7px;
       cursor: pointer;
       font-size: 12px;
@@ -277,7 +235,9 @@
     #historyList {
       display: grid;
       gap: 2px;
-      padding: 0 8px 10px;
+      padding: 8px 7px 10px;
+      max-height: calc(100vh - 250px);
+      overflow: auto;
     }
 
     .history-item {
@@ -321,29 +281,21 @@
       white-space: nowrap;
     }
 
-    .history-host {
-      font-size: 13px;
-      color: var(--text);
-    }
-
-    .history-url {
-      margin-top: 3px;
-      color: #8d99ad;
-      font-size: 11px;
-    }
+    .history-host { font-size: 13px; color: var(--text); }
+    .history-url { margin-top: 3px; color: #8d99ad; font-size: 11px; }
 
     .delete-entry {
-      flex: 0 0 auto;
       width: 28px;
       height: 28px;
+      display: grid;
+      place-items: center;
       border: 0;
       background: transparent;
       border-radius: 7px;
       color: #9aa5b6;
       cursor: pointer;
       opacity: 0;
-      display: grid;
-      place-items: center;
+      flex: 0 0 auto;
     }
 
     .history-item:hover .delete-entry,
@@ -365,7 +317,7 @@
     }
 
     .notice {
-      margin-top: 16px;
+      margin: 16px 0 0;
       color: var(--muted);
       font-size: 12px;
       line-height: 1.6;
@@ -399,11 +351,11 @@
 
     #viewerCard:fullscreen {
       display: flex;
+      flex-direction: column;
       width: 100vw;
       height: 100vh;
       border: 0;
       border-radius: 0;
-      flex-direction: column;
       background: var(--panel-2);
     }
 
@@ -434,86 +386,74 @@
 
     body.viewer-lock { overflow: hidden; }
 
-    @media (max-width: 760px) {
-      .page {
-        width: min(100% - 24px, 620px);
-        padding-top: 26px;
+    @media (max-width: 900px) {
+      .browser-body { grid-template-columns: 1fr; }
+      .sidebar {
+        border-top: 1px solid var(--line);
       }
-      .workspace { grid-template-columns: 1fr; }
-      .history-card { order: 2; }
-      .frame-wrap { height: 60vh; min-height: 300px; }
-      .history-item .delete-entry { opacity: 1; }
+      #historyList {
+        max-height: 260px;
+      }
     }
 
-    @media (max-width: 460px) {
-      .searchbar { gap: 6px; }
-      .search-icon { padding-left: 7px; }
-      .button.primary { padding: 0 11px; }
-      .button.primary .button-label { display: none; }
-      .toolbar-actions .button span { display: none; }
-      .viewer-toolbar { padding-left: 12px; }
-      .button.compact { padding: 0 9px; }
+    @media (max-width: 560px) {
+      .page { width: min(100% - 16px, 620px); }
+      .browser-bar { gap: 8px; padding: 10px 10px; }
+      .omnibox { gap: 8px; padding: 0 10px; }
+      .toolbar-button { padding: 0 10px; }
+      .toolbar-button span { display: none; }
+      .nav-btn, .action-btn { width: 30px; height: 30px; }
+      .frame-wrap { height: 57vh; min-height: 280px; }
+      .history-item .delete-entry { opacity: 1; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <header class="topline">
-      <div class="logo" aria-hidden="true">↗</div>
-      <div>
-        <h1>Browser View</h1>
-        <p class="subtitle">Öffne Sites wie in einem Browser. Verlauf lokal im Browser gespeichert.</p>
-      </div>
-    </header>
-
-    <form class="searchbar" id="urlForm">
-      <span class="search-icon" aria-hidden="true">⌕</span>
-      <input id="urlInput" type="text" inputmode="url" autocomplete="url" placeholder="Website-Adresse eingeben, z. B. example.com" aria-label="Website-Adresse" required />
-      <button class="button primary" type="submit">
-        <span aria-hidden="true">↵</span>
-        <span class="button-label">Öffnen</span>
-      </button>
-    </form>
-
-    <section class="workspace" aria-label="Webviewer und Verlauf">
-      <div class="viewer-card" id="viewerCard">
-        <div class="viewer-toolbar">
-          <div class="viewer-status" title="Aktuelle Adresse">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="currentAddress">Keine Website geöffnet</span>
-          </div>
-
-          <div class="toolbar-actions">
-            <button class="button compact" id="openNewTab" type="button" title="Im neuen Tab öffnen" aria-label="Im neuen Tab öffnen">
-              ↗ <span>Neues Tab</span>
-            </button>
-            <button class="button compact" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild" aria-pressed="false">
-              ⛶ <span>Vollbild</span>
-            </button>
-          </div>
+    <div class="browser-shell">
+      <div class="browser-bar">
+        <div class="nav-group" aria-label="Navigation">
+          <button class="nav-btn" id="backBtn" type="button" title="Zurück" aria-label="Zurück">←</button>
+          <button class="nav-btn" id="forwardBtn" type="button" title="Vorwärts" aria-label="Vorwärts">→</button>
+          <button class="nav-btn" id="reloadBtn" type="button" title="Neu laden" aria-label="Neu laden">↻</button>
         </div>
 
-        <div class="frame-wrap">
-          <iframe id="webFrame" title="Eingebettete Seite" hidden allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-          <div class="empty-state" id="emptyState">
-            <div class="empty-icon" aria-hidden="true">🌐</div>
-            <strong>Bereit für deine erste Seite</strong>
-            <p>Gib eine URL ein. Wenn die Seite das Einbetten blockiert, wird sie automatisch in einem neuen Tab geöffnet.</p>
-          </div>
+        <div class="omnibox" aria-label="Adressleiste">
+          <span class="address-lock" aria-hidden="true">🔒</span>
+          <input id="urlInput" type="text" inputmode="url" autocomplete="url" placeholder="Website-Adresse eingeben" aria-label="Website-Adresse" />
+        </div>
+
+        <div class="nav-group" aria-label="Aktionen">
+          <button class="toolbar-button primary" id="goBtn" type="button">Öffnen</button>
+          <button class="action-btn" id="openNewTab" type="button" title="Neues Tab" aria-label="Neues Tab">⇱</button>
+          <button class="action-btn" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild">⛶</button>
         </div>
       </div>
 
-      <aside class="history-card" aria-label="Verlauf">
-        <div class="history-heading">
-          <h2>Verlauf</h2>
-          <button class="clear-button" id="clearHistory" type="button">Löschen</button>
+      <div class="browser-body">
+        <div class="viewer-pane" id="viewerCard">
+          <div class="frame-wrap">
+            <iframe id="webFrame" title="Eingebettete Seite" hidden allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon" aria-hidden="true">🌐</div>
+              <strong>Bereit für deine erste Seite</strong>
+              <p>Gib eine URL ein. Falls das Einbetten blockiert wird, öffnet die App die Seite in einem neuen echten Browser-Tab.</p>
+            </div>
+          </div>
         </div>
-        <div id="historyList" aria-live="polite"></div>
-      </aside>
-    </section>
+
+        <aside class="sidebar" aria-label="Verlauf">
+          <div class="history-heading">
+            <h2>Verlauf</h2>
+            <button class="clear-button" id="clearHistory" type="button">Löschen</button>
+          </div>
+          <div id="historyList" aria-live="polite"></div>
+        </aside>
+      </div>
+    </div>
 
     <p class="notice">
-      <strong>Wichtig:</strong> Keine reine HTML-/JavaScript-Seite kann eine fremde Website gegen deren eigene Sicherheitsrichtlinien zwangsweise in ein iframe einbetten. Deshalb versucht diese App zuerst eine Vorschau und öffnet eine Seite automatisch in einem echten Tab, wenn das Einbetten verweigert wird. Der Verlauf bleibt nur lokal im Browser.
+      <strong>Hinweis:</strong> Browser verhindern aus Sicherheitsgründen, dass fremde Websites ohne Erlaubnis in ein iframe geladen werden. Deshalb ist die App so gebaut: Vorschau wenn möglich, echter Browser-Tab als Fallback. Der Verlauf bleibt nur lokal im Browser.
     </p>
   </main>
 
@@ -524,21 +464,25 @@
       const STORAGE_KEY = 'browser-view-history-v1';
       const MAX_HISTORY = 30;
 
-      const form = document.getElementById('urlForm');
       const input = document.getElementById('urlInput');
       const frame = document.getElementById('webFrame');
       const emptyState = document.getElementById('emptyState');
-      const currentAddress = document.getElementById('currentAddress');
-      const statusDot = document.getElementById('statusDot');
       const historyList = document.getElementById('historyList');
       const toast = document.getElementById('toast');
       const viewer = document.getElementById('viewerCard');
-      const fullscreenButton = document.getElementById('fullscreenButton');
+      const backBtn = document.getElementById('backBtn');
+      const forwardBtn = document.getElementById('forwardBtn');
+      const reloadBtn = document.getElementById('reloadBtn');
+      const goBtn = document.getElementById('goBtn');
       const openNewTabButton = document.getElementById('openNewTab');
+      const fullscreenButton = document.getElementById('fullscreenButton');
+      const clearHistoryButton = document.getElementById('clearHistory');
 
       let activeUrl = '';
       let toastTimer = null;
-      let iframeOpenTimer = null;
+      let iframeFallbackTimer = null;
+      let navStack = [];
+      let navIndex = -1;
 
       function readHistory() {
         try {
@@ -571,9 +515,7 @@
         if (!raw) return null;
 
         let candidate = raw;
-        if (!/^https?:\/\//i.test(candidate)) {
-          candidate = 'https://' + candidate;
-        }
+        if (!/^https?:\/\//i.test(candidate)) candidate = 'https://' + candidate;
 
         try {
           const parsed = new URL(candidate);
@@ -584,16 +526,20 @@
         }
       }
 
-      function updateStatus(url) {
-        currentAddress.textContent = url || 'Keine Website geöffnet';
-        currentAddress.title = url || '';
-        statusDot.classList.toggle('active', !!url);
+      function updateNavButtons() {
+        backBtn.disabled = navIndex <= 0;
+        forwardBtn.disabled = navIndex >= navStack.length - 1;
       }
 
-      function saveToHistory(url) {
+      function setAddress(url) {
+        input.value = url || '';
+      }
+
+      function pushHistoryEntry(url) {
         const history = readHistory().filter(item => item !== url);
         history.unshift(url);
         saveHistory(history.slice(0, MAX_HISTORY));
+        renderHistory();
       }
 
       function renderHistory() {
@@ -612,9 +558,7 @@
           let host = url;
           try {
             host = new URL(url).hostname;
-          } catch {
-            // fallback keeps raw url
-          }
+          } catch {}
 
           const item = document.createElement('div');
           item.className = 'history-item';
@@ -646,7 +590,6 @@
           remove.textContent = '×';
           remove.title = 'Aus Verlauf löschen';
           remove.setAttribute('aria-label', `Eintrag löschen: ${url}`);
-
           remove.addEventListener('click', event => {
             event.stopPropagation();
             const filtered = readHistory().filter(entry => entry !== url);
@@ -655,7 +598,7 @@
           });
 
           const activate = () => {
-            input.value = url;
+            setAddress(url);
             openPage(url, false);
           };
 
@@ -672,10 +615,15 @@
         });
       }
 
-      function hasProhibitedFrame(url) {
-        // Best effort: some sites reject embedding and don't load when framed.
-        // We cannot detect this reliably from plain HTML, so we use a timeout + fallback.
-        return false;
+      function navigateStack(url) {
+        if (!url) return;
+
+        if (navStack[navIndex] !== url) {
+          navStack = navStack.slice(0, navIndex + 1);
+          navStack.push(url);
+          navIndex = navStack.length - 1;
+        }
+        updateNavButtons();
       }
 
       function openInNewTab(url) {
@@ -684,50 +632,92 @@
       }
 
       function openPage(url, addToHistory = true) {
-        if (!url) return;
+        const normalized = normalizeUrl(url);
+        if (!normalized) {
+          showToast('Bitte gib eine gültige http- oder https-URL ein.');
+          return;
+        }
 
-        activeUrl = url;
-        updateStatus(url);
-
-        const previewUrl = url;
-        frame.src = previewUrl;
+        activeUrl = normalized;
+        setAddress(activeUrl);
+        frame.src = activeUrl;
         frame.hidden = false;
         emptyState.hidden = true;
 
         if (addToHistory) {
-          saveToHistory(url);
-          renderHistory();
+          pushHistoryEntry(activeUrl);
         }
 
-        clearTimeout(iframeOpenTimer);
-        iframeOpenTimer = setTimeout(() => {
+        navigateStack(activeUrl);
+
+        clearTimeout(iframeFallbackTimer);
+        iframeFallbackTimer = setTimeout(() => {
           try {
             const href = frame.contentWindow.location.href;
             if (href && href !== 'about:blank' && !href.startsWith('chrome-error:')) {
               return;
             }
           } catch (error) {
-            // cross-origin / blocked frame -> fall back to normal tab
+            // blocked by frame policy -> open in new tab
           }
 
-          // If the iframe did not produce a usable page quickly, the site likely blocked embedding.
-          // Open the page in a real browser tab instead of leaving a blank/blocked frame.
-          openInNewTab(url);
+          openInNewTab(activeUrl);
           showToast('Seite konnte nicht eingebettet werden. Sie wurde in einem neuen Tab geöffnet.');
-        }, 2500);
+        }, 2200);
       }
 
-      form.addEventListener('submit', event => {
-        event.preventDefault();
+      function goBack() {
+        if (navIndex <= 0) return;
+        navIndex -= 1;
+        const url = navStack[navIndex];
+        if (url) {
+          activeUrl = url;
+          setAddress(url);
+          frame.src = url;
+          frame.hidden = false;
+          emptyState.hidden = true;
+          updateNavButtons();
+        }
+      }
+
+      function goForward() {
+        if (navIndex >= navStack.length - 1) return;
+        navIndex += 1;
+        const url = navStack[navIndex];
+        if (url) {
+          activeUrl = url;
+          setAddress(url);
+          frame.src = url;
+          frame.hidden = false;
+          emptyState.hidden = true;
+          updateNavButtons();
+        }
+      }
+
+      function reloadCurrent() {
+        if (!activeUrl) return;
+        frame.src = activeUrl;
+      }
+
+      backBtn.addEventListener('click', goBack);
+      forwardBtn.addEventListener('click', goForward);
+      reloadBtn.addEventListener('click', reloadCurrent);
+
+      goBtn.addEventListener('click', () => {
         const url = normalizeUrl(input.value);
         if (!url) {
-          showToast('Bitte gib eine gültige http- oder https-URL ein.');
+          showToast('Bitte gib eine gültige URL ein.');
           input.focus();
           return;
         }
-
-        input.value = url;
         openPage(url, true);
+      });
+
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          goBtn.click();
+        }
       });
 
       openNewTabButton.addEventListener('click', () => {
@@ -738,29 +728,26 @@
         openInNewTab(activeUrl);
       });
 
-      document.getElementById('clearHistory').addEventListener('click', () => {
-        if (readHistory().length === 0) return;
+      clearHistoryButton.addEventListener('click', () => {
+        const history = readHistory();
+        if (history.length === 0) return;
         saveHistory([]);
         renderHistory();
         showToast('Verlauf wurde gelöscht.');
       });
 
-      function setFullscreenButton(isActive) {
-        fullscreenButton.setAttribute('aria-pressed', String(isActive));
-        fullscreenButton.title = isActive ? 'Vollbild beenden' : 'Vollbild';
+      function setFullscreenButton(isFullscreen) {
+        fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
+        fullscreenButton.title = isFullscreen ? 'Vollbild beenden' : 'Vollbild';
         fullscreenButton.setAttribute('aria-label', fullscreenButton.title);
-        const label = fullscreenButton.querySelector('span');
-        if (label) label.textContent = isActive ? 'Beenden' : 'Vollbild';
       }
 
       async function toggleFullscreen() {
         if (document.fullscreenElement === viewer) {
           try {
             await document.exitFullscreen();
-          } catch (error) {
-            // ignore
-          }
-          setFullscreenButton(false);
+            setFullscreenButton(false);
+          } catch {}
           return;
         }
 
@@ -769,9 +756,7 @@
             await viewer.requestFullscreen();
             setFullscreenButton(true);
             return;
-          } catch (error) {
-            // fallback below
-          }
+          } catch {}
         }
 
         viewer.classList.add('viewer-fullscreen-fallback');
@@ -798,7 +783,8 @@
       fullscreenButton.addEventListener('click', toggleFullscreen);
 
       renderHistory();
-      updateStatus('');
+      updateNavButtons();
+      setAddress('');
     })();
   </script>
 </body>

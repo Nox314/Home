@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131c">
+  <title>Web Viewer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #10131c;
+      color: #f4f6fb;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background: radial-gradient(ellipse at 50% -20%, #26304b 0, #10131c 55%);
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .page {
+      width: min(1240px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 48px 0 36px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border: 1px solid #ffffff20;
+      border-radius: 15px;
+      background: linear-gradient(145deg, #8b7bff, #5c55dc);
+      box-shadow: 0 8px 26px #665df044;
+      font-size: 23px;
+    }
+
+    h1 { margin: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.04em; }
+    .subtitle { margin: 4px 0 0; color: #a7aec0; font-size: 14px; }
+
+    .searchbar {
+      display: flex;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid #ffffff1a;
+      border-radius: 16px;
+      background: #191d29;
+      box-shadow: 0 14px 40px #00000025;
+    }
+
+    .search-icon { align-self: center; padding-left: 10px; color: #929ab0; font-size: 19px; }
+    #urlInput {
+      flex: 1;
+      width: 0;
+      min-width: 0;
+      padding: 10px 4px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #f4f6fb;
+      font-size: 15px;
+    }
+    #urlInput::placeholder { color: #778096; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid #ffffff1c;
+      border-radius: 11px;
+      background: #252a39;
+      color: #e7eaf2;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease;
+      white-space: nowrap;
+    }
+    .button:hover { background: #32394d; }
+    .button:active { transform: scale(.98); }
+    .button.primary { border-color: transparent; background: #7568ee; color: white; font-weight: 650; }
+    .button.primary:hover { background: #867bff; }
+    .button:focus-visible, input:focus-visible, .history-item:focus-visible { outline: 2px solid #a69eff; outline-offset: 2px; }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 18px; margin-top: 20px; }
+    .viewer-card, .history-card {
+      overflow: hidden;
+      border: 1px solid #ffffff18;
+      border-radius: 16px;
+      background: #191d29;
+      box-shadow: 0 16px 42px #00000025;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px 8px 16px;
+      border-bottom: 1px solid #ffffff13;
+    }
+    .viewer-status { display: flex; min-width: 0; align-items: center; gap: 9px; color: #aeb5c7; font-size: 13px; }
+    .status-dot { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: #6a7184; }
+    .status-dot.active { background: #55d69a; box-shadow: 0 0 10px #55d69a70; }
+    #currentAddress { overflow: hidden; color: #e3e6ee; text-overflow: ellipsis; white-space: nowrap; }
+    .toolbar-actions { display: flex; gap: 8px; }
+    .button.compact { min-height: 36px; padding: 0 11px; font-size: 13px; }
+
+    .frame-wrap { position: relative; height: min(68vh, 690px); min-height: 340px; background: #fff; }
+    #webFrame { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+    .empty-state {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      gap: 10px;
+      padding: 24px;
+      background: #141823;
+      text-align: center;
+    }
+    .empty-state[hidden] { display: none; }
+    .empty-icon { font-size: 38px; }
+    .empty-state strong { font-size: 17px; }
+    .empty-state p { max-width: 360px; margin: 0; color: #969eb2; font-size: 14px; line-height: 1.55; }
+
+    .history-card { align-self: start; }
+    .history-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 15px 12px; }
+    .history-heading h2 { margin: 0; font-size: 15px; }
+    .clear-button { padding: 5px 7px; border: 0; border-radius: 7px; background: transparent; color: #a9aebe; cursor: pointer; font-size: 12px; }
+    .clear-button:hover { background: #ffffff10; color: #fff; }
+    #historyList { display: grid; gap: 2px; padding: 0 7px 8px; }
+    .history-item { display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 8px; border: 0; border-radius: 9px; background: transparent; text-align: left; cursor: pointer; }
+    .history-item:hover { background: #ffffff0c; }
+    .history-favicon { flex: 0 0 auto; display: grid; width: 29px; height: 29px; place-items: center; border-radius: 8px; background: #272c3b; color: #b6b0ff; font-size: 14px; }
+    .history-text { overflow: hidden; flex: 1; min-width: 0; }
+    .history-host { overflow: hidden; color: #e9ebf2; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .history-url { overflow: hidden; margin-top: 3px; color: #8d95a9; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .delete-entry { display: grid; flex: 0 0 auto; width: 28px; height: 28px; place-items: center; border: 0; border-radius: 7px; background: transparent; color: #9299aa; cursor: pointer; opacity: 0; }
+    .history-item:hover .delete-entry, .delete-entry:focus-visible { opacity: 1; }
+    .delete-entry:hover { background: #ffffff14; color: #ff9a9a; }
+    .history-empty { padding: 16px 10px 20px; color: #8d95a9; font-size: 13px; line-height: 1.5; text-align: center; }
+
+    .notice { margin: 15px 2px 0; color: #8d95a9; font-size: 12px; line-height: 1.5; }
+    .notice strong { color: #b4bbcd; font-weight: 600; }
+    .toast { position: fixed; right: 20px; bottom: 20px; max-width: min(420px, calc(100vw - 40px)); padding: 12px 15px; border: 1px solid #ffffff20; border-radius: 11px; background: #252a39; color: #f4f6fb; box-shadow: 0 10px 30px #0008; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 24px, 600px); padding-top: 28px; }
+      .workspace { grid-template-columns: 1fr; }
+      .history-card { order: 2; }
+      .frame-wrap { height: 58vh; min-height: 300px; }
+      .history-item .delete-entry { opacity: 1; }
+    }
+    @media (max-width: 460px) {
+      .searchbar { gap: 5px; }
+      .search-icon { padding-left: 5px; }
+      .button.primary { padding: 0 11px; }
+      .button.primary .button-label { display: none; }
+      .viewer-toolbar { padding-left: 11px; }
+      .button.compact { padding: 0 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topline">
+      <div class="logo" aria-hidden="true">↗</div>
+      <div>
+        <h1>Web Viewer</h1>
+        <p class="subtitle">Öffne eine Website direkt hier im Fenster.</p>
+      </div>
+    </header>
+
+    <form class="searchbar" id="urlForm">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input id="urlInput" type="text" inputmode="url" autocomplete="url" placeholder="Website-Adresse eingeben, z. B. example.com" aria-label="Website-Adresse" required>
+      <button class="button primary" type="submit"><span aria-hidden="true">↵</span><span class="button-label">Öffnen</span></button>
+    </form>
+
+    <section class="workspace" aria-label="Web Viewer und Verlauf">
+      <div class="viewer-card" id="viewerCard">
+        <div class="viewer-toolbar">
+          <div class="viewer-status" title="Aktuelle Adresse">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="currentAddress">Keine Website geöffnet</span>
+          </div>
+          <div class="toolbar-actions">
+            <button class="button compact" id="openNewTab" type="button" title="In neuem Tab öffnen" aria-label="In neuem Tab öffnen">↗ <span>Neuer Tab</span></button>
+            <button class="button compact" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild">⛶ <span>Vollbild</span></button>
+          </div>
+        </div>
+        <div class="frame-wrap">
+          <iframe id="webFrame" title="Eingebettete Website" hidden allow="fullscreen; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon" aria-hidden="true">🌐</div>
+            <strong>Bereit, wenn du es bist</strong>
+            <p>Gib oben eine URL ein. Deine zuletzt geöffneten Websites findest du rechts im Verlauf.</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="history-card" aria-label="Verlauf">
+        <div class="history-heading">
+          <h2>Zuletzt besucht</h2>
+          <button class="clear-button" id="clearHistory" type="button">Verlauf löschen</button>
+        </div>
+        <div id="historyList" aria-live="polite"></div>
+      </aside>
+    </section>
+
+    <p class="notice"><strong>Hinweis:</strong> Manche Websites erlauben aus Sicherheitsgründen keine Einbettung. Wenn eine Seite nicht lädt, nutze „Neuer Tab“. Dein Verlauf wird nur lokal in diesem Browser gespeichert.</p>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = 'home-web-viewer-history-v1';
+      const MAX_HISTORY = 30;
+      const form = document.getElementById('urlForm');
+      const input = document.getElementById('urlInput');
+      const frame = document.getElementById('webFrame');
+      const emptyState = document.getElementById('emptyState');
+      const currentAddress = document.getElementById('currentAddress');
+      const statusDot = document.getElementById('statusDot');
+      const historyList = document.getElementById('historyList');
+      const toast = document.getElementById('toast');
+      let activeUrl = '';
+      let toastTimer;
+
+      function readHistory() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          return Array.isArray(parsed) ? parsed.filter(item => typeof item === 'string') : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveHistory(items) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+          return true;
+        } catch {
+          showToast('Der Verlauf konnte nicht gespeichert werden. Prüfe deinen Browser-Speicher.');
+          return false;
+        }
+      }
+
+      function normalizeUrl(value) {
+        let address = value.trim();
+        if (!address) return null;
+        if (!/^https?:\/\//i.test(address)) address = `https://${address}`;
+        try {
+          const parsed = new URL(address);
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+          return parsed.href;
+        } catch {
+          return null;
+        }
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+      }
+
+      function openUrl(url, addToHistory = true) {
+        activeUrl = url;
+        frame.src = url;
+        frame.hidden = false;
+        emptyState.hidden = true;
+        statusDot.classList.add('active');
+        currentAddress.textContent = url;
+        currentAddress.title = url;
+
+        if (addToHistory) {
+          const history = readHistory().filter(item => item !== url);
+          history.unshift(url);
+          saveHistory(history.slice(0, MAX_HISTORY));
+          renderHistory();
+        }
+      }
+
+      function removeHistoryItem(url) {
+        saveHistory(readHistory().filter(item => item !== url));
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const history = readHistory();
+        historyList.replaceChildren();
+        if (history.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'history-empty';
+          empty.textContent = 'Noch nichts im Verlauf. Geöffnete URLs erscheinen hier.';
+          historyList.append(empty);
+          return;
+        }
+
+        history.forEach(url => {
+          let host = url;
+          try { host = new URL(url).hostname; } catch { /* use the saved URL */ }
+
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.tabIndex = 0;
+          item.setAttribute('role', 'button');
+          item.setAttribute('aria-label', `Website öffnen: ${url}`);
+
+          const favicon = document.createElement('span');
+          favicon.className = 'history-favicon';
+          favicon.setAttribute('aria-hidden', 'true');
+          favicon.textContent = '↗';
+
+          const text = document.createElement('span');
+          text.className = 'history-text';
+          const hostLabel = document.createElement('span');
+          hostLabel.className = 'history-host';
+          hostLabel.textContent = host;
+          const urlLabel = document.createElement('span');
+          urlLabel.className = 'history-url';
+          urlLabel.textContent = url;
+          text.append(hostLabel, urlLabel);
+
+          const remove = document.createElement('button');
+          remove.className = 'delete-entry';
+          remove.type = 'button';
+          remove.textContent = '×';
+          remove.title = 'Aus Verlauf löschen';
+          remove.setAttribute('aria-label', `${url} aus Verlauf löschen`);
+          remove.addEventListener('click', event => {
+            event.stopPropagation();
+            removeHistoryItem(url);
+          });
+
+          const activate = () => {
+            input.value = url;
+            openUrl(url, false);
+          };
+          item.addEventListener('click', activate);
+          item.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              activate();
+            }
+          });
+          item.append(favicon, text, remove);
+          historyList.append(item);
+        });
+      }
+
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        const url = normalizeUrl(input.value);
+        if (!url) {
+          showToast('Bitte gib eine gültige http- oder https-URL ein.');
+          input.focus();
+          return;
+        }
+        input.value = url;
+        openUrl(url);
+      });
+
+      document.getElementById('fullscreenButton').addEventListener('click', async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else {
+            await document.getElementById('viewerCard').requestFullscreen();
+          }
+        } catch {
+          showToast('Vollbild wird von diesem Browser nicht unterstützt.');
+        }
+      });
+
+      document.getElementById('openNewTab').addEventListener('click', () => {
+        if (!activeUrl) {
+          showToast('Öffne zuerst eine Website.');
+          return;
+        }
+        window.open(activeUrl, '_blank', 'noopener,noreferrer');
+      });
+
+      document.getElementById('clearHistory').addEventListener('click', () => {
+        if (readHistory().length === 0) return;
+        saveHistory([]);
+        renderHistory();
+        showToast('Verlauf wurde gelöscht.');
+      });
+
+      frame.addEventListener('load', () => {
+        if (activeUrl) statusDot.classList.add('active');
+      });
+
+      renderHistory();
+    })();
+  </script>
+</body>
+</html>

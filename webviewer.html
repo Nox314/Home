@@ -1,106 +1,163 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#10131c">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0e1320" />
   <title>Browser View</title>
   <style>
     :root {
       color-scheme: dark;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0d1018;
-      color: #f4f7ff;
-      font-synthesis: none;
+      --bg1: #0d1320;
+      --bg2: #171f2d;
+      --panel: rgba(18, 23, 33, 0.96);
+      --panel-2: rgba(25, 31, 44, 0.96);
+      --line: rgba(255,255,255,0.08);
+      --text: #edf2ff;
+      --muted: #9aa7bc;
+      --soft: #7e8aa4;
+      --primary: #726dff;
+      --primary-2: #8c85ff;
+      --success: #5ad79a;
+      --danger: #ff9d9d;
+      --shadow: rgba(0, 0, 0, 0.28);
     }
+
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; }
     body {
       min-width: 320px;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 50% -15%, #2b3654 0%, #0d1018 45%);
+      background: radial-gradient(ellipse at 50% -15%, #2a3959 0%, var(--bg1) 42%);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", sans-serif;
     }
+
     button, input { font: inherit; }
     button { color: inherit; }
+
     .page {
-      width: min(1220px, calc(100% - 38px));
+      width: min(1220px, calc(100% - 36px));
       margin: 0 auto;
-      padding: 42px 0 38px;
+      padding: 42px 0 40px;
     }
+
     .topline {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 26px;
+      margin-bottom: 24px;
     }
+
     .logo {
       display: grid;
       place-items: center;
       width: 48px;
       height: 48px;
-      border: 1px solid rgba(255,255,255,.15);
       border-radius: 14px;
-      background: linear-gradient(145deg, #8b7cff, #5e5ce6);
-      box-shadow: 0 12px 34px rgba(97,88,255,.4);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: linear-gradient(145deg, #8d86ff, #5f5ae8);
+      box-shadow: 0 14px 30px rgba(110, 99, 255, 0.38);
       font-size: 24px;
     }
-    h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.04em; }
-    .subtitle { margin: 4px 0 0; color: #a7afc5; font-size: 14px; }
+
+    h1 {
+      margin: 0;
+      letter-spacing: -0.04em;
+      font-size: clamp(25px, 4vw, 34px);
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 14px;
+      color: #a8b2c7;
+    }
+
     .searchbar {
       display: flex;
+      align-items: center;
       gap: 10px;
       padding: 8px;
-      border: 1px solid rgba(255,255,255,.08);
       border-radius: 16px;
-      background: rgba(17,21,32,.9);
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+      border: 1px solid var(--line);
+      background: rgba(15, 20, 29, 0.9);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
     }
-    .search-icon { align-self: center; padding-left: 12px; color: #939bb4; font-size: 18px; }
+
+    .search-icon {
+      padding-left: 10px;
+      font-size: 18px;
+      color: #8f9bb3;
+    }
+
     #urlInput {
       flex: 1;
       min-width: 0;
       width: 0;
-      background: transparent;
-      border: 0;
-      outline: none;
-      color: #f3f6ff;
       padding: 10px 4px;
+      border: 0;
+      background: transparent;
+      outline: none;
+      color: var(--text);
       font-size: 15px;
     }
-    #urlInput::placeholder { color: #7a859a; }
+
+    #urlInput::placeholder {
+      color: #77829a;
+    }
+
     .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 0 15px;
       min-height: 42px;
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(39,46,63,.95);
-      color: #edf1ff;
+      background: rgba(39,46,63,0.96);
+      color: #eef3ff;
+      padding: 0 15px;
       cursor: pointer;
-      transition: transform .12s ease, background .12s ease;
+      transition: transform 0.12s ease, background 0.12s ease;
       white-space: nowrap;
     }
-    .button:hover { background: rgba(52,61,84,.96); }
-    .button:active { transform: scale(.98); }
-    .button.primary { background: linear-gradient(180deg, #7774ff, #655fef); border-color: transparent; font-weight: 700; }
-    .button.primary:hover { background: linear-gradient(180deg, #8a86ff, #726ef9); }
-    .button:focus-visible, input:focus-visible, .history-item:focus-visible, .delete-entry:focus-visible { outline: 2px solid #a9a2ff; outline-offset: 2px; }
+
+    .button:hover { background: rgba(52,62,82,0.96); }
+    .button:active { transform: scale(0.98); }
+    .button.primary {
+      background: linear-gradient(180deg, var(--primary-2), var(--primary));
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    .button.primary:hover {
+      background: linear-gradient(180deg, #968eff, #7e79ff);
+    }
+
+    .button:focus-visible,
+    input:focus-visible,
+    .history-item:focus-visible,
+    .delete-entry:focus-visible {
+      outline: 2px solid #a9a2ff;
+      outline-offset: 2px;
+    }
+
     .workspace {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 280px;
       gap: 18px;
       margin-top: 22px;
     }
-    .viewer-card, .history-card {
-      background: rgba(19,24,35,.96);
-      border: 1px solid rgba(255,255,255,.08);
+
+    .viewer-card,
+    .history-card {
       border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
       overflow: hidden;
-      box-shadow: 0 18px 46px rgba(0,0,0,.18);
+      box-shadow: 0 18px 46px rgba(0,0,0,0.2);
     }
+
     .viewer-toolbar {
       display: flex;
       align-items: center;
@@ -108,45 +165,65 @@
       gap: 12px;
       min-height: 54px;
       padding: 8px 12px 8px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid var(--line);
     }
+
     .viewer-status {
       display: flex;
       align-items: center;
       gap: 9px;
       min-width: 0;
-      color: #afbacd;
       font-size: 13px;
+      color: #b0bbce;
     }
+
     .status-dot {
-      flex: 0 0 auto;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #727c96;
+      background: #717d95;
+      flex: 0 0 auto;
     }
-    .status-dot.active { background: #59d49a; box-shadow: 0 0 12px rgba(89,212,154,.7); }
+
+    .status-dot.active {
+      background: var(--success);
+      box-shadow: 0 0 12px rgba(90, 215, 154, 0.7);
+    }
+
     #currentAddress {
       overflow: hidden;
-      text-overflow: ellipsis;
       white-space: nowrap;
-      color: #e8edf7;
+      text-overflow: ellipsis;
+      color: var(--text);
     }
-    .toolbar-actions { display: flex; gap: 8px; }
-    .button.compact { min-height: 34px; padding: 0 11px; font-size: 13px; }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .button.compact {
+      min-height: 34px;
+      padding: 0 11px;
+      font-size: 13px;
+    }
+
     .frame-wrap {
       position: relative;
+      width: 100%;
       height: min(71vh, 720px);
       min-height: 350px;
       background: white;
     }
+
     #webFrame {
+      display: block;
       width: 100%;
       height: 100%;
       border: 0;
-      display: block;
       background: white;
     }
+
     .empty-state {
       position: absolute;
       inset: 0;
@@ -155,31 +232,54 @@
       gap: 10px;
       padding: 24px;
       text-align: center;
-      background: rgba(12,16,24,.98);
+      background: rgba(10, 15, 21, 0.98);
     }
+
     .empty-state[hidden] { display: none; }
     .empty-icon { font-size: 38px; }
-    .empty-state strong { font-size: 18px; }
-    .empty-state p { max-width: 380px; color: #9aa8bc; font-size: 14px; line-height: 1.55; margin: 0; }
+    .empty-state strong { font-size: 17px; }
+    .empty-state p {
+      max-width: 380px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
     .history-heading {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       padding: 15px 15px 12px;
     }
-    .history-heading h2 { margin: 0; font-size: 15px; }
+
+    .history-heading h2 {
+      margin: 0;
+      font-size: 15px;
+    }
+
     .clear-button {
-      background: transparent;
       border: 0;
+      background: transparent;
       color: #a8b2c9;
-      padding: 5px 7px;
       border-radius: 8px;
+      padding: 5px 7px;
       cursor: pointer;
       font-size: 12px;
     }
-    .clear-button:hover { background: rgba(255,255,255,.05); color: white; }
-    #historyList { display: grid; gap: 2px; padding: 0 8px 10px; }
+
+    .clear-button:hover {
+      background: rgba(255,255,255,0.05);
+      color: white;
+    }
+
+    #historyList {
+      display: grid;
+      gap: 2px;
+      padding: 0 8px 10px;
+    }
+
     .history-item {
       display: flex;
       align-items: center;
@@ -192,60 +292,87 @@
       border-radius: 9px;
       cursor: pointer;
     }
-    .history-item:hover { background: rgba(255,255,255,.04); }
+
+    .history-item:hover { background: rgba(255,255,255,0.04); }
+
     .history-favicon {
+      width: 28px;
+      height: 28px;
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      width: 28px;
-      height: 28px;
       border-radius: 8px;
-      background: #2b3143;
-      color: #b7b3ff;
+      background: rgba(43, 49, 67, 0.8);
+      color: #b9b3ff;
       font-size: 14px;
     }
+
     .history-text {
       flex: 1;
       min-width: 0;
       overflow: hidden;
     }
-    .history-host, .history-url {
+
+    .history-host,
+    .history-url {
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .history-host { color: #edf2ff; font-size: 13px; }
-    .history-url { margin-top: 3px; color: #8f9bb0; font-size: 11px; }
+
+    .history-host {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .history-url {
+      margin-top: 3px;
+      color: #8d99ad;
+      font-size: 11px;
+    }
+
     .delete-entry {
       flex: 0 0 auto;
-      display: grid;
-      place-items: center;
       width: 28px;
       height: 28px;
       border: 0;
-      border-radius: 7px;
       background: transparent;
-      color: #a0a8b8;
+      border-radius: 7px;
+      color: #9aa5b6;
       cursor: pointer;
       opacity: 0;
+      display: grid;
+      place-items: center;
     }
-    .history-item:hover .delete-entry, .delete-entry:focus-visible { opacity: 1; }
-    .delete-entry:hover { background: rgba(255,255,255,.09); color: #ff9d9d; }
+
+    .history-item:hover .delete-entry,
+    .delete-entry:focus-visible {
+      opacity: 1;
+    }
+
+    .delete-entry:hover {
+      background: rgba(255,255,255,0.09);
+      color: var(--danger);
+    }
+
     .history-empty {
       padding: 18px 12px 22px;
-      color: #8d99ad;
+      color: #8e9bb0;
       font-size: 13px;
       line-height: 1.5;
       text-align: center;
     }
+
     .notice {
-      margin: 16px 0 0;
-      color: #8f9ab0;
+      margin-top: 16px;
+      color: var(--muted);
       font-size: 12px;
       line-height: 1.6;
     }
-    .notice strong { color: #b5bfd1; }
+
+    .notice strong { color: #bfcae0; }
+
     .toast {
       position: fixed;
       right: 20px;
@@ -254,31 +381,38 @@
       max-width: min(420px, calc(100vw - 40px));
       padding: 12px 15px;
       border-radius: 11px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(37,44,58,.96);
-      color: #f4f7ff;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(34, 42, 56, 0.98);
+      color: #f5f8ff;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.28);
       font-size: 13px;
-      opacity: 0;
-      box-shadow: 0 16px 36px rgba(0,0,0,.28);
       pointer-events: none;
+      opacity: 0;
       transform: translateY(8px);
-      transition: opacity .2s ease, transform .2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     #viewerCard:fullscreen {
       display: flex;
-      flex-direction: column;
       width: 100vw;
       height: 100vh;
       border: 0;
       border-radius: 0;
-      background: rgba(19,24,35,.96);
+      flex-direction: column;
+      background: var(--panel-2);
     }
+
     #viewerCard:fullscreen .frame-wrap {
       flex: 1;
-      height: auto;
       min-height: 0;
+      height: auto;
     }
+
     #viewerCard.viewer-fullscreen-fallback {
       position: fixed;
       inset: 0;
@@ -289,20 +423,28 @@
       height: 100vh;
       border: 0;
       border-radius: 0;
+      background: var(--panel-2);
     }
+
     #viewerCard.viewer-fullscreen-fallback .frame-wrap {
       flex: 1;
-      height: auto;
       min-height: 0;
+      height: auto;
     }
+
     body.viewer-lock { overflow: hidden; }
+
     @media (max-width: 760px) {
-      .page { width: min(100% - 24px, 620px); padding-top: 26px; }
+      .page {
+        width: min(100% - 24px, 620px);
+        padding-top: 26px;
+      }
       .workspace { grid-template-columns: 1fr; }
       .history-card { order: 2; }
       .frame-wrap { height: 60vh; min-height: 300px; }
       .history-item .delete-entry { opacity: 1; }
     }
+
     @media (max-width: 460px) {
       .searchbar { gap: 6px; }
       .search-icon { padding-left: 7px; }
@@ -320,34 +462,43 @@
       <div class="logo" aria-hidden="true">↗</div>
       <div>
         <h1>Browser View</h1>
-        <p class="subtitle">Öffne Sites wie in einem Browser und speichere deinen Verlauf lokal.</p>
+        <p class="subtitle">Öffne Sites wie in einem Browser. Verlauf lokal im Browser gespeichert.</p>
       </div>
     </header>
 
     <form class="searchbar" id="urlForm">
       <span class="search-icon" aria-hidden="true">⌕</span>
-      <input id="urlInput" type="text" inputmode="url" autocomplete="url" placeholder="Website-Adresse eingeben, z. B. example.com" aria-label="Website-Adresse" required>
-      <button class="button primary" type="submit"><span aria-hidden="true">↵</span><span class="button-label">Öffnen</span></button>
+      <input id="urlInput" type="text" inputmode="url" autocomplete="url" placeholder="Website-Adresse eingeben, z. B. example.com" aria-label="Website-Adresse" required />
+      <button class="button primary" type="submit">
+        <span aria-hidden="true">↵</span>
+        <span class="button-label">Öffnen</span>
+      </button>
     </form>
 
-    <section class="workspace" aria-label="Viewer und Verlauf">
+    <section class="workspace" aria-label="Webviewer und Verlauf">
       <div class="viewer-card" id="viewerCard">
         <div class="viewer-toolbar">
           <div class="viewer-status" title="Aktuelle Adresse">
             <span class="status-dot" id="statusDot"></span>
             <span id="currentAddress">Keine Website geöffnet</span>
           </div>
+
           <div class="toolbar-actions">
-            <button class="button compact" id="openNewTab" type="button" title="Direkt im neuen Tab öffnen" aria-label="Direkt im neuen Tab öffnen">↗ <span>Neues Tab</span></button>
-            <button class="button compact" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild" aria-pressed="false">⛶ <span>Vollbild</span></button>
+            <button class="button compact" id="openNewTab" type="button" title="Im neuen Tab öffnen" aria-label="Im neuen Tab öffnen">
+              ↗ <span>Neues Tab</span>
+            </button>
+            <button class="button compact" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild" aria-pressed="false">
+              ⛶ <span>Vollbild</span>
+            </button>
           </div>
         </div>
+
         <div class="frame-wrap">
           <iframe id="webFrame" title="Eingebettete Seite" hidden allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           <div class="empty-state" id="emptyState">
             <div class="empty-icon" aria-hidden="true">🌐</div>
             <strong>Bereit für deine erste Seite</strong>
-            <p>Gib eine URL ein. Der Viewer versucht zuerst eine Vorschau mit Proxy, und wenn eine Seite nicht eingebettet werden kann, öffnet er sie automatisch im normalen Browser-Tab.</p>
+            <p>Gib eine URL ein. Wenn die Seite das Einbetten blockiert, wird sie automatisch in einem neuen Tab geöffnet.</p>
           </div>
         </div>
       </div>
@@ -361,7 +512,9 @@
       </aside>
     </section>
 
-    <p class="notice"><strong>Wichtig:</strong> Keine reine HTML-/JavaScript-Seite kann eine fremde Website gegen deren eigene Sicherheitsrichtlinien zwangsweise in ein iframe einbetten. Deshalb versucht diese Version zuerst einen Browser-ähnlichen Proxy-Vorschau und fällt auf einen echten Tab zurück, wenn eine Seite das Einbetten verweigert. Der Verlauf bleibt nur lokal im Browser.</p>
+    <p class="notice">
+      <strong>Wichtig:</strong> Keine reine HTML-/JavaScript-Seite kann eine fremde Website gegen deren eigene Sicherheitsrichtlinien zwangsweise in ein iframe einbetten. Deshalb versucht diese App zuerst eine Vorschau und öffnet eine Seite automatisch in einem echten Tab, wenn das Einbetten verweigert wird. Der Verlauf bleibt nur lokal im Browser.
+    </p>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -370,6 +523,7 @@
     (() => {
       const STORAGE_KEY = 'browser-view-history-v1';
       const MAX_HISTORY = 30;
+
       const form = document.getElementById('urlForm');
       const input = document.getElementById('urlInput');
       const frame = document.getElementById('webFrame');
@@ -381,10 +535,10 @@
       const viewer = document.getElementById('viewerCard');
       const fullscreenButton = document.getElementById('fullscreenButton');
       const openNewTabButton = document.getElementById('openNewTab');
+
       let activeUrl = '';
       let toastTimer = null;
-      let iframeProxyMode = false;
-      let iframeLoadTimestamp = 0;
+      let iframeOpenTimer = null;
 
       function readHistory() {
         try {
@@ -416,13 +570,13 @@
         const raw = value.trim();
         if (!raw) return null;
 
-        let url = raw;
-        if (!/^https?:\/\//i.test(url)) {
-          url = 'https://' + url;
+        let candidate = raw;
+        if (!/^https?:\/\//i.test(candidate)) {
+          candidate = 'https://' + candidate;
         }
 
         try {
-          const parsed = new URL(url);
+          const parsed = new URL(candidate);
           if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
           return parsed.href;
         } catch {
@@ -430,27 +584,16 @@
         }
       }
 
-      function buildProxyUrl(url) {
-        try {
-          const parsed = new URL(url);
-          const target = parsed.href.replace(/^https?:\/\//i, '');
-          return `https://r.jina.ai/http://` + target;
-        } catch {
-          return url;
-        }
-      }
-
-      function setStatus(url, isActive = true) {
+      function updateStatus(url) {
         currentAddress.textContent = url || 'Keine Website geöffnet';
         currentAddress.title = url || '';
-        statusDot.classList.toggle('active', isActive && !!url);
+        statusDot.classList.toggle('active', !!url);
       }
 
-      function addHistory(url) {
-        const history = readHistory().filter(entry => entry !== url);
+      function saveToHistory(url) {
+        const history = readHistory().filter(item => item !== url);
         history.unshift(url);
         saveHistory(history.slice(0, MAX_HISTORY));
-        renderHistory();
       }
 
       function renderHistory() {
@@ -469,7 +612,9 @@
           let host = url;
           try {
             host = new URL(url).hostname;
-          } catch {}
+          } catch {
+            // fallback keeps raw url
+          }
 
           const item = document.createElement('div');
           item.className = 'history-item';
@@ -500,7 +645,8 @@
           remove.className = 'delete-entry';
           remove.textContent = '×';
           remove.title = 'Aus Verlauf löschen';
-          remove.setAttribute('aria-label', `${url} aus Verlauf löschen`);
+          remove.setAttribute('aria-label', `Eintrag löschen: ${url}`);
+
           remove.addEventListener('click', event => {
             event.stopPropagation();
             const filtered = readHistory().filter(entry => entry !== url);
@@ -510,7 +656,7 @@
 
           const activate = () => {
             input.value = url;
-            loadPage(url, false);
+            openPage(url, false);
           };
 
           item.addEventListener('click', activate);
@@ -526,45 +672,49 @@
         });
       }
 
-      function loadPage(url, addToHistory = true) {
-        activeUrl = url;
-        iframeProxyMode = true;
-        iframeLoadTimestamp = Date.now();
-        const proxyUrl = buildProxyUrl(url);
-
-        frame.src = proxyUrl;
-        frame.hidden = false;
-        emptyState.hidden = true;
-        setStatus(url, true);
-
-        if (addToHistory) {
-          addHistory(url);
-        }
-
-        setTimeout(() => {
-          try {
-            if (frame.contentWindow && frame.contentWindow.location) {
-              const href = frame.contentWindow.location.href;
-              if (href === 'about:blank') return;
-              if (typeof href === 'string' && href.includes('r.jina.ai')) {
-                return;
-              }
-            }
-          } catch (err) {
-            // Cross-origin or blocked iframe: open in a real browser tab.
-            window.open(url, '_blank', 'noopener,noreferrer');
-            showToast('Seite konnte nicht eingebettet werden. Sie wurde in einem neuen Tab geöffnet.');
-          }
-        }, 1800);
+      function hasProhibitedFrame(url) {
+        // Best effort: some sites reject embedding and don't load when framed.
+        // We cannot detect this reliably from plain HTML, so we use a timeout + fallback.
+        return false;
       }
 
-      function openDirect(url) {
-        activeUrl = url;
-        setStatus(url, true);
-        frame.src = 'about:blank';
-        frame.hidden = true;
-        emptyState.hidden = false;
+      function openInNewTab(url) {
+        if (!url) return;
         window.open(url, '_blank', 'noopener,noreferrer');
+      }
+
+      function openPage(url, addToHistory = true) {
+        if (!url) return;
+
+        activeUrl = url;
+        updateStatus(url);
+
+        const previewUrl = url;
+        frame.src = previewUrl;
+        frame.hidden = false;
+        emptyState.hidden = true;
+
+        if (addToHistory) {
+          saveToHistory(url);
+          renderHistory();
+        }
+
+        clearTimeout(iframeOpenTimer);
+        iframeOpenTimer = setTimeout(() => {
+          try {
+            const href = frame.contentWindow.location.href;
+            if (href && href !== 'about:blank' && !href.startsWith('chrome-error:')) {
+              return;
+            }
+          } catch (error) {
+            // cross-origin / blocked frame -> fall back to normal tab
+          }
+
+          // If the iframe did not produce a usable page quickly, the site likely blocked embedding.
+          // Open the page in a real browser tab instead of leaving a blank/blocked frame.
+          openInNewTab(url);
+          showToast('Seite konnte nicht eingebettet werden. Sie wurde in einem neuen Tab geöffnet.');
+        }, 2500);
       }
 
       form.addEventListener('submit', event => {
@@ -575,8 +725,9 @@
           input.focus();
           return;
         }
+
         input.value = url;
-        loadPage(url, true);
+        openPage(url, true);
       });
 
       openNewTabButton.addEventListener('click', () => {
@@ -584,53 +735,48 @@
           showToast('Öffne zuerst eine Website.');
           return;
         }
-        window.open(activeUrl, '_blank', 'noopener,noreferrer');
+        openInNewTab(activeUrl);
       });
 
       document.getElementById('clearHistory').addEventListener('click', () => {
-        const history = readHistory();
-        if (history.length === 0) return;
+        if (readHistory().length === 0) return;
         saveHistory([]);
         renderHistory();
         showToast('Verlauf wurde gelöscht.');
       });
 
-      function setFullscreenButton(isFullscreen) {
-        fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
-        fullscreenButton.title = isFullscreen ? 'Vollbild beenden' : 'Vollbild';
+      function setFullscreenButton(isActive) {
+        fullscreenButton.setAttribute('aria-pressed', String(isActive));
+        fullscreenButton.title = isActive ? 'Vollbild beenden' : 'Vollbild';
         fullscreenButton.setAttribute('aria-label', fullscreenButton.title);
         const label = fullscreenButton.querySelector('span');
-        if (label) label.textContent = isFullscreen ? 'Beenden' : 'Vollbild';
+        if (label) label.textContent = isActive ? 'Beenden' : 'Vollbild';
       }
 
       async function toggleFullscreen() {
-        if (!document.fullscreenElement && !viewer.classList.contains('viewer-fullscreen-fallback')) {
-          if (viewer.requestFullscreen) {
-            try {
-              await viewer.requestFullscreen();
-              setFullscreenButton(true);
-              return;
-            } catch (err) {
-              // Fallback below.
-            }
+        if (document.fullscreenElement === viewer) {
+          try {
+            await document.exitFullscreen();
+          } catch (error) {
+            // ignore
           }
-          viewer.classList.add('viewer-fullscreen-fallback');
-          document.body.classList.add('viewer-lock');
-          setFullscreenButton(true);
+          setFullscreenButton(false);
           return;
         }
 
-        if (document.fullscreenElement) {
+        if (viewer.requestFullscreen) {
           try {
-            await document.exitFullscreen();
-          } catch (err) {
-            // ignore
+            await viewer.requestFullscreen();
+            setFullscreenButton(true);
+            return;
+          } catch (error) {
+            // fallback below
           }
         }
 
-        viewer.classList.remove('viewer-fullscreen-fallback');
-        document.body.classList.remove('viewer-lock');
-        setFullscreenButton(false);
+        viewer.classList.add('viewer-fullscreen-fallback');
+        document.body.classList.add('viewer-lock');
+        setFullscreenButton(true);
       }
 
       document.addEventListener('fullscreenchange', () => {
@@ -651,26 +797,8 @@
 
       fullscreenButton.addEventListener('click', toggleFullscreen);
 
-      frame.addEventListener('load', () => {
-        const now = Date.now();
-        const loadingTook = now - iframeLoadTimestamp;
-        if (loadingTook > 1800 && activeUrl) {
-          try {
-            const href = frame.contentWindow.location.href;
-            if (href && href !== 'about:blank') {
-              return;
-            }
-          } catch (err) {
-            // Blocked iframe; open real browser tab.
-            if (activeUrl) {
-              openDirect(activeUrl);
-            }
-          }
-        }
-      });
-
       renderHistory();
-      setStatus('', false);
+      updateStatus('');
     })();
   </script>
 </body>

@@ -4,94 +4,313 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#10131c">
-  <title>Web Viewer</title>
+  <title>Browser View</title>
   <style>
     :root {
       color-scheme: dark;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #10131c;
-      color: #f4f6fb;
+      background: #0d1018;
+      color: #f4f7ff;
       font-synthesis: none;
     }
     * { box-sizing: border-box; }
-    body { min-width: 320px; min-height: 100vh; margin: 0; background: radial-gradient(ellipse at 50% -20%, #26304b 0, #10131c 55%); }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% -15%, #2b3654 0%, #0d1018 45%);
+    }
     button, input { font: inherit; }
     button { color: inherit; }
-    .page { width: min(1240px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 36px; }
-    .topline { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
-    .logo { display: grid; width: 46px; height: 46px; place-items: center; border: 1px solid #ffffff20; border-radius: 15px; background: linear-gradient(145deg, #8b7bff, #5c55dc); box-shadow: 0 8px 26px #665df044; font-size: 23px; }
-    h1 { margin: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.04em; }
-    .subtitle { margin: 4px 0 0; color: #a7aec0; font-size: 14px; }
-    .searchbar { display: flex; gap: 10px; padding: 8px; border: 1px solid #ffffff1a; border-radius: 16px; background: #191d29; box-shadow: 0 14px 40px #00000025; }
-    .search-icon { align-self: center; padding-left: 10px; color: #929ab0; font-size: 19px; }
-    #urlInput { flex: 1; width: 0; min-width: 0; padding: 10px 4px; border: 0; outline: 0; background: transparent; color: #f4f6fb; font-size: 15px; }
-    #urlInput::placeholder { color: #778096; }
-    .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 15px; border: 1px solid #ffffff1c; border-radius: 11px; background: #252a39; color: #e7eaf2; cursor: pointer; transition: background .18s ease, transform .18s ease; white-space: nowrap; }
-    .button:hover { background: #32394d; }
+    .page {
+      width: min(1220px, calc(100% - 38px));
+      margin: 0 auto;
+      padding: 42px 0 38px;
+    }
+    .topline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #8b7cff, #5e5ce6);
+      box-shadow: 0 12px 34px rgba(97,88,255,.4);
+      font-size: 24px;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.04em; }
+    .subtitle { margin: 4px 0 0; color: #a7afc5; font-size: 14px; }
+    .searchbar {
+      display: flex;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: rgba(17,21,32,.9);
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
+    .search-icon { align-self: center; padding-left: 12px; color: #939bb4; font-size: 18px; }
+    #urlInput {
+      flex: 1;
+      min-width: 0;
+      width: 0;
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: #f3f6ff;
+      padding: 10px 4px;
+      font-size: 15px;
+    }
+    #urlInput::placeholder { color: #7a859a; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 15px;
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(39,46,63,.95);
+      color: #edf1ff;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease;
+      white-space: nowrap;
+    }
+    .button:hover { background: rgba(52,61,84,.96); }
     .button:active { transform: scale(.98); }
-    .button.primary { border-color: transparent; background: #7568ee; color: white; font-weight: 650; }
-    .button.primary:hover { background: #867bff; }
-    .button:focus-visible, input:focus-visible, .history-item:focus-visible { outline: 2px solid #a69eff; outline-offset: 2px; }
-    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 18px; margin-top: 20px; }
-    .viewer-card, .history-card { overflow: hidden; border: 1px solid #ffffff18; border-radius: 16px; background: #191d29; box-shadow: 0 16px 42px #00000025; }
-    .viewer-toolbar { display: flex; min-height: 54px; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 16px; border-bottom: 1px solid #ffffff13; }
-    .viewer-status { display: flex; min-width: 0; align-items: center; gap: 9px; color: #aeb5c7; font-size: 13px; }
-    .status-dot { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: #6a7184; }
-    .status-dot.active { background: #55d69a; box-shadow: 0 0 10px #55d69a70; }
-    #currentAddress { overflow: hidden; color: #e3e6ee; text-overflow: ellipsis; white-space: nowrap; }
+    .button.primary { background: linear-gradient(180deg, #7774ff, #655fef); border-color: transparent; font-weight: 700; }
+    .button.primary:hover { background: linear-gradient(180deg, #8a86ff, #726ef9); }
+    .button:focus-visible, input:focus-visible, .history-item:focus-visible, .delete-entry:focus-visible { outline: 2px solid #a9a2ff; outline-offset: 2px; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .viewer-card, .history-card {
+      background: rgba(19,24,35,.96);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 18px 46px rgba(0,0,0,.18);
+    }
+    .viewer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 8px 12px 8px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .viewer-status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+      color: #afbacd;
+      font-size: 13px;
+    }
+    .status-dot {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #727c96;
+    }
+    .status-dot.active { background: #59d49a; box-shadow: 0 0 12px rgba(89,212,154,.7); }
+    #currentAddress {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #e8edf7;
+    }
     .toolbar-actions { display: flex; gap: 8px; }
-    .button.compact { min-height: 36px; padding: 0 11px; font-size: 13px; }
-    .frame-wrap { position: relative; height: min(68vh, 690px); min-height: 340px; background: #fff; }
-    #webFrame { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
-    .empty-state { position: absolute; inset: 0; display: grid; place-content: center; gap: 10px; padding: 24px; background: #141823; text-align: center; }
+    .button.compact { min-height: 34px; padding: 0 11px; font-size: 13px; }
+    .frame-wrap {
+      position: relative;
+      height: min(71vh, 720px);
+      min-height: 350px;
+      background: white;
+    }
+    #webFrame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: white;
+    }
+    .empty-state {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      gap: 10px;
+      padding: 24px;
+      text-align: center;
+      background: rgba(12,16,24,.98);
+    }
     .empty-state[hidden] { display: none; }
     .empty-icon { font-size: 38px; }
-    .empty-state strong { font-size: 17px; }
-    .empty-state p { max-width: 390px; margin: 0; color: #969eb2; font-size: 14px; line-height: 1.55; }
-    .history-card { align-self: start; }
-    .history-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 15px 12px; }
+    .empty-state strong { font-size: 18px; }
+    .empty-state p { max-width: 380px; color: #9aa8bc; font-size: 14px; line-height: 1.55; margin: 0; }
+    .history-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 15px 12px;
+    }
     .history-heading h2 { margin: 0; font-size: 15px; }
-    .clear-button { padding: 5px 7px; border: 0; border-radius: 7px; background: transparent; color: #a9aebe; cursor: pointer; font-size: 12px; }
-    .clear-button:hover { background: #ffffff10; color: #fff; }
-    #historyList { display: grid; gap: 2px; padding: 0 7px 8px; }
-    .history-item { display: flex; width: 100%; align-items: center; gap: 9px; padding: 10px 8px; border: 0; border-radius: 9px; background: transparent; text-align: left; cursor: pointer; }
-    .history-item:hover { background: #ffffff0c; }
-    .history-favicon { flex: 0 0 auto; display: grid; width: 29px; height: 29px; place-items: center; border-radius: 8px; background: #272c3b; color: #b6b0ff; font-size: 14px; }
-    .history-text { overflow: hidden; flex: 1; min-width: 0; }
-    .history-host { display: block; overflow: hidden; color: #e9ebf2; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
-    .history-url { display: block; overflow: hidden; margin-top: 3px; color: #8d95a9; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-    .delete-entry { display: grid; flex: 0 0 auto; width: 28px; height: 28px; place-items: center; border: 0; border-radius: 7px; background: transparent; color: #9299aa; cursor: pointer; opacity: 0; }
+    .clear-button {
+      background: transparent;
+      border: 0;
+      color: #a8b2c9;
+      padding: 5px 7px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .clear-button:hover { background: rgba(255,255,255,.05); color: white; }
+    #historyList { display: grid; gap: 2px; padding: 0 8px 10px; }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      padding: 10px 8px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+    .history-item:hover { background: rgba(255,255,255,.04); }
+    .history-favicon {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #2b3143;
+      color: #b7b3ff;
+      font-size: 14px;
+    }
+    .history-text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .history-host, .history-url {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .history-host { color: #edf2ff; font-size: 13px; }
+    .history-url { margin-top: 3px; color: #8f9bb0; font-size: 11px; }
+    .delete-entry {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: #a0a8b8;
+      cursor: pointer;
+      opacity: 0;
+    }
     .history-item:hover .delete-entry, .delete-entry:focus-visible { opacity: 1; }
-    .delete-entry:hover { background: #ffffff14; color: #ff9a9a; }
-    .history-empty { padding: 16px 10px 20px; color: #8d95a9; font-size: 13px; line-height: 1.5; text-align: center; }
-    .notice { margin: 15px 2px 0; color: #8d95a9; font-size: 12px; line-height: 1.5; }
-    .notice strong { color: #b4bbcd; font-weight: 600; }
-    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 20; max-width: min(420px, calc(100vw - 40px)); padding: 12px 15px; border: 1px solid #ffffff20; border-radius: 11px; background: #252a39; color: #f4f6fb; box-shadow: 0 10px 30px #0008; font-size: 13px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+    .delete-entry:hover { background: rgba(255,255,255,.09); color: #ff9d9d; }
+    .history-empty {
+      padding: 18px 12px 22px;
+      color: #8d99ad;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .notice {
+      margin: 16px 0 0;
+      color: #8f9ab0;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .notice strong { color: #b5bfd1; }
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 30;
+      max-width: min(420px, calc(100vw - 40px));
+      padding: 12px 15px;
+      border-radius: 11px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(37,44,58,.96);
+      color: #f4f7ff;
+      font-size: 13px;
+      opacity: 0;
+      box-shadow: 0 16px 36px rgba(0,0,0,.28);
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
     .toast.show { opacity: 1; transform: translateY(0); }
-
-    /* Native fullscreen where available, including the toolbar for easy exit. */
-    #viewerCard:fullscreen { display: flex; width: 100vw; height: 100vh; height: 100dvh; flex-direction: column; border: 0; border-radius: 0; background: #191d29; }
-    #viewerCard:fullscreen .frame-wrap { flex: 1; height: auto; min-height: 0; }
-    /* CSS fallback for browsers that do not implement the Fullscreen API (notably some mobile browsers). */
-    #viewerCard.viewer-fullscreen-fallback { position: fixed; inset: 0; z-index: 1000; display: flex; width: 100vw; height: 100vh; height: 100dvh; flex-direction: column; border: 0; border-radius: 0; }
-    #viewerCard.viewer-fullscreen-fallback .frame-wrap { flex: 1; height: auto; min-height: 0; }
+    #viewerCard:fullscreen {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      border: 0;
+      border-radius: 0;
+      background: rgba(19,24,35,.96);
+    }
+    #viewerCard:fullscreen .frame-wrap {
+      flex: 1;
+      height: auto;
+      min-height: 0;
+    }
+    #viewerCard.viewer-fullscreen-fallback {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      border: 0;
+      border-radius: 0;
+    }
+    #viewerCard.viewer-fullscreen-fallback .frame-wrap {
+      flex: 1;
+      height: auto;
+      min-height: 0;
+    }
     body.viewer-lock { overflow: hidden; }
-
     @media (max-width: 760px) {
-      .page { width: min(100% - 24px, 600px); padding-top: 28px; }
+      .page { width: min(100% - 24px, 620px); padding-top: 26px; }
       .workspace { grid-template-columns: 1fr; }
       .history-card { order: 2; }
-      .frame-wrap { height: 58vh; min-height: 300px; }
+      .frame-wrap { height: 60vh; min-height: 300px; }
       .history-item .delete-entry { opacity: 1; }
     }
     @media (max-width: 460px) {
-      .searchbar { gap: 5px; }
-      .search-icon { padding-left: 5px; }
+      .searchbar { gap: 6px; }
+      .search-icon { padding-left: 7px; }
       .button.primary { padding: 0 11px; }
       .button.primary .button-label { display: none; }
-      .viewer-toolbar { padding-left: 11px; }
-      .button.compact { padding: 0 9px; }
       .toolbar-actions .button span { display: none; }
+      .viewer-toolbar { padding-left: 12px; }
+      .button.compact { padding: 0 9px; }
     }
   </style>
 </head>
@@ -100,8 +319,8 @@
     <header class="topline">
       <div class="logo" aria-hidden="true">↗</div>
       <div>
-        <h1>Web Viewer</h1>
-        <p class="subtitle">Öffne eine Website direkt hier im Fenster.</p>
+        <h1>Browser View</h1>
+        <p class="subtitle">Öffne Sites wie in einem Browser und speichere deinen Verlauf lokal.</p>
       </div>
     </header>
 
@@ -111,7 +330,7 @@
       <button class="button primary" type="submit"><span aria-hidden="true">↵</span><span class="button-label">Öffnen</span></button>
     </form>
 
-    <section class="workspace" aria-label="Web Viewer und Verlauf">
+    <section class="workspace" aria-label="Viewer und Verlauf">
       <div class="viewer-card" id="viewerCard">
         <div class="viewer-toolbar">
           <div class="viewer-status" title="Aktuelle Adresse">
@@ -119,36 +338,37 @@
             <span id="currentAddress">Keine Website geöffnet</span>
           </div>
           <div class="toolbar-actions">
-            <button class="button compact" id="openNewTab" type="button" title="Website in einem neuen Tab öffnen" aria-label="Website in einem neuen Tab öffnen">↗ <span>Neuer Tab</span></button>
-            <button class="button compact" id="fullscreenButton" type="button" title="Viewer im Vollbild öffnen" aria-label="Viewer im Vollbild öffnen" aria-pressed="false">⛶ <span>Vollbild</span></button>
+            <button class="button compact" id="openNewTab" type="button" title="Direkt im neuen Tab öffnen" aria-label="Direkt im neuen Tab öffnen">↗ <span>Neues Tab</span></button>
+            <button class="button compact" id="fullscreenButton" type="button" title="Vollbild" aria-label="Vollbild" aria-pressed="false">⛶ <span>Vollbild</span></button>
           </div>
         </div>
         <div class="frame-wrap">
-          <iframe id="webFrame" title="Eingebettete Website" hidden allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <iframe id="webFrame" title="Eingebettete Seite" hidden allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           <div class="empty-state" id="emptyState">
             <div class="empty-icon" aria-hidden="true">🌐</div>
-            <strong>Bereit, wenn du es bist</strong>
-            <p>Gib oben eine URL ein. Wenn eine Website das Einbetten blockiert, kannst du sie mit „Neuer Tab“ direkt öffnen.</p>
+            <strong>Bereit für deine erste Seite</strong>
+            <p>Gib eine URL ein. Der Viewer versucht zuerst eine Vorschau mit Proxy, und wenn eine Seite nicht eingebettet werden kann, öffnet er sie automatisch im normalen Browser-Tab.</p>
           </div>
         </div>
       </div>
 
       <aside class="history-card" aria-label="Verlauf">
         <div class="history-heading">
-          <h2>Zuletzt besucht</h2>
-          <button class="clear-button" id="clearHistory" type="button">Verlauf löschen</button>
+          <h2>Verlauf</h2>
+          <button class="clear-button" id="clearHistory" type="button">Löschen</button>
         </div>
         <div id="historyList" aria-live="polite"></div>
       </aside>
     </section>
 
-    <p class="notice"><strong>Wichtig:</strong> Nicht jede Website lässt sich in eine andere Seite einbetten. Das wird von der Website selbst per Sicherheitsrichtlinie festgelegt und kann mit reinem HTML nicht umgangen werden. „Neuer Tab“ öffnet die Adresse stattdessen direkt. Vollbild nutzt den Browser-Vollbildmodus oder, falls dieser nicht verfügbar ist, eine Vollbildansicht im Fenster. Dein Verlauf bleibt lokal in diesem Browser.</p>
+    <p class="notice"><strong>Wichtig:</strong> Keine reine HTML-/JavaScript-Seite kann eine fremde Website gegen deren eigene Sicherheitsrichtlinien zwangsweise in ein iframe einbetten. Deshalb versucht diese Version zuerst einen Browser-ähnlichen Proxy-Vorschau und fällt auf einen echten Tab zurück, wenn eine Seite das Einbetten verweigert. Der Verlauf bleibt nur lokal im Browser.</p>
   </main>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     (() => {
-      const STORAGE_KEY = 'home-web-viewer-history-v1';
+      const STORAGE_KEY = 'browser-view-history-v1';
       const MAX_HISTORY = 30;
       const form = document.getElementById('urlForm');
       const input = document.getElementById('urlInput');
@@ -160,14 +380,19 @@
       const toast = document.getElementById('toast');
       const viewer = document.getElementById('viewerCard');
       const fullscreenButton = document.getElementById('fullscreenButton');
+      const openNewTabButton = document.getElementById('openNewTab');
       let activeUrl = '';
-      let toastTimer;
+      let toastTimer = null;
+      let iframeProxyMode = false;
+      let iframeLoadTimestamp = 0;
 
       function readHistory() {
         try {
           const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
           return Array.isArray(parsed) ? parsed.filter(item => typeof item === 'string') : [];
-        } catch { return []; }
+        } catch {
+          return [];
+        }
       }
 
       function saveHistory(items) {
@@ -175,151 +400,119 @@
           localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
           return true;
         } catch {
-          showToast('Der Verlauf konnte nicht gespeichert werden. Prüfe deinen Browser-Speicher.');
+          showToast('Der Verlauf konnte nicht gespeichert werden. Prüfe den Browser-Speicher.');
           return false;
         }
-      }
-
-      function normalizeUrl(value) {
-        let address = value.trim();
-        if (!address) return null;
-        if (!/^https?:\/\//i.test(address)) address = `https://${address}`;
-        try {
-          const parsed = new URL(address);
-          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
-          return parsed.href;
-        } catch { return null; }
       }
 
       function showToast(message) {
         toast.textContent = message;
         toast.classList.add('show');
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
       }
 
-      function setFullscreenButton(isFullscreen) {
-        fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
-        fullscreenButton.title = isFullscreen ? 'Vollbild verlassen' : 'Viewer im Vollbild öffnen';
-        fullscreenButton.setAttribute('aria-label', fullscreenButton.title);
-        fullscreenButton.querySelector('span').textContent = isFullscreen ? 'Vollbild verlassen' : 'Vollbild';
-      }
+      function normalizeUrl(value) {
+        const raw = value.trim();
+        if (!raw) return null;
 
-      function isViewerFullscreen() {
-        return document.fullscreenElement === viewer || viewer.classList.contains('viewer-fullscreen-fallback');
-      }
-
-      async function toggleFullscreen() {
-        if (isViewerFullscreen()) {
-          if (document.fullscreenElement && document.exitFullscreen) {
-            try {
-              await document.exitFullscreen();
-              return;
-            } catch { /* use the CSS fallback cleanup below */ }
-          }
-          viewer.classList.remove('viewer-fullscreen-fallback');
-          document.body.classList.remove('viewer-lock');
-          setFullscreenButton(false);
-          return;
+        let url = raw;
+        if (!/^https?:\/\//i.test(url)) {
+          url = 'https://' + url;
         }
 
-        if (viewer.requestFullscreen) {
-          try {
-            await viewer.requestFullscreen();
-            return;
-          } catch { /* Some browsers deny fullscreen; show the in-page fallback. */ }
-        }
-        viewer.classList.add('viewer-fullscreen-fallback');
-        document.body.classList.add('viewer-lock');
-        setFullscreenButton(true);
-      }
-
-      document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-          viewer.classList.remove('viewer-fullscreen-fallback');
-          document.body.classList.remove('viewer-lock');
-        }
-        setFullscreenButton(isViewerFullscreen());
-      });
-
-      document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && viewer.classList.contains('viewer-fullscreen-fallback')) {
-          viewer.classList.remove('viewer-fullscreen-fallback');
-          document.body.classList.remove('viewer-lock');
-          setFullscreenButton(false);
-        }
-      });
-
-      function openUrl(url, addToHistory = true) {
-        activeUrl = url;
-        frame.src = url;
-        frame.hidden = false;
-        emptyState.hidden = true;
-        statusDot.classList.add('active');
-        currentAddress.textContent = url;
-        currentAddress.title = url;
-        if (addToHistory) {
-          const history = readHistory().filter(item => item !== url);
-          history.unshift(url);
-          saveHistory(history.slice(0, MAX_HISTORY));
-          renderHistory();
+        try {
+          const parsed = new URL(url);
+          if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+          return parsed.href;
+        } catch {
+          return null;
         }
       }
 
-      function removeHistoryItem(url) {
-        saveHistory(readHistory().filter(item => item !== url));
+      function buildProxyUrl(url) {
+        try {
+          const parsed = new URL(url);
+          const target = parsed.href.replace(/^https?:\/\//i, '');
+          return `https://r.jina.ai/http://` + target;
+        } catch {
+          return url;
+        }
+      }
+
+      function setStatus(url, isActive = true) {
+        currentAddress.textContent = url || 'Keine Website geöffnet';
+        currentAddress.title = url || '';
+        statusDot.classList.toggle('active', isActive && !!url);
+      }
+
+      function addHistory(url) {
+        const history = readHistory().filter(entry => entry !== url);
+        history.unshift(url);
+        saveHistory(history.slice(0, MAX_HISTORY));
         renderHistory();
       }
 
       function renderHistory() {
         const history = readHistory();
         historyList.replaceChildren();
+
         if (history.length === 0) {
           const empty = document.createElement('div');
           empty.className = 'history-empty';
           empty.textContent = 'Noch nichts im Verlauf. Geöffnete URLs erscheinen hier.';
-          historyList.append(empty);
+          historyList.appendChild(empty);
           return;
         }
 
         history.forEach(url => {
           let host = url;
-          try { host = new URL(url).hostname; } catch { /* use the saved URL */ }
+          try {
+            host = new URL(url).hostname;
+          } catch {}
+
           const item = document.createElement('div');
           item.className = 'history-item';
           item.tabIndex = 0;
           item.setAttribute('role', 'button');
-          item.setAttribute('aria-label', `Website öffnen: ${url}`);
+          item.setAttribute('aria-label', `Seite öffnen: ${url}`);
 
           const favicon = document.createElement('span');
           favicon.className = 'history-favicon';
           favicon.setAttribute('aria-hidden', 'true');
           favicon.textContent = '↗';
+
           const text = document.createElement('span');
           text.className = 'history-text';
+
           const hostLabel = document.createElement('span');
           hostLabel.className = 'history-host';
           hostLabel.textContent = host;
+
           const urlLabel = document.createElement('span');
           urlLabel.className = 'history-url';
           urlLabel.textContent = url;
+
           text.append(hostLabel, urlLabel);
 
           const remove = document.createElement('button');
-          remove.className = 'delete-entry';
           remove.type = 'button';
+          remove.className = 'delete-entry';
           remove.textContent = '×';
           remove.title = 'Aus Verlauf löschen';
           remove.setAttribute('aria-label', `${url} aus Verlauf löschen`);
           remove.addEventListener('click', event => {
             event.stopPropagation();
-            removeHistoryItem(url);
+            const filtered = readHistory().filter(entry => entry !== url);
+            saveHistory(filtered);
+            renderHistory();
           });
 
           const activate = () => {
             input.value = url;
-            openUrl(url, false);
+            loadPage(url, false);
           };
+
           item.addEventListener('click', activate);
           item.addEventListener('keydown', event => {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -327,9 +520,51 @@
               activate();
             }
           });
+
           item.append(favicon, text, remove);
-          historyList.append(item);
+          historyList.appendChild(item);
         });
+      }
+
+      function loadPage(url, addToHistory = true) {
+        activeUrl = url;
+        iframeProxyMode = true;
+        iframeLoadTimestamp = Date.now();
+        const proxyUrl = buildProxyUrl(url);
+
+        frame.src = proxyUrl;
+        frame.hidden = false;
+        emptyState.hidden = true;
+        setStatus(url, true);
+
+        if (addToHistory) {
+          addHistory(url);
+        }
+
+        setTimeout(() => {
+          try {
+            if (frame.contentWindow && frame.contentWindow.location) {
+              const href = frame.contentWindow.location.href;
+              if (href === 'about:blank') return;
+              if (typeof href === 'string' && href.includes('r.jina.ai')) {
+                return;
+              }
+            }
+          } catch (err) {
+            // Cross-origin or blocked iframe: open in a real browser tab.
+            window.open(url, '_blank', 'noopener,noreferrer');
+            showToast('Seite konnte nicht eingebettet werden. Sie wurde in einem neuen Tab geöffnet.');
+          }
+        }, 1800);
+      }
+
+      function openDirect(url) {
+        activeUrl = url;
+        setStatus(url, true);
+        frame.src = 'about:blank';
+        frame.hidden = true;
+        emptyState.hidden = false;
+        window.open(url, '_blank', 'noopener,noreferrer');
       }
 
       form.addEventListener('submit', event => {
@@ -341,12 +576,10 @@
           return;
         }
         input.value = url;
-        openUrl(url);
+        loadPage(url, true);
       });
 
-      fullscreenButton.addEventListener('click', toggleFullscreen);
-
-      document.getElementById('openNewTab').addEventListener('click', () => {
+      openNewTabButton.addEventListener('click', () => {
         if (!activeUrl) {
           showToast('Öffne zuerst eine Website.');
           return;
@@ -355,17 +588,89 @@
       });
 
       document.getElementById('clearHistory').addEventListener('click', () => {
-        if (readHistory().length === 0) return;
+        const history = readHistory();
+        if (history.length === 0) return;
         saveHistory([]);
         renderHistory();
         showToast('Verlauf wurde gelöscht.');
       });
 
+      function setFullscreenButton(isFullscreen) {
+        fullscreenButton.setAttribute('aria-pressed', String(isFullscreen));
+        fullscreenButton.title = isFullscreen ? 'Vollbild beenden' : 'Vollbild';
+        fullscreenButton.setAttribute('aria-label', fullscreenButton.title);
+        const label = fullscreenButton.querySelector('span');
+        if (label) label.textContent = isFullscreen ? 'Beenden' : 'Vollbild';
+      }
+
+      async function toggleFullscreen() {
+        if (!document.fullscreenElement && !viewer.classList.contains('viewer-fullscreen-fallback')) {
+          if (viewer.requestFullscreen) {
+            try {
+              await viewer.requestFullscreen();
+              setFullscreenButton(true);
+              return;
+            } catch (err) {
+              // Fallback below.
+            }
+          }
+          viewer.classList.add('viewer-fullscreen-fallback');
+          document.body.classList.add('viewer-lock');
+          setFullscreenButton(true);
+          return;
+        }
+
+        if (document.fullscreenElement) {
+          try {
+            await document.exitFullscreen();
+          } catch (err) {
+            // ignore
+          }
+        }
+
+        viewer.classList.remove('viewer-fullscreen-fallback');
+        document.body.classList.remove('viewer-lock');
+        setFullscreenButton(false);
+      }
+
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          viewer.classList.remove('viewer-fullscreen-fallback');
+          document.body.classList.remove('viewer-lock');
+          setFullscreenButton(false);
+        }
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && viewer.classList.contains('viewer-fullscreen-fallback')) {
+          viewer.classList.remove('viewer-fullscreen-fallback');
+          document.body.classList.remove('viewer-lock');
+          setFullscreenButton(false);
+        }
+      });
+
+      fullscreenButton.addEventListener('click', toggleFullscreen);
+
       frame.addEventListener('load', () => {
-        if (activeUrl) statusDot.classList.add('active');
+        const now = Date.now();
+        const loadingTook = now - iframeLoadTimestamp;
+        if (loadingTook > 1800 && activeUrl) {
+          try {
+            const href = frame.contentWindow.location.href;
+            if (href && href !== 'about:blank') {
+              return;
+            }
+          } catch (err) {
+            // Blocked iframe; open real browser tab.
+            if (activeUrl) {
+              openDirect(activeUrl);
+            }
+          }
+        }
       });
 
       renderHistory();
+      setStatus('', false);
     })();
   </script>
 </body>
